@@ -157,7 +157,8 @@
   .cinfo { padding: 8px 0 10px; cursor: default; }
   .cinfo .frow { display: flex; align-items: baseline; gap: 8px; }
   .cinfo .ftitle { flex: 1; min-width: 0; font-family: var(--serif); font-size: 16px; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
-  .cinfo .tk { white-space: normal; overflow: visible; text-overflow: clip; margin-top: 6px; }
+  .cinfo .tk { display: block; margin-top: 6px; }
+  .cinfo .tk .tt { white-space: normal; overflow: visible; text-overflow: clip; }
   .abar {
     position: sticky; top: calc(var(--toolh, 0px) + var(--headh)); z-index: 3; background: var(--paper);
     display: flex; align-items: center; gap: 6px;
@@ -395,11 +396,10 @@
   }
 
   /* 생각 정리 기능 */
-  .tk {
-    margin-top: 3px; font-size: 13px; color: #3a3f55; white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis;
-  }
-  .tk::before { content: "\201C"; color: var(--c); font-weight: 700; margin-right: 2px; }
+  .tk { margin-top: 3px; font-size: 13px; color: #3a3f55; display: flex; align-items: baseline; min-width: 0; }
+  .tk .tt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tk::before { content: "\201C"; flex: none; color: var(--c); font-weight: 700; margin-right: 2px; }
+  .tk::after { content: "\201D"; flex: none; color: var(--c); font-weight: 700; margin-left: 2px; }
   .lcnt { flex: none; margin-left: auto; padding-left: 8px; font-size: 11.5px; color: var(--mute); }
   .quote {
     margin-top: 8px; padding: 4px 0 4px 12px; border-left: 2px solid var(--c);
@@ -795,7 +795,13 @@
     flex: none; display: flex; align-items: center; gap: 8px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
     background: var(--bg); border-top: 1px solid var(--line);
   }
-  .gsum { flex: 1; min-width: 0; font-size: 13px; color: var(--sub); line-height: 1.35; }
+  .gfoot { flex-wrap: wrap; row-gap: 8px; }
+  .gsum { flex: 1 0 100%; min-width: 0; font-size: 13px; color: var(--sub); line-height: 1.35; }
+  .grand {
+    display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border: 1px solid var(--line2); background: var(--paper);
+    color: var(--ink); border-radius: 999px; font-size: 14px; font-family: inherit; cursor: pointer;
+  }
+  .grand:active { background: #eef0f7; }
   .gclear {
     height: 40px; padding: 0 14px; border: 1px solid var(--line2); background: var(--paper); color: var(--ink); border-radius: 999px;
     font-size: 14px; font-family: inherit; cursor: pointer;
@@ -803,9 +809,44 @@
   .gclear:disabled { opacity: .4; }
   .gins {
     height: 40px; padding: 0 22px; border: 0; background: var(--ink); color: #fff; border-radius: 999px; font-size: 14.5px;
-    font-weight: 700; font-family: inherit; cursor: pointer;
+    font-weight: 700; font-family: inherit; cursor: pointer; flex: 1; min-width: 0;
   }
   .gins:disabled { opacity: .3; cursor: default; }
+
+  /* ===== 장르 선택 ===== */
+  #genreBox { position: relative; }
+  .gnwrap { position: relative; }
+  #genre { padding-right: 40px; cursor: pointer; text-overflow: ellipsis; }
+  #genre:not([readonly]) { cursor: text; }
+  .gnchev {
+    position: absolute; right: 4px; top: 50%; width: 36px; height: 36px; margin-top: -18px; padding: 0; border: 0;
+    background: transparent; color: #8b90a5; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    border-radius: 10px; transition: transform .2s, color .15s;
+  }
+  .gnwrap.open .gnchev { transform: rotate(180deg); color: var(--ink); }
+  .gnwrap.open #genre { background: #fff; border-color: #7d8bff; box-shadow: 0 0 0 3px rgba(125,139,255,.2); }
+  .gnpop {
+    position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 40; background: #fff; border-radius: 16px; padding: 12px;
+    box-shadow: 0 14px 36px rgba(20,24,50,.18), 0 0 0 1px var(--line); animation: gnIn .16s ease-out; transform-origin: top center;
+  }
+  .gnpop[hidden] { display: none; }
+  @keyframes gnIn { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .gnpop { animation: none; } }
+  .gnhead { display: flex; align-items: center; justify-content: space-between; margin: 0 2px 8px; min-height: 22px; }
+  .gnh { font-size: 12px; font-weight: 600; color: var(--sub); letter-spacing: .02em; }
+  .gnclr { border: 0; background: transparent; padding: 2px 4px; font-size: 12.5px; color: var(--sub); font-family: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .gngrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .gnopt {
+    display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; height: 42px; padding: 0 12px;
+    border: 1px solid transparent; border-radius: 11px; background: #f5f6fa; color: var(--ink); font-size: 14px; font-family: inherit;
+    cursor: pointer; text-align: left; transition: background .12s, border-color .12s, color .12s;
+  }
+  .gnopt > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gnopt:active { background: #e9ebf5; }
+  .gnopt.on { background: var(--book, var(--ink)); border-color: var(--book, var(--ink)); color: #fff; font-weight: 700; }
+  .gnopt svg { flex: none; }
+  .gnopt.wide { grid-column: 1 / -1; background: #fff; border: 1px dashed var(--line2); color: var(--sub); }
+  .gnopt.wide.on { background: var(--book, var(--ink)); border: 1px solid var(--book, var(--ink)); color: #fff; }
 </style>
 </head>
 <body>
@@ -822,9 +863,9 @@
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
         <span>수정</span>
       </button>
-      <a class="ghost" id="adminLink" href="https://app.netlify.com/projects/jjkkkosos-review/overview" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3z"/></svg>
-        <span>관리자페이지</span>
+      <a class="ghost" id="adminLink" href="https://github.com/" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a10.9 10.9 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+        <span>GitHub</span>
       </a>
       </div>
       <div class="hline hl-b">
@@ -939,6 +980,17 @@
           <input type="text" id="creator">
         </div>
 
+        <div id="genreBox" class="fld">
+          <label for="genre">장르</label>
+          <div class="gnwrap">
+            <input type="text" id="genre" readonly maxlength="30" autocomplete="off" placeholder="눌러서 장르 고르기" aria-haspopup="listbox" aria-expanded="false">
+            <button type="button" class="gnchev" id="genreChev" aria-label="장르 목록 열기" tabindex="-1">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="gnpop" id="genrePop" role="listbox" hidden></div>
+          </div>
+        </div>
+
         <div id="statusBox" class="fld">
           <label>읽기 상태</label>
           <div class="kinds" id="stKinds">
@@ -1027,6 +1079,10 @@
     <div class="gfoot">
       <span class="gsum" id="gSum">질문을 골라 주세요</span>
       <button type="button" class="gclear" id="gClear">비우기</button>
+      <button type="button" class="grand" id="gRand">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1" fill="currentColor"/></svg>
+        <span>랜덤 선택</span>
+      </button>
       <button type="button" class="gins" id="gIns" disabled>넣기</button>
     </div>
   </div>
@@ -1106,7 +1162,7 @@
   function load() {
     try {
       var arr = JSON.parse(localStorage.getItem(KEY)) || [];
-      arr.forEach(function (r) { if (r.type === "show") r.type = "play"; if (r.cast == null) r.cast = ""; if (r.note == null) r.note = ""; if (r.time == null) r.time = ""; if (!r.status) r.status = "done"; if (r.seat == null) r.seat = ""; if (r.take == null) r.take = ""; if (r.quote == null) r.quote = ""; r.tags = cleanTags(r.tags); r.later = cleanLater(r.later);
+      arr.forEach(function (r) { if (r.type === "show") r.type = "play"; if (r.cast == null) r.cast = ""; if (r.genre == null) r.genre = ""; if (r.note == null) r.note = ""; if (r.time == null) r.time = ""; if (!r.status) r.status = "done"; if (r.seat == null) r.seat = ""; if (r.take == null) r.take = ""; if (r.quote == null) r.quote = ""; r.tags = cleanTags(r.tags); r.later = cleanLater(r.later);
         /* 없앤 "인상 깊은 문장·장면" 칸에 남아 있던 내용은 후기 맨 위로 옮김 */
         if (r.quote && String(r.quote).trim()) {
           r.text = (r.text && r.text.trim()) ? String(r.quote).trim() + "\n\n" + r.text : String(r.quote).trim();
@@ -1170,7 +1226,7 @@
       if (rfilter === "no" && hasReview(r)) return false;
       if (!starOk(r, sfilter)) return false;
       if (!q) return true;
-      return (r.title + " " + r.creator + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.quote || "") + " " + (r.later || []).map(function (x) { return x.t; }).join(" ")).toLowerCase().indexOf(q) > -1;
+      return (r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.quote || "") + " " + (r.later || []).map(function (x) { return x.t; }).join(" ")).toLowerCase().indexOf(q) > -1;
     });
   }
 
@@ -1191,6 +1247,12 @@
     return st;
   }
 
+  /* 한줄평: 여는 따옴표와 닫는 따옴표를 모두 붙이고, 길면 글자만 말줄임 */
+  function mkTake(t) {
+    var d = el("div", "tk");
+    d.appendChild(el("span", "tt", t));
+    return d;
+  }
   function toolH() {
     var t = document.querySelector(".tools");
     return t ? t.offsetHeight : 0;
@@ -1234,7 +1296,8 @@
       info.appendChild(c);
     }
     if (r.creator) line(KIND[r.type].who, r.creator);
-    if (r.take) info.appendChild(el("div", "tk", r.take));
+    if (r.genre) line("장르", r.genre);
+    if (r.take) info.appendChild(mkTake(r.take));
     if (r.seat) line("좌석", r.seat);
     if (r.cast) line("캐스팅", r.cast.replace(/\n/g, ", "));
     if (r.note) info.appendChild(el("div", "note", r.note));
@@ -1337,7 +1400,7 @@
       if (when) l2.appendChild(el("span", "m d", when));
       if (r.later && r.later.length) l2.appendChild(el("span", "lcnt", "생각 +" + r.later.length));
       card.appendChild(l2);
-      if (r.take) card.appendChild(el("div", "tk", r.take));
+      if (r.take) card.appendChild(mkTake(r.take));
 
       /* 닫힌 카드만 눌러서 열림 (처음 열 땐 세부정보도 펼친 상태) */
       card.onclick = function () {
@@ -1943,700 +2006,4 @@
       w.appendChild(summaryPane(dated, "전체"));
       var years = {};
       dated.forEach(function (r) { years[r.date.slice(0, 4)] = 1; });
-      var ys = Object.keys(years).sort().reverse();
-      if (ys.length) {
-        w.appendChild(matrixPane("연도별 카테고리 편수", "연도", ys.map(function (yy) {
-          return { label: yy + "년", items: dated.filter(function (r) { return r.date.slice(0, 4) === yy; }) };
-        })));
-        var yr = el("div", "rows");
-        ys.forEach(function (yy) {
-          yr.appendChild(periodRow(yy + "년", dated.filter(function (r) { return r.date.slice(0, 4) === yy; })));
-        });
-        w.appendChild(yr);
-      }
-    }
-
-    var undated = data.length - dated.length;
-    if (undated) w.appendChild(el("div", "hint2", "날짜가 없는 기록 " + undated + "개(읽는 중인 책 등)는 통계에 포함되지 않아요."));
-  }
-
-  /* ---------- 가이드 질문 ---------- */
-  var GUIDE_DATA = {"book":{"name":"책","themes":[{"t":"첫 인상과 경험","qs":[{"q":"책을 덮은 직후 가장 먼저 떠오른 것은 무엇인가?","s":["특정 장면이나 문장이 먼저 떠오르는가?","인물, 분위기, 사건 중 무엇이 가장 강하게 남았는가?","왜 하필 그것이 가장 먼저 기억났을까?"]},{"q":"읽는 동안 내가 가장 강하게 반응한 순간은 언제였나?","s":["정확히 어느 문장이나 장면에서 반응했나?","그 반응은 감정인가, 판단인가, 신체적인 느낌인가?","그 순간 작품이 직접 제시한 것과 내가 덧붙인 것은 무엇인가?"]},{"q":"읽기 전 예상과 실제 작품은 어디에서 달랐나?","s":["내가 처음 예상했던 작품의 모습은 무엇이었나?","예상과 달랐던 부분은 내용인가, 문체인가, 인물인가?","그 차이가 작품을 보는 내 태도를 어떻게 바꿨나?"]},{"q":"가장 이해되지 않았거나 마음에 걸리는 부분은 무엇인가?","s":["이해되지 않는 이유가 정보 부족 때문인가, 인물의 행동 때문인가?","작품이 의도적으로 설명하지 않은 부분일 가능성은 있는가?","지금 당장 결론을 내리지 않는다면 어떤 질문으로 남길 수 있을까?"]},{"q":"이 책을 한 문장으로 기억한다면 어떤 문장이 될까?","s":["그 문장을 뒷받침하는 구체적인 장면은?","‘재미있었다/슬펐다/좋았다’를 빼면 어떻게 표현할 수 있을까?","시간이 지난 뒤에도 이 문장이 유효할 것 같은가?"]}]},{"t":"문장과 언어","qs":[{"q":"가장 오래 붙잡고 싶은 문장은 무엇인가?","s":["왜 그 문장이 눈에 들어왔나?","단어 하나를 바꾸면 느낌이 어떻게 달라질까?","그 문장이 작품 전체에서 어떤 위치에 있나?"]},{"q":"작가가 유난히 반복하는 단어나 표현이 있는가?","s":["같은 표현이 등장하는 상황은 어떻게 다른가?","반복될 때 의미가 변하는가?","반복 자체가 독자에게 어떤 효과를 만드는가?"]},{"q":"말하지 않고 보여주는 부분은 어디인가?","s":["인물이 직접 설명하지 않는 것은 무엇인가?","행동이나 묘사가 대사를 대신하고 있는가?","직접 설명했다면 작품의 느낌이 어떻게 달라졌을까?"]},{"q":"평범해 보이지만 이상하게 기억에 남은 표현은 무엇인가?","s":["왜 특별해 보이지 않는 문장이 기억났을까?","앞뒤 문맥을 보면 의미가 달라지는가?","작가가 다른 표현을 사용할 수도 있었는데 이것을 선택한 이유는 무엇일까?"]},{"q":"내가 이 책을 설명할 때 자꾸 사용하는 단어는 무엇인가?","s":["그 단어가 실제 작품의 어떤 부분에서 나온 것인가?","너무 넓거나 추상적인 단어는 아닌가?","더 정확한 단어로 바꾼다면 무엇일까?"]}]},{"t":"인물과 관계","qs":[{"q":"가장 이해하고 싶은 인물은 누구인가?","s":["그 인물이 원하는 것은 무엇인가?","그 인물은 자신이 원하는 것을 정확히 알고 있는가?","말과 행동 사이에 차이가 있는가?"]},{"q":"인물의 행동 중 가장 판단하기 어려웠던 것은 무엇인가?","s":["그 행동을 설명할 수 있는 작품 속 근거는?","인물 본인은 그 행동을 어떻게 설명할 것 같은가?","내가 그 인물의 입장이라면 다른 선택을 할 수 있었을까?"]},{"q":"두 인물의 관계는 언제 달라졌다고 느꼈나?","s":["관계가 바뀌는 구체적인 사건은?","대사가 아니라 행동이나 침묵으로 드러나는 변화는?","두 사람 중 누가 관계의 변화를 먼저 알아차렸을까?"]},{"q":"내가 처음 판단했던 인물에 대한 생각이 바뀌었나?","s":["처음에는 무엇이라고 생각했나?","무엇 때문에 생각이 바뀌었나?","혹시 생각이 바뀐 것이 아니라 내가 새로운 정보를 추가했을 뿐일까?"]},{"q":"이 인물을 한 단어로 규정하는 것이 가능한가?","s":["그 단어와 맞지 않는 행동은 없는가?","반대되는 단어를 붙이면 어떤 모습이 보이는가?","한 단어 대신 한 문장으로 설명한다면?"]}]},{"t":"구조와 서술","qs":[{"q":"왜 이 이야기는 이런 순서로 진행되었을까?","s":["시간순으로 배열했다면 무엇이 달라졌을까?","정보가 늦게 공개되는 부분은 무엇인가?","독자가 특정 사실을 늦게 알게 만드는 효과는?"]},{"q":"작품에서 일부러 감춰진 정보는 무엇인가?","s":["누가 알고 독자는 모르는 정보가 있는가?","반대로 독자는 알지만 인물이 모르는 것은?","그 정보의 공개 시점이 왜 중요한가?"]},{"q":"이야기에서 반복되는 사건이나 구조가 있는가?","s":["반복될 때 같은 의미인가?","두 번째 등장하면서 무엇이 달라졌나?","반복을 하나 제거한다면 작품의 의미가 달라질까?"]},{"q":"가장 큰 전환점은 어디인가?","s":["사건 자체가 바뀐 것인가, 인물의 인식이 바뀐 것인가?","전환 전과 후의 작품 분위기는 어떻게 달라지는가?","그 전환을 준비하는 앞부분의 단서는 무엇이었나?"]},{"q":"없어도 될 것처럼 보이지만 계속 마음에 걸리는 부분은 무엇인가?","s":["정말 없어도 되는가?","다른 장면이나 인물과 연결되는가?","작가가 이것을 넣음으로써 무엇을 추가했을 가능성이 있을까?"]}]},{"t":"이미지·상징·모티프","qs":[{"q":"작품에서 반복적으로 등장하는 사물이나 이미지가 있는가?","s":["언제 등장하는가?","등장할 때마다 상황이 어떻게 다른가?","단순한 배경일 가능성과 상징일 가능성을 각각 생각해보면?"]},{"q":"제목은 작품의 어느 부분과 연결되는가?","s":["제목을 읽기 전과 읽은 후 의미가 달라졌나?","제목이 특정 인물/장면/이미지를 가리키는가?","다른 제목이었다면 작품의 인상이 달라졌을까?"]},{"q":"작품에서 유난히 강조되는 공간이나 장소가 있는가?","s":["그 장소에서 반복적으로 어떤 일이 일어나는가?","장소 자체가 인물의 상태와 연결되는가?","장소를 다른 곳으로 바꾸면 무엇이 사라질까?"]},{"q":"작품 속 이미지가 처음과 나중에 다르게 보이는 것이 있는가?","s":["처음에는 어떤 의미였나?","나중에는 왜 다르게 보이나?","그 변화가 인물이나 독자의 인식 변화와 연결되는가?"]},{"q":"내가 상징이라고 생각하는 것이 실제로 작품 안에서 반복·강조되는가?","s":["구체적인 근거는 몇 개나 있는가?","내가 의미를 과도하게 부여한 것은 아닐까?","상징이 아니라 단순한 사건으로 읽어도 설명이 되는가?"]}]},{"t":"관점 뒤집기와 반론","qs":[{"q":"내 해석과 정반대로 읽는다면 이 작품은 어떻게 보일까?","s":["내가 당연하게 전제한 것은 무엇인가?","반대 해석을 지지할 장면은?","두 해석 중 어느 쪽이 더 많은 텍스트를 설명하는가?"]},{"q":"내가 가장 비판하고 싶은 인물을 변호한다면 어떻게 말할 수 있을까?","s":["그 인물의 입장에서 가장 강력한 변론은?","작품 안에 그 변론을 뒷받침하는 증거가 있는가?","그래도 설명되지 않는 행동은 무엇인가?"]},{"q":"내 해석과 충돌하는 장면은 무엇인가?","s":["그 장면을 무시하고 있지는 않은가?","기존 해석을 수정하면 해결되는가?","아니면 작품 자체가 모순적인 두 방향을 동시에 열어두는가?"]},{"q":"작품을 싫어하는 사람이 가장 강하게 비판한다면 무엇을 지적할까?","s":["그 비판에 동의할 부분은?","반박할 수 있는 작품 속 근거는?","그 비판 때문에 내가 새롭게 보게 되는 부분은?"]},{"q":"내가 작품을 너무 쉽게 이해했다고 느끼는 지점은 없는가?","s":["내가 붙인 하나의 설명으로 너무 많은 것을 해결하고 있지는 않은가?","설명되지 않는 부분은?","그 모호함을 그대로 남겨둘 필요는 없는가?"]}]},{"t":"나의 생각과 가치관","qs":[{"q":"이 작품이 내게 다시 생각하게 만든 나의 생각은 무엇인가?","s":["원래 나는 어떻게 생각했나?","작품의 무엇이 그 생각을 흔들었나?","생각이 바뀐 것인가, 질문이 하나 더 생긴 것인가?"]},{"q":"내가 이 인물과 실제로 만난다면 어떻게 대할 것 같은가?","s":["왜 그렇게 행동할 것인가?","작품을 읽기 전에도 같은 선택을 했을까?","작품이 내 판단 기준을 드러내게 만든 부분은?"]},{"q":"내 경험 때문에 작품을 특정 방식으로 읽고 있을 가능성이 있는가?","s":["작품 자체에서 나온 판단과 내 경험에서 나온 판단은 무엇인가?","다른 경험을 가진 사람이라면 어떻게 다르게 읽을까?","그렇다고 해서 나의 독해가 무효가 되는가?"]},{"q":"이 작품이 내게 불편했던 이유는 무엇인가?","s":["작품의 내용이 불편했나, 표현 방식이 불편했나?","내가 지키고 싶은 가치와 충돌했나?","불편함이 작품에 대한 거부인가, 생각을 자극하는 신호인가?"]},{"q":"이 책을 읽기 전의 나와 읽은 후의 나 사이에 아주 작은 변화라도 있는가?","s":["무엇을 이전과 다르게 보게 되었나?","실제 행동까지 바뀔 정도인가?","아니면 단지 하나의 질문이 기억에 남은 것인가?"]}]},{"t":"표현 훈련","qs":[{"q":"“좋았다/별로였다”를 쓰지 않고 이 책을 평가한다면?","s":["무엇이 좋았는가?","어떤 방식으로 좋았는가?","그 효과를 만든 구체적인 요소는?"]},{"q":"내 감정을 가장 정확하게 표현하는 단어는 무엇인가?","s":["‘슬펐다’보다 정확한 단어가 있는가?","감정과 판단을 분리하면 어떻게 되는가?","그 감정을 만들어낸 장면은?"]},{"q":"한 문장의 감상을 세 문장으로 확장한다면?","s":["내가 주장하는 것은?","그렇게 생각한 이유는?","이를 보여주는 구체적인 장면은?"]},{"q":"내 후기에서 가장 추상적인 문장은 무엇인가?","s":["‘인간의 본질’, ‘삶의 의미’, ‘사회적 문제’ 같은 말을 구체화할 수 있는가?","실제 작품 속 무엇을 가리키는 말인가?","추상어 하나를 구체적인 장면으로 바꾼다면?"]},{"q":"누군가에게 이 책을 설명할 때 가장 먼저 말하고 싶은 것은 무엇인가?","s":["줄거리가 아니라 작품의 특징을 말한다면?","다른 작품과 비교하면 무엇이 두드러지는가?","“이 작품은 ___한 이야기다”에서 빈칸을 정확히 채운다면?"]}]}]},"movie":{"name":"영화","themes":[{"t":"첫 경험과 감정","qs":[{"q":"영화가 끝난 뒤 가장 먼저 떠오른 이미지는 무엇인가?","s":["왜 그 이미지가 다른 장면보다 먼저 떠올랐나?","화면의 구도·색·소리와 관련이 있는가?","이야기 때문인가, 영화적 표현 때문인가?"]},{"q":"가장 강하게 반응한 장면은 어디인가?","s":["무엇을 보고 그렇게 반응했나?","배우의 연기, 대사, 음악, 촬영 중 무엇이 영향을 줬나?","다른 방식으로 찍었다면 같은 반응이 나왔을까?"]},{"q":"영화가 예상과 달랐던 부분은 무엇인가?","s":["내용의 반전인가, 영화의 스타일인가?","기대했던 영화와 실제 영화의 차이는?","그 차이가 장점/단점이라는 판단 이전에 무엇을 보여주는가?"]},{"q":"영화를 보면서 가장 궁금했던 것은 무엇인가?","s":["영화가 끝날 때 그 질문에 답했나?","답하지 않았다면 의도적인 공백일 가능성은?","질문 자체가 영화의 중요한 경험이었을까?"]},{"q":"한 장면만 남긴다면 어떤 장면을 남기겠는가?","s":["왜 그 장면인가?","그 장면은 영화 전체를 압축하고 있는가?","그 장면만 봐도 영화의 특징을 설명할 수 있는가?"]}]},{"t":"장면과 미장센","qs":[{"q":"가장 기억에 남는 화면의 구도는 무엇인가?","s":["인물은 화면 어디에 있었나?","빈 공간은 얼마나 있었나?","그 배치가 인물의 상태와 어떤 관계를 만드는가?"]},{"q":"배경에 놓인 물건 중 이상하게 눈에 들어온 것은?","s":["단순한 배경인가?","이후 사건과 연결되는가?","카메라가 특별히 강조했는가?"]},{"q":"인물이 화면에 없는데도 존재감이 느껴지는 장면이 있는가?","s":["소리 때문인가?","공간의 흔적 때문인가?","다른 인물의 반응 때문인가?"]},{"q":"같은 공간이 반복해서 등장할 때 무엇이 달라지는가?","s":["인물의 위치가 달라지는가?","조명이나 소리가 달라지는가?","공간에 대한 관객의 의미가 바뀌는가?"]},{"q":"감독이 보여주지 않은 것은 무엇인가?","s":["카메라 밖에서 일어나는 사건은?","일부러 화면 밖에 남겨둔 것은?","직접 보여줬다면 장면의 의미가 어떻게 달라졌을까?"]}]},{"t":"카메라와 편집","qs":[{"q":"카메라는 누구의 시선을 따라가고 있는가?","s":["관객이 알고 있는 정보와 인물이 아는 정보가 다른가?","특정 인물에게 계속 붙어 있는가?","그 시점이 해석에 영향을 주는가?"]},{"q":"특히 가까이 찍은 장면은 무엇인가?","s":["왜 이 순간에 클로즈업했을까?","표정의 어떤 부분을 보게 만드는가?","멀리 찍었다면 무엇을 잃었을까?"]},{"q":"컷과 컷 사이에서 생략된 시간이 있는가?","s":["무엇이 생략되었나?","그 생략 때문에 관객이 추측하게 되는 것은?","모든 과정을 보여줬다면 긴장감이 달라졌을까?"]},{"q":"유난히 길게 유지되는 쇼트가 있었나?","s":["관객이 무엇을 기다리게 하는가?","배우의 움직임이나 공간을 관찰하게 하는가?","편집했다면 무엇이 달라질까?"]},{"q":"두 장면을 붙여놓은 방식 때문에 새로운 의미가 생기는 부분은?","s":["각각 따로 보면 어떤 의미인가?","연속해서 보면서 어떤 관계가 생겼나?","이것이 편집이 만든 의미라고 볼 근거는 무엇인가?"]}]},{"t":"소리와 음악","qs":[{"q":"음악이 없었다면 느낌이 달라졌을 장면은?","s":["음악이 어떤 감정을 유도했나?","화면만으로도 같은 의미가 전달되는가?","음악이 장면을 강화했나, 과잉 설명했나?"]},{"q":"갑자기 소리가 사라지는 순간이 있었나?","s":["무엇이 사라졌나?","침묵 때문에 무엇에 집중하게 되었나?","침묵 자체가 하나의 사건처럼 기능하는가?"]},{"q":"화면보다 소리가 먼저 정보를 알려준 장면은?","s":["관객은 무엇을 먼저 알았나?","인물은 그 사실을 알고 있었나?","긴장감은 어떻게 만들어졌나?"]},{"q":"같은 소리가 반복되는가?","s":["언제 반복되는가?","처음과 마지막의 의미가 달라지는가?","소리가 특정 인물이나 기억과 연결되는가?"]},{"q":"대사가 없어도 이해할 수 있는 장면은?","s":["무엇이 대사를 대신했나?","표정, 행동, 공간, 소리 중 무엇이 핵심인가?","대사를 넣었다면 오히려 의미가 좁아졌을까?"]}]},{"t":"인물과 연기","qs":[{"q":"배우가 대사보다 행동으로 보여준 것은 무엇인가?","s":["어떤 행동인가?","대사와 일치하는가, 충돌하는가?","그 차이가 인물을 어떻게 보이게 하는가?"]},{"q":"인물이 숨기고 있다고 느낀 것은 무엇인가?","s":["작품에서 그 근거가 있는가?","표정이나 행동이 대사와 다른가?","혹은 내가 인물에게 의미를 부여한 것일 뿐인가?"]},{"q":"인물에 대한 판단이 바뀌는 순간은?","s":["어떤 장면이 전환점인가?","정보가 새로 주어진 것인가?","같은 행동을 이전과 다르게 보게 된 것인가?"]},{"q":"두 배우의 관계가 말보다 몸으로 드러나는 순간은?","s":["거리감은 어떻게 표현되는가?","시선은 어디를 향하는가?","움직임이나 침묵이 관계를 어떻게 설명하는가?"]},{"q":"배우의 연기가 지나치게 설명적이라고 느껴진 부분이 있는가?","s":["무엇을 이미 대사나 화면이 설명하고 있었나?","연기가 추가한 것은 무엇인가?","그 표현이 없었다면 장면이 더 열려 있었을까?"]}]},{"t":"구조와 주제","qs":[{"q":"영화의 중심 갈등은 무엇인가?","s":["인물 간 갈등인가?","인물 내부의 갈등인가?","갈등이 시작되고 변화하는 지점은?"]},{"q":"영화가 반복해서 돌아오는 질문은 무엇인가?","s":["등장인물이 직접 말하는 질문인가?","사건을 통해 드러나는 질문인가?","영화가 답을 제시하는가?"]},{"q":"결말은 앞부분을 어떻게 다시 보게 만드는가?","s":["처음의 장면 중 의미가 달라지는 것이 있는가?","결말이 새로운 정보를 제공하는가?","아니면 기존 정보의 의미를 바꾸는가?"]},{"q":"중간에 없어도 될 것처럼 보이는 장면은 무엇인가?","s":["정말 없어도 되는가?","인물이나 주제와 연결되는가?","삭제했을 때 구조가 어떻게 달라지는가?"]},{"q":"영화가 하나의 해석으로 완전히 닫히는가?","s":["다른 해석이 가능한 장면은?","결말이 남겨놓은 빈칸은?","내가 확신하지 못하는 부분은 무엇인가?"]}]},{"t":"관점 뒤집기","qs":[{"q":"내 해석과 정반대로 이 영화를 읽으면?","s":["가장 강한 반대 해석은?","그것을 뒷받침하는 장면은?","내 해석으로 설명하기 어려운 장면은?"]},{"q":"이 영화에서 가장 억울하게 평가받는 인물은 누구일까?","s":["왜 그렇게 볼 수 있는가?","영화는 그 인물의 관점을 충분히 보여주는가?","반대로 그 인물을 비판할 근거는?"]},{"q":"감독이 이 장면을 전혀 다른 의도로 만들었다고 가정한다면?","s":["어떤 해석이 가능한가?","실제 화면과 충돌하는 부분은?","해석의 범위를 어디까지 열어둘 수 있을까?"]},{"q":"내가 영화에서 당연하게 받아들인 전제는 무엇인가?","s":["왜 당연하다고 생각했나?","영화가 실제로 그렇게 말했나?","내가 사회적 경험을 통해 가져온 판단은 아닌가?"]},{"q":"이 영화를 싫어하는 사람의 가장 설득력 있는 비판은?","s":["그 비판이 겨냥하는 영화의 선택은?","반박할 수 있는 근거는?","반박할 수 없다면 내 감상을 어떻게 수정할 것인가?"]}]},{"t":"영화에서 나에게로","qs":[{"q":"이 영화가 내게 불편했던 지점은 무엇인가?","s":["내용 때문인가, 표현 방식 때문인가?","내가 가진 가치관과 충돌했나?","그 불편함이 작품에 대한 판단과 같은 것인가?"]},{"q":"영화를 보고 나서 현실에서 다르게 보게 된 것은?","s":["특정 사람인가?","특정 상황인가?","이전에도 알고 있었지만 다르게 느끼게 된 것인가?"]},{"q":"내가 이 영화의 인물이었다면 어떤 선택을 했을까?","s":["왜 그렇게 선택할까?","내가 비판했던 인물과 실제로 얼마나 다른 선택을 할까?","작품은 그 선택의 대가를 어떻게 보여주는가?"]},{"q":"이 영화에 대한 내 감정을 가장 정확한 문장으로 쓰면?","s":["감정과 평가를 분리하면?","“재밌었다”를 제거하면?","가장 구체적인 장면 하나를 넣는다면?"]},{"q":"시간이 지나도 이 영화를 기억하게 할 요소는 무엇일까?","s":["이야기인가?","특정 이미지인가?","배우의 연기인가?","영화가 내게 남긴 질문인가?"]}]}]},"perf":{"name":"공연","themes":[{"t":"공연 직후 기억","qs":[{"q":"공연장을 나온 직후 가장 선명하게 남은 장면은 무엇인가?","s":["정확히 무엇이 기억나는가?","배우의 행동인가, 대사인가, 무대 이미지인가?","그 장면을 실제로 본 것과 내가 나중에 재구성한 것을 구분할 수 있는가?"]},{"q":"가장 강하게 반응한 순간은 언제였나?","s":["웃음, 불쾌함, 긴장, 슬픔, 당혹감 중 무엇에 가까운가?","정확히 어떤 자극이 그 반응을 만들었나?","대사 자체 때문인가, 공연의 표현 방식 때문인가?"]},{"q":"공연이 끝난 뒤에도 머릿속에서 반복되는 대사나 이미지가 있는가?","s":["정확한 표현은 무엇인가?","왜 그것만 반복되는가?","작품 전체에서 그 표현이 어떤 위치에 있는가?"]},{"q":"공연에서 내가 놓쳤다고 느끼는 부분은 무엇인가?","s":["기억나지 않는 장면인가?","이해하지 못한 장면인가?","당시에는 느꼈지만 지금 언어화하지 못하는 부분인가?"]},{"q":"전체 공연을 하나의 장면으로 압축한다면 무엇인가?","s":["왜 그 장면인가?","그 장면이 작품의 무엇을 대표하는가?","반대로 그 장면만으로는 설명되지 않는 부분은?"]}]},{"t":"희곡과 텍스트","qs":[{"q":"이 장면에서 실제로 인물들이 주고받는 것은 무엇인가?","s":["표면적으로 말하는 내용은?","말하지 않고 있는 내용은?","대사의 목적이 서로 다른가?"]},{"q":"특정 대사가 앞뒤 맥락에서 어떻게 달라지는가?","s":["같은 단어가 이전에도 나왔나?","인물의 상황이 바뀌면서 의미가 변했나?","배우의 표현 때문에 의미가 달라졌다고 느낀다면 텍스트 자체와 구분할 수 있는가?"]},{"q":"이 장면은 배우와 대사만으로도 성립할까?","s":["성립한다면 무엇이 그것을 가능하게 하는가?","성립하지 않는다면 어떤 공연적 요소가 필수적인가?","그 요소는 텍스트의 의미를 확장하는가, 설명하는가?"]},{"q":"작품에서 일부러 설명하지 않는 것은 무엇인가?","s":["관객이 추측해야 하는 부분은?","그 공백이 작품의 효과에 기여하는가?","공연이 그 공백을 너무 많이 채웠다고 느꼈나?"]},{"q":"이번 공연을 보고 나서 희곡의 문장을 다시 읽는다면 달라질 부분은?","s":["특정 대사가 새롭게 들리는가?","인물 관계가 달라 보이는가?","공연이 텍스트에 추가한 것과 텍스트에서 발견한 것을 구분할 수 있는가?"]}]},{"t":"배우와 인물","qs":[{"q":"배우가 대사 없이 인물의 상태를 보여준 순간은?","s":["표정인가?","호흡인가?","시선인가?","몸의 방향이나 움직임인가?"]},{"q":"가장 작은 연기 디테일 하나를 기억해본다면?","s":["손, 시선, 자세, 말의 속도 중 무엇인가?","그 디테일은 언제 등장했나?","그것을 빼면 인물의 모습이 달라지는가?"]},{"q":"배우의 해석 때문에 인물을 특정한 방식으로 보게 된 순간은?","s":["텍스트에도 그런 해석의 근거가 있는가?","배우가 새롭게 만들어낸 부분은 무엇인가?","다른 배우가 연기하면 달라질 수 있는 부분인가?"]},{"q":"배우가 일부러 보여주지 않는 것처럼 느껴진 부분은?","s":["감정을 직접 표현하지 않았나?","관객에게 판단을 맡겼나?","그 절제가 인물에게 어떤 효과를 만드는가?"]},{"q":"가장 기억에 남은 연기와 가장 좋은 연기를 구분한다면?","s":["기억에 남은 이유는 무엇인가?","극 전체에 필요한 연기였나?","순간적으로 강렬했을 뿐인지, 인물의 구조를 이해하게 만든 연기인지?"]}]},{"t":"연출과 공연 언어","qs":[{"q":"연출이 텍스트에서 특별히 강조한 것은 무엇인가?","s":["반복적으로 강조되는 이미지가 있는가?","배우의 위치나 움직임이 특정 의미를 만드는가?","텍스트 자체에서도 그 강조를 뒷받침할 근거가 있는가?"]},{"q":"연출이 관객에게 해석을 미리 제시한 것처럼 느껴지는 부분은?","s":["무엇을 어떻게 보여줬나?","텍스트만 읽었을 때보다 해석의 방향이 좁아졌나?","반대로 해석의 가능성을 넓힌 부분은?"]},{"q":"연출 장치 하나를 제거한다면 가장 크게 달라질 장면은?","s":["무엇을 제거할 것인가?","그 장치가 없으면 텍스트가 더 잘 보이는가?","아니면 오히려 작품의 핵심이 사라지는가?"]},{"q":"무대적 선택이 텍스트에 없는 새로운 의미를 만들었나?","s":["어떤 선택인가?","텍스트와 모순되는가, 확장하는가?","다른 연출에서도 유지되어야 하는 의미인가?"]},{"q":"이 공연의 연출적 개성이 가장 잘 드러나는 순간은?","s":["무엇을 다르게 했나?","그것이 작품의 본질적인 부분인가, 프로덕션의 스타일인가?","그 차이가 나에게 어떤 경험을 만들었나?"]}]},{"t":"공간·소품·조명·음향","qs":[{"q":"무대 공간이 인물의 관계를 어떻게 보여주는가?","s":["가까움과 멀어짐은 어떻게 표현되는가?","누가 어느 공간을 차지하는가?","공간의 경계가 존재하는가?"]},{"q":"소품 하나가 극의 의미를 바꾸는 순간이 있었나?","s":["그 소품은 언제 등장했나?","인물에게 어떤 의미인가?","소품 없이 장면을 상상하면 무엇이 달라지는가?"]},{"q":"조명 변화가 장면의 의미를 어떻게 바꿨나?","s":["단순히 분위기를 만드는가?","시간이나 장소를 구분하는가?","관객의 시선을 특정 부분으로 유도하는가?"]},{"q":"음향이나 음악이 장면의 해석을 유도했나?","s":["배우만으로 전달되는 정보와 구분되는가?","음악이 감정을 설명했나?","오히려 장면과 모순되는 효과를 만들었나?"]},{"q":"무대의 제약이 오히려 작품의 의미가 된 부분은?","s":["제한된 공간이나 소품인가?","반복되는 구조인가?","그 제약을 제거하면 오히려 평범해지는 부분은?"]}]},{"t":"구조·리듬·관객 경험","qs":[{"q":"공연의 리듬이 가장 크게 변하는 순간은?","s":["속도가 빨라지거나 느려지는가?","침묵이 길어지는가?","장면 전환 때문인가?","인물 관계의 변화 때문인가?"]},{"q":"관객의 시선이 어디로 이동하도록 설계되었다고 느꼈나?","s":["배우인가, 소품인가, 공간인가?","동시에 여러 곳을 봐야 하는 순간이 있었나?","내가 놓친 것이 생겼을 가능성은?"]},{"q":"관객의 존재 자체가 의미를 만드는 순간이 있었나?","s":["배우가 관객을 의식했나?","관객의 웃음이나 침묵이 장면에 영향을 주었나?","관객이 없으면 같은 장면이 성립할까?"]},{"q":"공연에서 가장 긴장도가 높은 구간은 어디였나?","s":["사건이 가장 큰 부분인가?","아무 일도 일어나지 않는 순간인가?","무엇이 긴장감을 만들었나?"]},{"q":"중간에 장면 하나를 삭제한다면 어디를 삭제하겠는가?","s":["이야기상 없어도 되는가?","리듬상 필요한가?","인물 이해에 필요한가?","삭제했을 때 오히려 선명해지는 것이 있는가?"]}]},{"t":"해석과 반론","qs":[{"q":"내가 가장 강하게 밀고 있는 해석은 무엇인가?","s":["그 해석을 뒷받침하는 텍스트는?","공연의 구체적인 선택은?","반대로 그 해석과 충돌하는 부분은?"]},{"q":"내 해석과 정반대로 이 작품을 본다면?","s":["어떤 장면을 중심으로 보게 될까?","그 해석은 무엇을 더 잘 설명하는가?","반대로 무엇을 설명하지 못하는가?"]},{"q":"작가가 의도한 것과 내가 읽어낸 것이 다를 가능성을 생각해본다면?","s":["작품 안에서 내 해석을 독립적으로 지지하는 근거는?","작가의 의도를 몰라도 성립하는 해석인가?","작가의 의도와 달라도 텍스트와 모순되지 않는가?"]},{"q":"이번 공연이 나의 해석을 특정 방향으로 유도했을 가능성은?","s":["배우의 연기 때문인가?","음악/조명/무대 때문인가?","희곡만 읽었을 때도 같은 해석이 나올 것 같은가?"]},{"q":"내가 작품에 너무 쉽게 붙인 단어는 무엇인가?","s":["실제로 그 단어가 정확히 무엇을 의미하는가?","작품 안에서 그것을 구체적으로 보여주는 장면은?","더 좁고 정확한 단어로 바꿀 수 있는가?"]}]},{"t":"표현과 자기화","qs":[{"q":"“좋았다/별로였다”를 제외하고 이번 공연을 평가한다면?","s":["무엇이 인상적이었나?","그 인상은 어떻게 만들어졌나?","작품과 공연 중 어느 쪽의 장점인가?"]},{"q":"가장 작은 디테일 하나로 공연 전체를 설명한다면?","s":["배우의 한 동작인가?","대사의 한 단어인가?","조명이나 공간의 변화인가?","왜 그 작은 부분이 전체를 대표할 수 있다고 생각하는가?"]},{"q":"내가 쓴 후기에서 가장 ‘있어 보이려고 쓴 것 같은’ 표현은?","s":["실제로 내가 무슨 말을 하려는지 설명할 수 있는가?","추상어를 장면으로 바꿀 수 있는가?","그 문장을 평범한 말로 다시 쓴다면?"]},{"q":"이 공연을 세 문장으로만 남긴다면?","s":["무엇을 보았는가?","그것을 어떻게 해석했는가?","그래서 나는 무엇을 생각하게 되었는가?"]},{"q":"이 공연을 본 경험이 이제 내 것이 되었다고 느끼는 순간은 무엇인가?","s":["작품에 대해 새롭게 알게 된 것인가?","나 자신에 대해 새롭게 알게 된 것인가?","다른 작품을 볼 때도 적용할 수 있는 질문이나 관점이 생겼는가?"]}]}]}};
-  var editingRec = null;
-  var gKey = "book", gTab = 0, gSel = {}, gInserted = false;
-  function guideKey() { return form.type === "book" ? "book" : form.type === "movie" ? "movie" : "perf"; }
-  function gst(ti, qi) {
-    var id = ti + "-" + qi;
-    if (!gSel[id]) gSel[id] = { on: false, subs: [] };
-    return gSel[id];
-  }
-  function gTotals() {
-    var q = 0, sub = 0;
-    Object.keys(gSel).forEach(function (k) {
-      if (!gSel[k].on) return;
-      q++;
-      gSel[k].subs.forEach(function (v) { if (v) sub++; });
-    });
-    return [q, sub];
-  }
-  function openGuide() {
-    if ($("writer").hidden) openWriter();
-    $("wtext").blur();
-    gKey = guideKey(); gTab = 0; gSel = {};
-    $("guide").dataset.k = form.type;
-    $("gTitle").textContent = GUIDE_DATA[gKey].name + " 가이드 질문";
-    $("guide").hidden = false;
-    pushLayer("guide");
-    renderGuide();
-    $("gBody").scrollTop = 0;
-  }
-  function hideGuide() {
-    $("guide").hidden = true;
-    if (gInserted) {
-      gInserted = false;
-      var t = $("wtext");
-      t.focus();
-      var n = t.value.length;
-      try { t.setSelectionRange(n, n); } catch (e) {}
-      t.scrollTop = t.scrollHeight;
-    }
-  }
-  function closeGuide() { popLayer("guide"); }
-  function renderGuide() {
-    var set = GUIDE_DATA[gKey], th = set.themes[gTab];
-    var tabs = $("gTabs");
-    tabs.textContent = "";
-    set.themes.forEach(function (t, ti) {
-      var cnt = 0;
-      t.qs.forEach(function (q, qi) { if (gSel[ti + "-" + qi] && gSel[ti + "-" + qi].on) cnt++; });
-      var b = el("button", ti === gTab ? "on" : "", t.t);
-      b.type = "button"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", ti === gTab ? "true" : "false");
-      if (cnt) b.appendChild(el("span", "bd", String(cnt)));
-      b.onclick = function () { gTab = ti; renderGuide(); $("gBody").scrollTop = 0; };
-      tabs.appendChild(b);
-    });
-    var body = $("gBody"), keep = body.scrollTop;
-    body.textContent = "";
-    th.qs.forEach(function (q, qi) {
-      var st = gst(gTab, qi);
-      var card = el("div", "gq" + (st.on ? " on" : ""));
-      var h = el("button", "gqh"); h.type = "button"; h.setAttribute("aria-pressed", st.on ? "true" : "false");
-      h.appendChild(el("span", "gck"));
-      h.appendChild(el("span", "gqt", q.q));
-      h.onclick = function () {
-        if (st.on) { st.on = false; st.subs = []; } else st.on = true;
-        renderGuide(); body.scrollTop = keep;
-      };
-      card.appendChild(h);
-      var box = el("div", "gsubs");
-      q.s.forEach(function (sq, si) {
-        var b = el("button", "gs" + (st.subs[si] ? " on" : "")); b.type = "button";
-        b.setAttribute("aria-pressed", st.subs[si] ? "true" : "false");
-        b.appendChild(el("span", "gck"));
-        b.appendChild(el("span", "", sq));
-        b.onclick = function () {
-          st.subs[si] = !st.subs[si];
-          if (st.subs[si]) st.on = true;
-          renderGuide(); body.scrollTop = keep;
-        };
-        box.appendChild(b);
-      });
-      var all = q.s.every(function (_, i) { return st.subs[i]; });
-      var ab = el("button", "gall", all ? "딸림 질문 모두 해제" : "딸림 질문 모두 선택"); ab.type = "button";
-      ab.onclick = function () {
-        st.subs = q.s.map(function () { return !all; });
-        if (!all) st.on = true;
-        renderGuide(); body.scrollTop = keep;
-      };
-      box.appendChild(ab);
-      card.appendChild(box);
-      body.appendChild(card);
-    });
-    body.scrollTop = keep;
-    var tot = gTotals();
-    $("gSum").textContent = tot[0] ? "질문 " + tot[0] + "개" + (tot[1] ? " · 딸림 " + tot[1] + "개" : "") + " 선택" : "질문을 골라 주세요";
-    $("gIns").disabled = !tot[0];
-    $("gClear").disabled = !tot[0];
-    $("gIns").textContent = tot[0] ? tot[0] + "개 넣기" : "넣기";
-  }
-  function guideText() {
-    var out = [];
-    GUIDE_DATA[gKey].themes.forEach(function (th, ti) {
-      th.qs.forEach(function (q, qi) {
-        var st = gSel[ti + "-" + qi];
-        if (!st || !st.on) return;
-        var b = "Q. " + q.q;
-        q.s.forEach(function (sq, si) { if (st.subs[si]) b += "\n\u00B7 " + sq; });
-        out.push(b + "\n");
-      });
-    });
-    return out.join("\n\n");
-  }
-  function insertGuideSel() {
-    var txt = guideText();
-    if (!txt) return;
-    var t = $("wtext"), base = t.value;
-    var sep = !base ? "" : (/\n\n$/.test(base) ? "" : (/\n$/.test(base) ? "\n" : "\n\n"));
-    t.value = base + sep + txt;
-    $("text").value = t.value;
-    $("wcnt").textContent = t.value.length + "자";
-    gInserted = true;
-    closeGuide();
-  }
-  /* ---------- 입력창 ---------- */
-  function fmtRate(v) { return v ? String(v) : ""; }
-  function buildRate() {
-    var box = $("rate");
-    box.textContent = "";
-    for (var i = 1; i <= 5; i++) {
-      (function (n) {
-        var cls = form.rating >= n ? "on" : (form.rating >= n - 0.5 ? "half" : "");
-        var b = el("button", cls, "★");
-        b.type = "button";
-        b.setAttribute("aria-label", n + "점, 왼쪽을 누르면 " + (n - 0.5) + "점");
-        b.onclick = function (e) {
-          var rc = b.getBoundingClientRect();
-          var left = (e.clientX - rc.left) < rc.width / 2;
-          var v = left ? n - 0.5 : n;
-          form.rating = (form.rating === v) ? 0 : v;
-          buildRate();
-        };
-        box.appendChild(b);
-      })(i);
-    }
-    box.appendChild(el("span", "rval", fmtRate(form.rating)));
-  }
-  function setKind(k) {
-    form.type = k;
-    Array.prototype.forEach.call($("kinds").children, function (b) {
-      b.classList.toggle("on", b.dataset.k === k);
-    });
-    $("creatorLabel").textContent = KIND[k].who;
-    $("dateLabel").textContent = KIND[k].when;
-    $("castBox").hidden = !KIND[k].cast;
-    $("seatBox").hidden = !KIND[k].cast;
-    $("row2").hidden = !KIND[k].cast;
-    $("timeBox").hidden = true;
-    $("date").hidden = !!KIND[k].cast;
-    $("dtBtn").hidden = !KIND[k].cast;
-    if (KIND[k].cast) $("row2").prepend($("creatorBox"));
-    else $("title").after($("creatorBox"));
-    $("statusBox").hidden = (k !== "book");
-    if (k !== "book") form.status = "done";
-    updateDateBox();
-  }
-  function setStatus(st) {
-    form.status = st;
-    Array.prototype.forEach.call($("stKinds").children, function (b) {
-      b.classList.toggle("on", b.dataset.s === st);
-    });
-    updateDateBox();
-  }
-  function updateDateBox() {
-    $("dateBox").hidden = (form.type === "book" && form.status === "reading");
-  }
-  function openForm(id) {
-    editingId = id || null;
-    var r = id ? data.filter(function (x) { return x.id === id; })[0] : null;
-    $("sheetTitle").textContent = r ? "후기 수정" : "새 후기";
-    form.rating = r ? r.rating : 0;
-    form.status = r ? (r.status || "done") : "done";
-    setKind(r ? r.type : (filter !== "all" ? filter : "book"));
-    setStatus(form.status);
-    $("title").value = r ? r.title : "";
-    $("creator").value = r ? r.creator : "";
-    $("cast").value = r ? (r.cast || "") : "";
-    $("seat").value = r ? (r.seat || "") : "";
-    $("note").value = r ? (r.note || "") : "";
-    $("take").value = r ? (r.take || "") : "";
-    form.time = r ? (r.time || "") : "";
-    updateTimeBtn();
-    $("date").value = r ? r.date : (view === "cal" ? selDate : today());
-    updateTimeBtn();
-    $("text").value = r ? r.text : "";
-    buildRate();
-    $("sheet").classList.add("show");
-    document.body.style.overflow = "hidden";
-    $("sheet").querySelector(".panel").scrollTop = 0;
-    growText();
-    formSnap = snapForm();
-    pushLayer("form");
-    if (!r) $("title").focus();
-  }
-  function growText() {
-    var t = $("text");
-    t.style.height = "auto";
-    t.style.height = t.scrollHeight + "px";
-    $("cnt").textContent = t.value.length + "자";
-  }
-  function fitWriter() {
-    var w = $("writer"), vv = window.visualViewport;
-    if (w.hidden || !vv) return;
-    w.style.height = vv.height + "px";
-    w.style.top = vv.offsetTop + "px";
-  }
-  function openWriter() {
-    var t = $("wtext");
-    t.value = $("text").value;
-    $("wtitle").textContent = $("title").value.trim() || "후기";
-    $("wcnt").textContent = t.value.length + "자";
-    $("wbar").after($("rateBox"));
-    $("writer").hidden = false;
-    pushLayer("writer");
-    fitWriter();
-    t.focus();
-    var n = t.value.length;
-    try { t.setSelectionRange(n, n); } catch (e) {}
-    t.scrollTop = t.scrollHeight;
-    $("text").blur();
-  }
-  function restoreExtra() { $("rateAnchor").before($("rateBox")); }
-  function hideWriter() {
-    restoreExtra();
-    $("text").value = $("wtext").value;
-    $("writer").hidden = true;
-    $("writer").style.height = "";
-    $("writer").style.top = "";
-    $("wtext").blur();
-    growText();
-  }
-  function hideForm() {
-    if (!$("writer").hidden) { $("writer").hidden = true; restoreExtra(); }
-    $("sheet").classList.remove("show");
-    document.body.style.overflow = "";
-  }
-
-  /* ---------- 폰 뒤로가기 = 맨 위 창 닫기 ---------- */
-  var layers = [];          /* 지금 열려 있는 창들: "form" > "writer" / "clock" */
-  var skipPop = 0, skipConfirm = false, exitArmedAt = 0, formSnap = "";
-  function snapForm() {
-    return JSON.stringify([form.type, form.status, form.rating, form.time, $("title").value, $("creator").value, $("date").value,
-      $("seat").value, $("cast").value, $("note").value, $("take").value, $("text").value]);
-  }
-  function formDirty() { return !!formSnap && snapForm() !== formSnap; }
-  function pushLayer(name) { armGuard(); layers.push(name); history.pushState({ g: 1 + layers.length }, ""); }
-  function hideLayer(name) {
-    if (name === "clock") hideClock();
-    else if (name === "writer") hideWriter();
-    else if (name === "guide") hideGuide();
-    else if (name === "form") { hideForm(); formSnap = ""; }
-  }
-  /* 닫기/취소 버튼: 기록(history)도 한 칸 되돌려서 뒤로가기와 똑같이 동작 */
-  function popLayer(name) {
-    if (layers[layers.length - 1] === name) history.back();
-    else if (layers.indexOf(name) > -1) { layers.splice(layers.indexOf(name), 1); hideLayer(name); }
-  }
-  function closeClock() { popLayer("clock"); }
-  function closeWriter() { popLayer("writer"); }
-  function closeForm() {
-    if (layers.indexOf("form") < 0) { hideForm(); return; }
-    if (layers[layers.length - 1] === "form" && formDirty()) {
-      if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) return;
-      skipConfirm = true;
-    }
-    popLayer("form");
-  }
-  /* 저장 후: 열린 창을 전부 닫고 기록 칸도 정리 */
-  function closeAllLayers() {
-    var n = layers.length;
-    layers.slice().reverse().forEach(hideLayer);
-    layers.length = 0;
-    hideForm(); formSnap = "";
-    if (n) { skipPop++; history.go(-n); }
-  }
-  function requestClose() {
-    var top = layers[layers.length - 1];
-    if (top === "guide") closeGuide();
-    else if (top === "writer") closeWriter();
-    else if (top === "clock") closeClock();
-    else if (top === "form") closeForm();
-  }
-  function showToast(msg) {
-    var t = $("toast"); t.textContent = msg; t.classList.add("show");
-    clearTimeout(showToast.h); showToast.h = setTimeout(function () { t.classList.remove("show"); }, 1800);
-  }
-  window.addEventListener("popstate", function (e) {
-    if (skipPop > 0) { skipPop--; return; }
-    var g = (e.state && e.state.g != null) ? e.state.g : 0;
-    /* 열려 있는 창이 있으면 맨 위 창부터 닫기 */
-    if (layers.length && g < 1 + layers.length) {
-      var top = layers[layers.length - 1];
-      if (top === "form" && !skipConfirm && formDirty()) {
-        if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) { history.pushState({ g: 1 + layers.length }, ""); return; }
-      }
-      skipConfirm = false;
-      layers.pop(); hideLayer(top);
-      return;
-    }
-    if (g >= 1) return;
-    /* 맨 첫 화면에서의 뒤로가기: 바로 나가지 않고 한 단계씩 정리 */
-    var busy = searchOpen || addingId || tEditId || view !== "list" || Object.keys(openIds).length;
-    if (busy) {
-      history.pushState({ g: 1 }, "");
-      if (searchOpen) searchOpen = false;
-      else if (addingId || tEditId) { addingId = null; tEditId = null; }
-      else if (view !== "list") view = "list";
-      else { openIds = {}; infoOpen = {}; }
-      render();
-      return;
-    }
-    if (Date.now() - exitArmedAt < 2000) { history.back(); return; }
-    exitArmedAt = Date.now();
-    history.pushState({ g: 1 }, "");
-    showToast("한 번 더 누르면 나가요");
-  });
-  /* 처음 화면을 한 번 만진 뒤에 뒤로가기 기록을 깔아 둠 (브라우저가 만지기 전 기록은 건너뛰기 때문) */
-  var guarded = false;
-  function armGuard() {
-    if (guarded) return;
-    guarded = true;
-    history.replaceState({ g: 0 }, "");
-    history.pushState({ g: 1 }, "");
-  }
-  ["pointerdown", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, armGuard, { capture: true, once: true, passive: true }); });
-  function save() {
-    var title = $("title").value.trim();
-    if (!title) { alert("제목을 입력해 주세요."); $("title").focus(); return; }
-    var rec = {
-      type: form.type, title: title,
-      creator: $("creator").value.trim(),
-      cast: KIND[form.type].cast ? $("cast").value.trim() : "",
-      seat: KIND[form.type].cast ? $("seat").value.trim() : "",
-      note: $("note").value.trim(),
-      time: KIND[form.type].cast ? form.time : "",
-      status: (form.type === "book" && form.status === "reading") ? "reading" : "done",
-      date: (form.type === "book" && form.status === "reading") ? "" : $("date").value,
-      rating: form.rating,
-      text: $("text").value.trim(),
-      take: $("take").value.trim()
-    };
-    var prev = editingId ? data.filter(function (x) { return x.id === editingId; })[0] : null;
-    rec.quote = prev ? (prev.quote || "") : "";
-    rec.later = prev ? (prev.later || []) : [];
-    rec.tags = prev ? (prev.tags || []) : [];
-    if (editingId) {
-      data = data.map(function (x) { return x.id === editingId ? Object.assign({ id: x.id }, rec) : x; });
-      openIds[editingId] = true; if (infoOpen[editingId] == null) infoOpen[editingId] = true;
-    } else {
-      rec.id = Date.now();
-      data.push(rec);
-      openIds[rec.id] = true; infoOpen[rec.id] = true;
-    }
-    if (rec.date) { calY = +rec.date.slice(0, 4); calM = +rec.date.slice(5, 7) - 1; selDate = rec.date; }
-    persist(); closeAllLayers(); render();
-  }
-
-  /* ---------- 시계 ---------- */
-  var NS = "http://www.w3.org/2000/svg";
-  var tp = { h: 7, m: 30, pm: true, mode: "h" };
-  var dragging = false;
-
-  function pad(n) { return String(n).padStart(2, "0"); }
-  function fmtTime(t) {
-    var h = +t.slice(0, 2), m = t.slice(3, 5);
-    return (h < 12 ? "오전 " : "오후 ") + (h % 12 || 12) + ":" + m;
-  }
-  function updateTimeBtn() {
-    var b = $("timeBtn");
-    b.textContent = form.time ? fmtTime(form.time) : "시간 선택";
-    b.classList.toggle("empty", !form.time);
-    var d = $("date").value, label = "";
-    if (d) {
-      var dt = new Date(d + "T00:00:00");
-      label = d + " (" + DOW[dt.getDay()] + ")";
-    }
-    if (form.time) label += (label ? " " : "") + fmtTime(form.time);
-    $("dtBtn").textContent = label || "날짜와 시간 선택";
-    $("dtBtn").classList.toggle("empty", !label);
-  }
-  function svgEl(tag, attrs, text) {
-    var n = document.createElementNS(NS, tag);
-    for (var k in attrs) n.setAttribute(k, attrs[k]);
-    if (text !== undefined) n.textContent = text;
-    return n;
-  }
-  function pos(i, r) {
-    var a = i * 30 * Math.PI / 180;
-    return { x: 120 + r * Math.sin(a), y: 120 - r * Math.cos(a) };
-  }
-  function renderClock() {
-    $("segH").textContent = tp.h;
-    $("segM").textContent = pad(tp.m);
-    $("segH").classList.toggle("on", tp.mode === "h");
-    $("segM").classList.toggle("on", tp.mode === "m");
-    $("am").classList.toggle("on", !tp.pm);
-    $("pm").classList.toggle("on", tp.pm);
-    $("chint").textContent = tp.mode === "h" ? "시를 누르세요" : "분을 누르세요 (5분 단위)";
-
-    var d = $("dial");
-    d.textContent = "";
-    var face = svgEl("circle", { cx: 120, cy: 120, r: 116 });
-    face.style.fill = "#eceef4";
-    d.appendChild(face);
-
-    var selIdx = tp.mode === "h" ? (tp.h % 12) : (tp.m / 5);
-    var sp = pos(selIdx, 92), hp = pos(selIdx, 70);
-
-    var hand = svgEl("line", { x1: 120, y1: 120, x2: hp.x, y2: hp.y, "stroke-width": 2.5, "stroke-linecap": "round" });
-    hand.style.stroke = "#191c2b";
-    d.appendChild(hand);
-    var dot = svgEl("circle", { cx: 120, cy: 120, r: 5 });
-    dot.style.fill = "#191c2b";
-    d.appendChild(dot);
-    var sel = svgEl("circle", { cx: sp.x, cy: sp.y, r: 21 });
-    sel.style.fill = "#191c2b";
-    d.appendChild(sel);
-
-    for (var i = 0; i < 12; i++) {
-      var p = pos(i, 92);
-      var label = tp.mode === "h" ? (i === 0 ? 12 : i) : pad(i * 5);
-      var t = svgEl("text", { x: p.x, y: p.y + 6, "text-anchor": "middle", "font-size": 18, "font-weight": 600 }, label);
-      t.style.fill = (i === selIdx) ? "#ffffff" : "#191c2b";
-      t.style.pointerEvents = "none";
-      d.appendChild(t);
-    }
-  }
-  function pick(e) {
-    var r = $("dial").getBoundingClientRect();
-    var x = e.clientX - (r.left + r.width / 2);
-    var y = e.clientY - (r.top + r.height / 2);
-    var deg = (Math.atan2(x, -y) * 180 / Math.PI + 360) % 360;
-    var idx = Math.round(deg / 30) % 12;
-    if (tp.mode === "h") tp.h = idx === 0 ? 12 : idx;
-    else tp.m = idx * 5;
-    renderClock();
-  }
-  function openClock() {
-    $("cDate").value = $("date").value;
-    if (form.time) {
-      var h = +form.time.slice(0, 2);
-      tp.pm = h >= 12; tp.h = h % 12 || 12; tp.m = Math.round(+form.time.slice(3, 5) / 5) % 12 * 5;
-    } else { tp.h = 7; tp.m = 30; tp.pm = true; }
-    tp.mode = "h";
-    renderClock();
-    $("clock").classList.add("show");
-    pushLayer("clock");
-  }
-  function hideClock() { $("clock").classList.remove("show"); }
-
-  var dial = $("dial");
-  dial.addEventListener("pointerdown", function (e) {
-    dragging = true; dial.setPointerCapture(e.pointerId); pick(e);
-  });
-  dial.addEventListener("pointermove", function (e) { if (dragging) pick(e); });
-  function endDrag() {
-    if (!dragging) return;
-    dragging = false;
-    if (tp.mode === "h") { tp.mode = "m"; renderClock(); }
-  }
-  dial.addEventListener("pointerup", endDrag);
-  dial.addEventListener("pointercancel", function () { dragging = false; });
-
-  $("timeBtn").onclick = openClock;
-  $("dtBtn").onclick = openClock;
-  $("segH").onclick = function () { tp.mode = "h"; renderClock(); };
-  $("segM").onclick = function () { tp.mode = "m"; renderClock(); };
-  $("am").onclick = function () { tp.pm = false; renderClock(); };
-  $("pm").onclick = function () { tp.pm = true; renderClock(); };
-  $("cCancel").onclick = closeClock;
-  $("cClear").onclick = function () { form.time = ""; updateTimeBtn(); closeClock(); };
-  $("cOk").onclick = function () {
-    var h24 = (tp.h % 12) + (tp.pm ? 12 : 0);
-    form.time = pad(h24) + ":" + pad(tp.m);
-    $("date").value = $("cDate").value;
-    updateTimeBtn(); closeClock();
-  };
-  $("clock").onclick = function (e) { if (e.target === this) closeClock(); };
-
-  /* ---------- 백업 ---------- */
-  function exportData() {
-    if (!data.length && !thoughts.length) { alert("저장할 기록이 없어요."); return; }
-    var out = data.concat(thoughts.map(function (t) { return { type: "thought", id: t.id, d: t.d, tm: t.tm, t: t.t }; }));
-    var blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "후기백업_" + today() + ".json";
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-  }
-  function importData(file) {
-    var rd = new FileReader();
-    rd.onload = function () {
-      try {
-        var arr = JSON.parse(rd.result);
-        if (!Array.isArray(arr)) throw 0;
-        var have = {};
-        data.forEach(function (x) { have[x.id] = x; });
-        var added = 0, updated = 0, filled = 0, addedT = 0;
-        var haveT = {};
-        thoughts.forEach(function (t) { haveT[t.id] = true; });
-        arr.forEach(function (x) {
-          if (x && x.type === "thought") {
-            var ct = cleanThought(x);
-            if (ct && !haveT[ct.id]) { thoughts.push(ct); haveT[ct.id] = true; addedT++; }
-            return;
-          }
-          if (x && x.type === "show") x.type = "play";
-          /* 이미 있는 기록이라도 후기/나중에 든 생각이 비어 있으면 백업 내용으로 채움 (있는 내용은 건드리지 않음) */
-          if (x && have[x.id]) {
-            var fx = have[x.id], fc = false;
-            if (!String(fx.text || "").trim() && String(x.text || "").trim()) { fx.text = String(x.text); fc = true; }
-            else if (x.oldText != null && fx.text === String(x.oldText) && String(x.text || "") !== fx.text) { fx.text = String(x.text || ""); fc = true; }
-            if (!(fx.later && fx.later.length) && cleanLater(x.later).length) { fx.later = cleanLater(x.later); fc = true; }
-            if (fc) filled++;
-          }
-          if (x && have[x.id] && x.oldNote != null) {
-            var ex = have[x.id], ch = false;
-            if (!ex.seat && x.seat) { ex.seat = String(x.seat); ch = true; }
-            if (ex.note === x.oldNote && x.note !== ex.note) { ex.note = String(x.note || ""); ch = true; }
-            if (ch) updated++;
-            return;
-          }
-          if (x && x.title && KIND[x.type] && !have[x.id]) {
-            data.push({
-              id: x.id || Date.now() + added, type: x.type, title: String(x.title),
-              creator: String(x.creator || ""), cast: String(x.cast || ""), seat: String(x.seat || ""), note: String(x.note || ""),
-              time: /^\d{2}:\d{2}$/.test(x.time) ? x.time : "",
-              status: (x.type === "book" && x.status === "reading") ? "reading" : "done",
-              date: (x.type === "book" && x.status === "reading") ? "" : String(x.date || ""),
-              rating: Math.max(0, Math.min(5, Math.round((+x.rating || 0) * 2) / 2)),
-              text: (String(x.quote || "").trim() ? String(x.quote).trim() + (String(x.text || "").trim() ? "\n\n" : "") : "") + String(x.text || ""),
-              take: String(x.take || ""), quote: "", tags: cleanTags(x.tags), later: cleanLater(x.later)
-            });
-            added++;
-          }
-        });
-        persist(); persistThoughts(); render();
-        alert(added + "개를 불러왔어요." + (addedT ? " 생각 " + addedT + "개도 가져왔어요." : "") + (filled ? " 이미 있던 " + filled + "개는 후기를 채우거나 정리했어요." : "") + (updated ? " 이미 있던 " + updated + "개는 좌석 정보를 갱신했어요." : ""));
-      } catch (e) { alert("올바른 백업 파일이 아니에요."); }
-    };
-    rd.readAsText(file);
-  }
-
-  /* ---------- 이벤트 ---------- */
-  $("add").onclick = function () { openForm(); };
-  $("closeAll").onclick = function () { openIds = {}; infoOpen = {}; addingId = null; render(); };
-  $("toTop").onclick = function () { window.scrollTo({ top: 0, behavior: "smooth" }); };
-  $("sbtn").onclick = function () {
-    searchOpen = !searchOpen;
-    render();
-    if (searchOpen) $("q").focus();
-  };
-  $("cancel").onclick = closeForm;
-  $("save").onclick = save;
-  $("sheet").onclick = function (e) { if (e.target === this) closeForm(); };
-  $("kinds").onclick = function (e) { if (e.target.dataset.k) setKind(e.target.dataset.k); };
-  $("tabs").onclick = function (e) {
-    if (!e.target.dataset.f) return;
-    filter = e.target.dataset.f;
-    Array.prototype.forEach.call($("tabs").children, function (b) {
-      b.classList.toggle("on", b === e.target);
-    });
-    render();
-  };
-  $("rsel").onchange = function () { rfilter = this.value; render(); };
-  $("ssel").onchange = function () { sfilter = this.value; render(); };
-  $("tgBtn").onclick = function () { showTh = !showTh; render(); };
-  function tlSync() {
-    var t = $("tlText");
-    t.style.height = "auto";
-    t.style.height = Math.min(t.scrollHeight, 240) + "px";
-    $("tlPost").disabled = !t.value.trim();
-    $("tlCnt").textContent = t.value.length ? t.value.length + "자" : "";
-  }
-  function tlPost() {
-    var t = $("tlText"), v = t.value.trim();
-    if (!v) return;
-    thoughts.push({ id: Date.now() + (tseq++), d: today(), tm: nowHM(), t: v });
-    persistThoughts();
-    t.value = ""; tlSync(); render();
-  }
-  $("tlText").addEventListener("input", tlSync);
-  $("tlText").addEventListener("keydown", function (e) { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); tlPost(); } });
-  $("tlPost").onclick = tlPost;
-  $("q").oninput = render;
-  $("text").addEventListener("click", openWriter);
-  $("wtext").addEventListener("input", function () {
-    $("text").value = this.value;
-    $("wcnt").textContent = this.value.length + "자";
-  });
-  $("wdone").onclick = closeWriter;
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener("resize", fitWriter);
-    window.visualViewport.addEventListener("scroll", fitWriter);
-  }
-  $("views").onclick = function (e) { if (e.target.dataset.v) { view = e.target.dataset.v; render(); } };
-  $("stKinds").onclick = function (e) { if (e.target.dataset.s) setStatus(e.target.dataset.s); };
-  $("prevM").onclick = function () { moveMonth(-1); };
-  $("nextM").onclick = function () { moveMonth(1); };
-  $("todayBtn").onclick = function () {
-    var t = new Date(); calY = t.getFullYear(); calM = t.getMonth(); selDate = today(); renderCal();
-  };
-  $("dayAdd").onclick = function () { openForm(); };
-  var TKEY = "reviews-title-v1", DEF_TITLE = "나의 후기";
-  function applyTitle() {
-    var t = DEF_TITLE;
-    try { t = localStorage.getItem(TKEY) || DEF_TITLE; } catch (e) {}
-    document.querySelector("header h1").textContent = t;
-    document.title = t;
-  }
-  var PEN = '<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>';
-  var CHECK = '<path d="M5 12.5l4.5 4.5L19 7.5"/>';
-  var titleInput = null;
-  function endTitleEdit(save) {
-    if (!titleInput) return;
-    var v = titleInput.value.trim().slice(0, 30);
-    titleInput.remove(); titleInput = null;
-    var h = document.querySelector("header h1"); h.hidden = false;
-    if (save) {
-      try { if (v) localStorage.setItem(TKEY, v); else localStorage.removeItem(TKEY); } catch (e) {}
-    }
-    applyTitle();
-    var b = $("editBtn");
-    b.querySelector("span").textContent = "수정";
-    b.querySelector("svg").innerHTML = PEN;
-    b.setAttribute("aria-label", "앱 제목 수정");
-  }
-  $("editBtn").onclick = function () {
-    if (titleInput) { endTitleEdit(true); return; }
-    var h = document.querySelector("header h1");
-    titleInput = document.createElement("input");
-    titleInput.type = "text"; titleInput.className = "titleInput"; titleInput.maxLength = 30;
-    titleInput.value = h.textContent; titleInput.setAttribute("aria-label", "앱 제목");
-    titleInput.onkeydown = function (e) {
-      e.stopPropagation();
-      if (e.key === "Enter") endTitleEdit(true);
-      else if (e.key === "Escape") endTitleEdit(false);
-    };
-    h.hidden = true;
-    h.parentNode.insertBefore(titleInput, h);
-    var b = $("editBtn");
-    b.querySelector("span").textContent = "확인";
-    b.querySelector("svg").innerHTML = CHECK;
-    b.setAttribute("aria-label", "제목 수정 확인");
-    titleInput.focus();
-    titleInput.setSelectionRange(titleInput.value.length, titleInput.value.length);
-  };
-  applyTitle();
-  $("export").onclick = exportData;
-  $("import").onclick = function () { $("file").click(); };
-  $("file").onchange = function () { if (this.files[0]) importData(this.files[0]); this.value = ""; };
-  document.addEventListener("keydown", function (e) {
-    if (e.key !== "Escape") return;
-    requestClose();
-  });
-
-  window.addEventListener("resize", updateToolH);
-  if (window.ResizeObserver) new ResizeObserver(updateToolH).observe(document.querySelector(".tools"));
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateToolH);
-
-  $("gOpen").onclick = openGuide;
-  $("gOpen2").onclick = openGuide;
-  $("gClose").onclick = closeGuide;
-  $("gIns").onclick = insertGuideSel;
-  $("gClear").onclick = function () { gSel = {}; renderGuide(); };
-  render();
-})();
-</script>
-</body>
-</html>
+      var ys = Object.key
