@@ -105,7 +105,6 @@
   .card + .card { border-top: 1px solid var(--line); }
   .card:active { background: #f7f8fb; }
   .card .bar { position: absolute; left: 9px; top: 11px; bottom: 11px; width: 3px; border-radius: 2px; background: var(--c); z-index: 3; }   /* 층 순서(아래→위): 버튼 줄 1 < 제목 줄 2 < 색 띠 3 < PDF 선택 바 4 < 상단 도구 5 */
-  .card:has(.cfloat) .bar { z-index: 0; }   /* 세부정보 덮개가 떠 있는 동안만 색 띠를 덮개 아래로 */
   .l1 { display: flex; align-items: baseline; gap: 8px; }
   .card h2 {
     flex: 1; min-width: 0; margin: 0; font-family: var(--serif); font-size: 15.5px; font-weight: 600;
@@ -170,7 +169,7 @@
     height: 28px; border: 1px solid var(--line2); background: var(--paper); border-radius: 8px;
     padding: 0 10px; font-size: 13px; cursor: pointer; color: var(--ink); white-space: nowrap;
   }
-  .abar .tog { border-radius: 999px; min-width: 58px; }
+  .abar .tog { border-radius: 999px; min-width: 68px; }
   .abar .tog:disabled { opacity: .35; cursor: default; }
   .abar .del { color: var(--movie); margin-left: auto; }
   .card.open .detail { border-top: 0; margin-top: 0; padding-top: 0; padding-bottom: 4px; }
@@ -1041,7 +1040,7 @@
   .abar button, .actions button {
     height: var(--ctl); padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 500;
   }
-  .abar .tog { min-width: 58px; }
+  .abar .tog { min-width: 68px; }
   .actions { gap: var(--gap); }
 
   /* 하단 도크 */
