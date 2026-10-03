@@ -48,7 +48,6 @@
   .hrow { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 34px 16px 16px; }
   header h1 { margin: 0; font-family: var(--serif); font-size: 28px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
   header p { margin: 7px 0 0; color: var(--sub); font-size: 13.5px; }
-  .hact { display: flex; gap: 6px; flex: none; }
   .ghost {
     display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 12px;
     border: 1px solid var(--line2); background: var(--paper); color: var(--ink);
@@ -57,7 +56,7 @@
   .ghost svg { flex: none; }
 
   /* 상단 도구 */
-  .tools { padding: 6px 16px 6px; position: sticky; top: 0; background: var(--bg); z-index: 5; }
+  .tools { position: sticky; top: 0; background: var(--bg); z-index: 5; }
   .views { display: flex; background: #e7e9f1; border-radius: 10px; padding: 2px; margin-bottom: 6px; }
   .views button {
     flex: 1; border: 0; background: transparent; height: 28px; border-radius: 8px;
@@ -80,7 +79,6 @@
 
   .rtabs { margin-bottom: 6px; gap: 5px; }
   .rtabs button { height: 26px; font-size: 12.5px; }
-  .rtabs .rn { margin-left: 4px; font-weight: 400; opacity: .65; }
   .rtabs .sbtn {
     flex: none; width: 26px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
     background: #dcdfe9; border-color: #dcdfe9; color: #5b6076;
@@ -159,7 +157,7 @@
   .cast b { color: var(--sub); font-weight: 600; margin-right: 6px; }
   .note { margin-top: 3px; font-size: 13.5px; color: var(--sub); overflow-wrap: anywhere; }
   .text { margin-top: 8px; white-space: pre-wrap; font-size: 15px; line-height: 1.75; overflow-wrap: anywhere; }
-  .actions { display: flex; gap: 6px; margin-top: 10px; }
+  .actions { display: flex; margin-top: 10px; }
   .actions button {
     border: 1px solid var(--line2); background: var(--paper); border-radius: 8px;
     padding: 6px 13px; font-size: 13px; cursor: pointer; color: var(--ink);
@@ -190,7 +188,7 @@
   .cinfo .tk .tt { white-space: normal; overflow: visible; text-overflow: clip; }
   .abar {
     position: sticky; top: calc(var(--toolh, 0px) + var(--headh)); z-index: 1; background: var(--paper);
-    display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center;
     margin: 0 -14px 0 -20px; padding: 6px 14px 6px 20px;
     border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
   }
@@ -198,7 +196,7 @@
     height: 28px; border: 1px solid var(--line2); background: var(--paper); border-radius: 8px;
     padding: 0 10px; font-size: 13px; cursor: pointer; color: var(--ink); white-space: nowrap;
   }
-  .abar .tog { border-radius: 999px; min-width: 68px; }
+  .abar .tog { border-radius: 999px; }
   .abar .tog:disabled { opacity: .35; cursor: default; }
   .abar .del { color: var(--movie); margin-left: auto; }
   .card.open .detail { border-top: 0; margin-top: 0; padding-top: 0; padding-bottom: 4px; }
@@ -211,7 +209,7 @@
   /* 「후기 수정」: 날짜 줄 오른쪽 제자리에 고정(스크롤을 따라오지 않음) */
   .rvstick { position: relative; height: 0; }
   .rvstick .rmwr {
-    position: absolute; right: 0; top: -2px; margin: 0; padding: 2px 6px; border: 0; border-radius: 6px;
+    position: absolute; right: 0; top: -2px; margin: 0; padding: 2px 0 2px 6px; border: 0; border-radius: 6px;   /* 오른쪽 끝 글자를 「접기/펼치기」와 같은 선에 */
     background: var(--paper); font: inherit; font-size: 12.5px; line-height: 20px; color: var(--sub); cursor: pointer; white-space: nowrap;
   }
   .rvstick .rmwr:active { opacity: .6; }
@@ -227,19 +225,18 @@
     background: rgba(243,244,248,.96); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
     border-top: 1px solid var(--line); padding: 5px 16px calc(5px + env(safe-area-inset-bottom));
   }
-  #dock .in { max-width: 608px; margin: 0 auto; display: flex; gap: 6px; }
+  #dock .in { max-width: 608px; margin: 0 auto; display: flex; }
   #dock button {
-    height: 28px; border-radius: 8px; border: 1px solid var(--line2); background: var(--paper);
-    color: var(--ink); font-size: 13.5px; cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--line2); background: var(--paper);
+    color: var(--ink); cursor: pointer; white-space: nowrap;
     display: flex; align-items: center; justify-content: center;
   }
   #dock .dclose { flex: 1 1 0; min-width: 0; }
   #dock .dclose:disabled { opacity: .4; cursor: default; }
-  #dock .dadd { flex: 2 1 0; min-width: 0; background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
-  #dock .dtop { flex: none; width: 28px; padding: 0; }
+  #dock .dadd { flex: 2 1 0; min-width: 0; background: var(--ink); border-color: var(--ink); color: #fff; }
+  #dock .dtop { flex: none; padding: 0; }
 
   /* 달력 */
-  #calWrap { padding: 4px 16px; }
   .calhead { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
   .calhead button {
     height: 38px; border: 1px solid var(--line); background: var(--paper); border-radius: 10px;
@@ -267,23 +264,23 @@
   .dots { display: flex; gap: 3px; justify-content: center; }
   .dots i { width: 6px; height: 6px; border-radius: 50%; display: block; background: var(--c); }
   .day.sel .dots i { box-shadow: 0 0 0 1.5px #fff; }
-  .dayhead { margin: 18px 0 8px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 15px; }
+  .dayhead { display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
   .dayhead button {
-    border: 1px solid var(--line2); background: var(--paper); border-radius: 999px; padding: 6px 13px;
-    font-size: 13px; color: var(--ink); cursor: pointer; font-weight: 400;
+    border: 1px solid var(--line2);
+    cursor: pointer;
   }
 
   /* 통계 */
   #statWrap { padding: 4px 16px; }
-  .sub { display: flex; gap: 6px; margin-bottom: 12px; }
+  .sub { display: flex; margin-bottom: 12px; }
   .sub button {
-    flex: 1; height: 34px; padding: 0 4px; border: 1px solid var(--line2); background: var(--paper);
-    border-radius: 999px; font-size: 13.5px; color: var(--sub); cursor: pointer; white-space: nowrap;
+    flex: 1; border: 1px solid var(--line2); background: var(--paper);
+    border-radius: 999px; color: var(--sub); cursor: pointer; white-space: nowrap;
   }
-  .sub button.on { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
+  .sub button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
   .range { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
   .range span { color: var(--mute); }
-  .range input { flex: 1; min-width: 0; padding: 9px 10px; font-size: 15px; }
+  .range input { flex: 1; min-width: 0; }
   .pane { background: var(--paper); border-radius: 14px; box-shadow: 0 0 0 1px var(--line); padding: 14px 16px; margin-bottom: 12px; }
   .phead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
   .phead b { font-family: var(--serif); font-size: 16px; }
@@ -378,46 +375,37 @@
   }
   .cdisp .seg.on { background: var(--ink); color: #fff; }
   .cdisp .colon { font-size: 40px; font-weight: 700; }
-  .ampm { display: flex; flex-direction: column; gap: 4px; margin-left: 8px; }
+  .ampm { display: flex; flex-direction: column; margin-left: 8px; }
   .ampm button {
-    border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 7px 11px;
-    font-size: 14px; font-family: inherit; cursor: pointer; color: var(--ink);
+    border: 1px solid var(--line); background: var(--paper); border-radius: 8px;
+    font-family: inherit; cursor: pointer; color: var(--ink);
   }
   .ampm button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
   #dial { display: block; margin: 6px auto 4px; width: 250px; height: 250px; touch-action: none; user-select: none; -webkit-user-select: none; }
   .chint { text-align: center; color: var(--sub); font-size: 13px; margin-bottom: 6px; }
-  .cbtns { display: flex; gap: 8px; margin-top: 10px; }
+  .cbtns { display: flex; margin-top: 10px; }
   .cbtns button {
-    flex: 1; padding: 12px 0; border-radius: 12px; font-size: 14.5px; font-family: inherit; white-space: nowrap;
+    flex: 1; font-family: inherit; white-space: nowrap;
     border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer;
   }
   #cClear { flex: 1.3; }
   .cbtns .ok { background: var(--ink); color: #fff; border-color: var(--ink); font-weight: 700; flex: 1.5; }
-  #cast { min-height: 72px; }
   .rate { display: flex; gap: 4px; }
   .rate button {
     background: none; border: 0; font-size: 34px; line-height: 1; padding: 2px 4px;
     color: var(--line2); cursor: pointer;
   }
   .rate button.on { color: var(--star); }
-  .btns { display: flex; gap: 8px; margin-top: 20px; }
-  .btns button {
-    flex: 1; padding: 14px 0; border-radius: 12px; font-size: 16px; font-family: inherit;
-    border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer;
-  }
-  .btns .save { background: var(--ink); color: #fff; border-color: var(--ink); font-weight: 700; flex: 2; }
   .editbar {
     position: sticky; top: 0; z-index: 3; background: var(--bg); border-bottom: 1px solid var(--line);
     display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 12px; padding-top: max(10px, env(safe-area-inset-top));
+    padding-top: max(10px, env(safe-area-inset-top));
   }
-  .editbar b { font-size: 16px; }
   .barbtn {
-    border: 0; background: transparent; color: var(--sub); font-family: inherit; font-size: 16px;
-    padding: 8px 12px; border-radius: 10px; cursor: pointer; min-width: 64px;
+    border: 0; background: transparent; color: var(--sub); font-family: inherit;
+    cursor: pointer;
   }
   .barbtn.save { background: var(--ink); color: #fff; font-weight: 700; }
-  .editbody { padding: 14px 16px 0; }
   input[type=text].bigtitle {
     border: 0; border-bottom: 2px solid var(--line); border-radius: 0; background: transparent;
     padding: 12px 2px 8px; margin-top: 14px; font-size: 25px; line-height: 1.35; font-weight: 700;
@@ -425,18 +413,16 @@
   }
   input[type=text].bigtitle:focus { border-bottom-color: var(--ink); outline: none; }
   .paper { position: relative; margin-top: 18px; }
-  #text {
+  #text, #pre {
     display: block; min-height: max(320px, 50vh); border: 0; border-radius: 14px;
     padding: 20px 18px 40px; font-size: 17px; line-height: 1.85; resize: none; overflow: hidden;
     box-shadow: 0 1px 0 var(--line);
   }
-  #text:focus { outline: none; box-shadow: 0 0 0 2px #7d8bff; }
+  #text:focus, #pre:focus { outline: none; box-shadow: 0 0 0 2px #7d8bff; }
   .cnt { position: absolute; right: 16px; bottom: 12px; font-size: 12.5px; color: var(--sub); pointer-events: none; }
-  .row2 { display: flex; gap: 10px; }
+  .row2 { display: flex; }
   .row2 > div { flex: 1; min-width: 0; }
-  .divider { border: 0; border-top: 1px solid var(--line2); margin: 22px 0 2px; }
-  #text[readonly] { cursor: pointer; }
-  .tapnote { margin: 8px 4px 0; font-size: 13px; color: var(--sub); }
+  #text[readonly], #pre[readonly] { cursor: pointer; }
   #writer {
     position: fixed; left: 0; right: 0; top: 0; height: 100dvh; background: var(--paper);
     z-index: 30; display: flex; justify-content: center; overscroll-behavior: contain;
@@ -481,9 +467,8 @@
   .lh { font-size: 12.5px; font-weight: 700; color: var(--sub); margin-bottom: 6px; }
   .lh.fold { display: flex; align-items: center; gap: 6px; width: 100%; padding: 2px 0; border: 0; background: none; font-family: inherit; text-align: left; cursor: pointer; }
   .lh.fold .fc { font-weight: 500; color: var(--mute); }
-  .lh.fold .chev { margin-left: auto; font-size: 13px; color: var(--mute); transition: transform .15s; }
+  .lh.fold .chev { margin-left: auto; display: inline-flex; align-items: center; color: var(--sub); }
   .lh.fold.folded { margin-bottom: 0; }
-  .lh.fold.folded .chev { transform: rotate(-90deg); }
   .li { margin-bottom: 9px; }
   .ld { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--mute); }
   .ld button { border: 0; background: none; color: var(--mute); font-size: 12px; cursor: pointer; padding: 0 2px; }
@@ -502,7 +487,7 @@
   .tdock .compose { margin-top: 6px; }
   .tdock .compose textarea { min-height: 72px; max-height: 32vh; }
   .compose textarea { min-height: 88px; font-size: 15px; padding: 10px 12px; }
-  .cb { display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end; }
+  .cb { display: flex; margin-top: 6px; justify-content: flex-end; }
   .cb button {
     border: 1px solid var(--line2); background: var(--paper); border-radius: 8px;
     padding: 6px 14px; font-size: 13px; cursor: pointer; color: var(--ink);
@@ -521,27 +506,25 @@
   .recall .rx.take { font-weight: 600; color: var(--ink); }
 
   #quote { min-height: 84px; font-size: 15px; line-height: 1.65; }
-  .gchips { display: flex; align-items: center; gap: 6px; overflow-x: auto; padding: 2px 0 4px; scrollbar-width: none; }
-  .gchips::-webkit-scrollbar { display: none; }
-  .gchips .gl { flex: none; font-size: 12.5px; color: var(--sub); padding-right: 2px; }
-  .gchips button {
-    flex: none; border: 1px solid var(--line2); background: var(--paper); border-radius: 999px;
-    padding: 5px 12px; font-size: 13px; color: var(--ink); cursor: pointer; white-space: nowrap;
-  }
   #writer #rateBox {
-    flex: none; display: flex; align-items: center; gap: 10px; padding: 2px 14px;
+    flex: none; display: flex; align-items: center; padding: 2px 14px;
     border-bottom: 1px solid var(--line); background: var(--bg);
   }
   #writer #rateBox label { margin: 0; }
-  #writer .rate button { font-size: 28px; padding: 2px 2px; }
   #writer #rateBox { gap: 6px; }
-  #writer #rateBox .rval { margin-left: 4px; min-width: 24px; }
+  /* 작성 창 맨 위 고정 탭: 작게 */
+  #writer .vtabs { flex: none; }
+  /* 관람 후(별점 + 가이드 질문)와 관람 전(가이드 질문) 줄을 같은 높이·같은 선으로 */
+  #writer #rateBox, #writer #wPreBox { box-sizing: border-box; border-bottom: 1px solid var(--line); background: var(--bg); }
+  #writer #wPreBox { flex: none; display: flex; align-items: center; justify-content: flex-end; }
+  #writer #wPreBox[hidden] { display: none; }
+  #writer #wPreBox .gbtn { margin-left: auto; flex: none; height: 28px; padding: 0 10px; }
   #rateBox #gOpen2 { display: none; }
   #writer #rateBox #gOpen2 { display: inline-flex; margin-left: auto; flex: none; height: 28px; padding: 0 10px; }
 
 
   /* ===== 디자인 개선: 헤더 2×2 버튼 / 필터 / 달력 ===== */
-  .hact { display: grid; grid-template-columns: repeat(2, auto); gap: 6px; flex: none; }
+  .hact { flex: none; }
   .hact .ghost {
     height: 32px; padding: 0 12px; justify-content: center; gap: 5px; white-space: nowrap;
     text-decoration: none; font-size: 12.5px; font-weight: 500; box-shadow: 0 1px 2px rgba(25,28,43,.05);
@@ -549,48 +532,42 @@
   .hact .ghost:active { background: #eef0f7; }
   #adminLink { color: var(--ink); }
 
-  .tools { padding: 8px 16px 10px; box-shadow: 0 1px 0 var(--line); }
-  .tools .views { background: #e4e7f0; border-radius: 12px; padding: 3px; margin-bottom: 10px; }
-  .tools .views button { height: 32px; border-radius: 9px; font-size: 14px; font-weight: 500; transition: background .15s, color .15s; }
+  .tools { box-shadow: 0 1px 0 var(--line); }
+  .tools .views { background: #e4e7f0; }
+  .tools .views button { font-weight: 500; transition: background .15s, color .15s; }
   .tools .views button.on { box-shadow: 0 1px 3px rgba(25,28,43,.14); }
 
-  .tools .tabs { gap: 6px; margin-bottom: 8px; }
   .tools .tabs button {
-    height: 36px; border: 1px solid var(--line2); border-radius: 999px; font-size: 13.5px; font-weight: 500;
-    background: var(--paper); color: var(--ink); gap: 6px; transition: background .15s, border-color .15s, color .15s, box-shadow .15s;
+    border: 1px solid var(--line2); border-radius: 999px; font-weight: 500;
+    background: var(--paper); color: var(--ink); transition: background .15s, border-color .15s, color .15s, box-shadow .15s;
   }
-  .tools .tabs button[data-f]:not([data-f="all"])::before { width: 7px; height: 7px; }
   .tools .tabs button.on {
     background: var(--c, var(--ink)); border-color: var(--c, var(--ink)); color: var(--cf, #fff); font-weight: 700;
-    box-shadow: 0 3px 8px color-mix(in srgb, var(--c, var(--ink)) 32%, transparent);
   }
 
-  #rtabs { align-items: center; gap: 2px; margin-bottom: 0; }
+  #rtabs { margin-bottom: 0; }
   #rtabs button {
-    flex: none; height: 32px; padding: 0 10px; border: 0; border-radius: 0; background: transparent;
-    color: var(--mute); font-size: 13.5px; font-weight: 500; position: relative;
+    flex: none; border: 0; border-radius: 0; background: transparent;
+    color: var(--mute); font-weight: 500; position: relative;
   }
   #rtabs button.on { background: transparent; color: var(--ink); font-weight: 700; }
   #rtabs button[data-r].on::after {
-    content: ""; position: absolute; left: 10px; right: 10px; bottom: 2px; height: 2px; border-radius: 2px; background: var(--ink);
+    content: ""; position: absolute; height: 2px; border-radius: 2px; background: var(--ink);
   }
-  #rtabs .rn { margin-left: 4px; font-weight: 500; opacity: .7; font-size: 12px; }
   #rtabs .sbtn {
-    flex: none; width: 32px; height: 32px; padding: 0; margin-right: 6px; border-radius: 50%;
+    flex: none; padding: 0; border-radius: 50%;
     background: var(--paper); border: 1px solid var(--line2); color: var(--sub);
   }
   #rtabs .sbtn.act { background: var(--ink); border-color: var(--ink); color: #fff; }
-  #qbox { margin-top: 8px; }
 
   /* 달력 */
   #calWrap { padding: 12px 16px 4px; }
   .calcard { background: var(--paper); border-radius: 20px; box-shadow: 0 0 0 1px var(--line), 0 6px 18px rgba(25,28,43,.05); padding: 14px 10px 10px; }
-  .calcard .calhead { margin: 0 4px 10px; gap: 6px; }
+  .calcard .calhead { margin: 0 4px 10px; }
   .calcard .caltitle { flex: 1; text-align: left; font-size: 21px; letter-spacing: -0.02em; }
   .calcard .caltitle small { margin-top: 1px; font-size: 12.5px; }
-  .calcard .calhead button { height: 34px; border: 1px solid var(--line); background: var(--paper); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
-  .calcard .calhead .navb { width: 34px; }
-  .calcard .calhead .todayb { width: auto; border-radius: 999px; padding: 0 13px; font-size: 13px; font-weight: 600; margin-right: 2px; }
+  .calcard .calhead button { border: 1px solid var(--line); background: var(--paper); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+  .calcard .calhead .todayb { width: auto; border-radius: 999px; font-size: 13px; }
   .calcard .calhead button:active { background: #eef0f7; }
   .calcard .dow { gap: 0; margin-bottom: 2px; }
   .calcard .dow div { font-size: 11.5px; font-weight: 600; padding: 6px 0; }
@@ -612,7 +589,7 @@
   .calcard .day:not(.blank):not(.sel):active > span:first-child { background: #eef0f7; }
 
   .dayhead { margin: 18px 4px 8px; font-size: 16px; }
-  .dayhead button { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 600; padding: 7px 14px; }
+  .dayhead button { background: var(--ink); border-color: var(--ink); color: #fff; }
 
   #toast {
     position: fixed; left: 50%; bottom: calc(76px + env(safe-area-inset-bottom)); transform: translate(-50%, 12px);
@@ -698,7 +675,7 @@
   .gleg i.d { background: var(--c); }
   .gchart { display: flex; gap: 3px; padding-top: 16px; }
   .gchart.sc { overflow-x: auto; }
-  .gcol { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+  .gcol { flex: 1; min-width: 0; align-items: center; }
   .gchart.sc .gcol { min-width: 46px; }
   .gbars { width: 100%; height: 120px; display: flex; align-items: flex-end; justify-content: center; gap: 2px; border-bottom: 1px solid var(--line2); }
   .gbars i { position: relative; flex: 1; max-width: 16px; border-radius: 3px 3px 0 0; background: var(--line2); }
@@ -721,29 +698,27 @@
   .tagchip:active { background: #dcdfe9; }
 
   /* ===== 헤더 버튼 재정리: 위줄=수정·관리자(희미한 텍스트) / 아랫줄=불러오기·백업(작은 버튼) ===== */
-  .hact { grid-template-columns: auto auto; justify-items: end; align-items: center; gap: 7px 14px; }
+  .hact { justify-items: end; }
   .hact #editBtn { order: 1; } .hact #adminLink { order: 2; }
   .hact #import { order: 3; } .hact #export { order: 4; }
 
   .hact #editBtn, .hact #adminLink {
     height: auto; padding: 2px 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
-    color: var(--mute); font-size: 12px; font-weight: 400; gap: 4px;
+    color: var(--mute); font-weight: 400; gap: 4px;
   }
   .hact #editBtn svg, .hact #adminLink svg { width: 12px; height: 12px; stroke-width: 2; }
   .hact #editBtn:active, .hact #adminLink:active { background: transparent; color: var(--ink); }
 
   .hact #import, .hact #export {
-    height: 26px; padding: 0 10px; gap: 4px; font-size: 12px; font-weight: 500; box-shadow: none;
+    box-shadow: none;
     border: 1px solid var(--line2); background: var(--paper); color: var(--sub);
   }
-  .hact #import svg, .hact #export svg { width: 12px; height: 12px; }
   .hact #import:active, .hact #export:active { background: #eef0f7; }
 
   /* ===== 보정: 버튼 간격 좁히기 + 고정 영역 컴팩트하게 ===== */
   .hact { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; grid-template-columns: none; }
   .hact .hline { display: flex; align-items: center; }
   .hact .hl-a { gap: 12px; }
-  .hact .hl-b { gap: 5px; }
 
   .tools { padding: 4px 16px 6px; }
   .tools .views { padding: 2px; margin-bottom: 5px; border-radius: 10px; }
@@ -752,9 +727,9 @@
   .tools .tabs button { height: 28px; font-size: 13px; gap: 5px; }
   .tools .tabs button.on { box-shadow: none; }
   .tools .tabs button[data-f]:not([data-f="all"])::before { width: 6px; height: 6px; }
-  #rtabs button { height: 26px; font-size: 13px; padding: 0 8px; }
+  #rtabs button { padding: 0 8px; }
   #rtabs button[data-r].on::after { left: 8px; right: 8px; bottom: 1px; }
-  #rtabs .sbtn { width: 26px; height: 26px; margin-right: 4px; }
+  #rtabs .sbtn { margin-right: 4px; }
   #qbox { margin-top: 5px; }
 
   /* 제목 인라인 수정 */
@@ -773,15 +748,14 @@
   }
   .rate { align-items: center; }
   .rate .rval { margin-left: 8px; font-size: 15px; font-weight: 700; color: var(--sub); min-width: 28px; }
-  .rhint { font-size: 11.5px; color: var(--mute); }
 
   /* ===== 필터 줄: 돋보기(원형 버튼) + 글자형 선택 3개, 한 줄 높이 26px ===== */
-  #rtabs { display: flex; align-items: center; gap: 14px; height: 26px; margin: 0; }
+  #rtabs { display: flex; align-items: center; gap: 14px; margin: 0; }
   #rtabs .sbtn { margin: 0 -2px 0 0; }
   #rtabs .fsel {
-    position: relative; flex: none; display: inline-flex; align-items: center; height: 26px; margin: 0;
+    position: relative; flex: none; display: inline-flex; align-items: center; margin: 0;
     padding: 0 13px 0 0; border: 0; background: transparent; color: var(--mute);
-    font-size: 13.5px; font-weight: 500; line-height: 1; white-space: nowrap; cursor: pointer;
+    font-weight: 500; line-height: 1; white-space: nowrap; cursor: pointer;
   }
   #rtabs .fsel::after {
     content: ""; position: absolute; right: 2px; top: 50%; width: 5px; height: 5px;
@@ -794,8 +768,8 @@
   #rtabs .fsel.act { color: var(--ink); font-weight: 700; }
   /* 생각 포함: 켜고 끄는 토글 버튼, 오른쪽 끝 정렬 */
   #rtabs button.tgl {
-    margin: 0 0 0 auto; flex: none; height: 26px; padding: 0; border: 0; border-radius: 0; background: transparent;
-    color: var(--mute); font-size: 13.5px; font-weight: 500; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;
+    margin: 0 0 0 auto; flex: none; padding: 0; border: 0; border-radius: 0; background: transparent;
+    color: var(--mute); font-weight: 500; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;
   }
   #rtabs button.tgl::before {
     content: ""; width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor;
@@ -822,8 +796,8 @@
   .tlcompose .cb { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
   .tlcompose .cb span { font-size: 12px; color: var(--mute); }
   .tlcompose .cb button {
-    border: 0; background: var(--ink); color: #fff; border-radius: 999px; padding: 7px 18px;
-    font-size: 14px; font-weight: 600; cursor: pointer;
+    border: 0; background: var(--ink); color: #fff; border-radius: 999px;
+    cursor: pointer;
   }
   .tlcompose .cb button:disabled { opacity: .3; cursor: default; }
   .rows .tent { padding: 10px 14px; position: relative; }
@@ -882,7 +856,7 @@
   .tent .edit .cb { display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px; }
   .tent .edit .cb button { border: 1px solid var(--line2); background: var(--paper); border-radius: 999px; padding: 6px 14px; font-size: 13px; cursor: pointer; color: var(--ink); }
   .tent .edit .cb button.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
-  .moreTl { display: block; margin: 14px auto 6px; border: 1px solid var(--line2); background: var(--paper); border-radius: 999px; padding: 8px 22px; font-size: 13.5px; cursor: pointer; color: var(--ink); }
+  .moreTl { display: block; margin: 14px auto 6px; border: 1px solid var(--line2); background: var(--paper); border-radius: 999px; cursor: pointer; color: var(--ink); }
   .dots i.td { background: transparent; box-shadow: inset 0 0 0 1.5px #9aa0b6; }
   .dots i.rd, .calcard .day.sel .dots i.rd { background: transparent; box-shadow: inset 0 0 0 1.5px var(--book); }   /* 독서함: 노란 빈 동그라미 */
   .calcard .day.sel .dots i.td { box-shadow: inset 0 0 0 1.5px #9aa0b6; }
@@ -901,26 +875,23 @@
   /* ===== 입력 화면: 홈과 같은 카드·알약 버튼 언어 ===== */
   .editbar { padding: 8px 12px; padding-top: max(8px, env(safe-area-inset-top)); }
   .editbar b { font-family: var(--serif); font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
-  .barbtn { height: 34px; padding: 0 12px; min-width: 0; font-size: 15px; display: inline-flex; align-items: center; }
-  .barbtn.save { border-radius: 999px; padding: 0 18px; font-size: 14.5px; }
+  .barbtn { min-width: 0; display: inline-flex; align-items: center; }
+  .barbtn.save { border-radius: 999px; }
   .editbody { padding: 12px 16px 0; }
 
   /* 카테고리: 홈의 알약 버튼과 같은 모양 */
-  #kinds { display: flex; gap: 6px; }
+  #kinds { display: flex; }
   #kinds button {
-    flex: 1; min-width: 0; height: 32px; padding: 0 2px; gap: 6px; border-radius: 999px;
+    flex: 1; min-width: 0; border-radius: 999px;
     border: 1px solid var(--line2); background: var(--paper); color: var(--ink);
-    font-size: 13.5px; font-weight: 500; font-family: inherit; transition: background .15s, border-color .15s, color .15s;
+    font-family: inherit; transition: background .15s, border-color .15s, color .15s;
   }
-  #kinds button.on { background: var(--c, var(--ink)); border-color: var(--c, var(--ink)); color: var(--cf, #fff); font-weight: 700; }
+  #kinds button.on { background: var(--c, var(--ink)); border-color: var(--c, var(--ink)); color: var(--cf, #fff); }
 
   /* 카드 */
-  .fcard { background: var(--paper); border-radius: 16px; box-shadow: 0 0 0 1px var(--line); padding: 14px 14px 16px; margin-top: 10px; }
-  .fcard label { margin: 0 0 4px 2px; font-size: 12.5px; color: var(--sub); font-weight: 500; }
+  .fcard { background: var(--paper); border-radius: 16px; box-shadow: 0 0 0 1px var(--line); }
+  .fcard label { font-size: 12.5px; color: var(--sub); font-weight: 500; }
   .fcard label.tl { margin: 0 0 6px 2px; }
-  .fld { margin-top: 10px; }
-  .row2 { margin-top: 10px; gap: 8px; }
-  .row2 > .fld { margin-top: 0; }
 
   .fcard input[type=text], .fcard input[type=date], .fcard textarea, .fcard .timeBtn {
     background: #f5f6fa; border: 1px solid transparent; border-radius: 10px; padding: 9px 12px;
@@ -942,14 +913,13 @@
     padding: 2px 2px 10px; font-size: 22px; font-weight: 700; line-height: 1.35; letter-spacing: -0.02em; box-shadow: none;
   }
   .fcard input[type=text].bigtitle:focus { background: transparent; border-bottom-color: var(--ink); box-shadow: none; }
-  #creatorBox { margin-top: 12px; }
   .row2 #creatorBox { margin-top: 0; }
 
   /* 읽기 상태: 홈의 목록/달력 탭 같은 분할 버튼 */
-  #stKinds { display: flex; gap: 0; background: #eceef5; border-radius: 10px; padding: 2px; }
+  #stKinds { display: flex; background: #eceef5; }
   #stKinds button {
-    flex: 1; height: 32px; padding: 0; border: 0; border-radius: 8px; background: transparent;
-    color: var(--sub); font-size: 14px; font-weight: 500; font-family: inherit; gap: 0;
+    flex: 1; padding: 0; border: 0; border-radius: 8px; background: transparent;
+    color: var(--sub); font-weight: 500; font-family: inherit; gap: 0;
   }
   #stKinds button.on { background: var(--paper); color: var(--ink); font-weight: 700; box-shadow: 0 1px 3px rgba(25,28,43,.14); }
 
@@ -957,26 +927,24 @@
   .fcard #rateBox { display: flex; align-items: center; gap: 10px; }
   .fcard #rateBox label { margin: 0 0 0 2px; }
   .fcard #rateBox .rate { margin-left: auto; gap: 0; }
-  .fcard .rate button { font-size: 30px; padding: 0 2px; }
-  .fcard .rate .rval { margin-left: 6px; min-width: 26px; text-align: right; }
+  .fcard .rate .rval { text-align: right; }
   #writer #rateBox .rate { margin-left: 0; }
 
   /* 후기 */
-  .fcard .paper { margin-top: 8px; }
-  .fcard #text {
-    min-height: max(190px, 28vh); padding: 13px 14px 34px; font-size: 16px; line-height: 1.8; border-radius: 12px;
+  .fcard #text, .fcard #pre {
+    min-height: max(190px, 28vh); font-size: 16px; line-height: 1.8;
     background: #f5f6fa; border: 1px solid transparent; box-shadow: none;
   }
-  .fcard #text:focus { box-shadow: 0 0 0 3px rgba(125,139,255,.2); border-color: #7d8bff; background: #fff; }
+  .fcard #text:focus, .fcard #pre:focus { box-shadow: 0 0 0 3px rgba(125,139,255,.2); border-color: #7d8bff; background: #fff; }
   .fcard .cnt { right: 12px; bottom: 10px; }
   .panel { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
 
   /* ===== 가이드 질문 창 ===== */
-  .thead { display: flex; align-items: center; justify-content: space-between; margin: 0 0 8px; }
+  .thead { display: flex; align-items: center; justify-content: space-between; }
   .thead label.tl { margin: 0 0 0 2px; }
   .gbtn {
-    display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px; border: 1px solid var(--line2);
-    background: var(--paper); color: var(--ink); border-radius: 999px; font-size: 13px; font-family: inherit; cursor: pointer; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line2);
+    background: var(--paper); color: var(--ink); border-radius: 999px; font-family: inherit; cursor: pointer; white-space: nowrap;
   }
   .gbtn::before { content: "+"; font-size: 16px; line-height: 1; color: var(--sub); margin-top: -1px; }
   #guide {
@@ -994,19 +962,19 @@
   .gbar .barbtn { min-width: 64px; }
   .gbar b { flex: 1; min-width: 0; text-align: center; font-family: var(--serif); font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
   .gtabs {
-    flex: none; display: flex; gap: 6px; overflow-x: auto; padding: 10px 16px; background: var(--bg);
+    flex: none; display: flex; overflow-x: auto; background: var(--bg);
     border-bottom: 1px solid var(--line); scrollbar-width: none; -webkit-overflow-scrolling: touch;
   }
   .gtabs::-webkit-scrollbar { display: none; }
   .gtabs button {
-    flex: none; display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 999px;
-    border: 1px solid var(--line2); background: var(--paper); color: var(--ink); font-size: 13.5px; font-weight: 500;
+    flex: none; display: inline-flex; align-items: center; border-radius: 999px;
+    border: 1px solid var(--line2); background: var(--paper); color: var(--ink); font-weight: 500;
     font-family: inherit; white-space: nowrap; cursor: pointer; transition: background .15s, border-color .15s, color .15s;
   }
   .gtabs button.on { background: var(--c, var(--ink)); border-color: var(--c, var(--ink)); color: var(--cf, #fff); font-weight: 700; }
   .gtabs .bd {
-    min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--c, var(--ink)); color: var(--cf, #fff);
-    font-size: 11.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--c, var(--ink)); color: var(--cf, #fff);
+    font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
   }
   .gtabs button.on .bd { background: var(--cf, #fff); color: var(--c, var(--ink)); }
   .gbody { flex: 1; min-height: 0; overflow-y: auto; padding: 12px 16px 20px; -webkit-overflow-scrolling: touch; }
@@ -1036,11 +1004,11 @@
   .gs .gck { width: 17px; height: 17px; border-radius: 5px; margin-top: 2px; }
   .gs .gck::after { left: 5px; top: 1.5px; width: 4px; height: 8px; }
   .gall {
-    align-self: flex-start; margin-top: 6px; height: 28px; padding: 0 12px; border: 1px solid var(--line2); background: var(--paper);
-    border-radius: 999px; font-size: 12.5px; color: var(--sub); font-family: inherit; cursor: pointer;
+    align-self: flex-start; margin-top: 6px; padding: 0 12px; border: 1px solid var(--line2); background: var(--paper);
+    border-radius: 999px; color: var(--sub); font-family: inherit; cursor: pointer;
   }
   .gfoot {
-    flex: none; display: flex; align-items: center; gap: 8px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    flex: none; display: flex; align-items: center; padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
     background: var(--bg); border-top: 1px solid var(--line);
   }
   .gfoot { flex-wrap: wrap; row-gap: 8px; }
@@ -1069,7 +1037,7 @@
   #genre { padding-right: 40px; cursor: pointer; text-overflow: ellipsis; }
   #genre:not([readonly]) { cursor: text; }
   .gnchev {
-    position: absolute; right: 4px; top: 50%; width: 36px; height: 36px; margin-top: -18px; padding: 0; border: 0;
+    position: absolute; right: 4px; top: 50%; padding: 0; border: 0;
     background: transparent; color: #8b90a5; display: flex; align-items: center; justify-content: center; cursor: pointer;
     border-radius: 10px; transition: transform .2s, color .15s;
   }
@@ -1085,10 +1053,10 @@
   .gnhead { display: flex; align-items: center; justify-content: space-between; margin: 0 2px 8px; min-height: 22px; }
   .gnh { font-size: 12px; font-weight: 600; color: var(--sub); letter-spacing: .02em; }
   .gnclr { border: 0; background: transparent; padding: 2px 4px; font-size: 12.5px; color: var(--sub); font-family: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-  .gngrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .gngrid { display: grid; grid-template-columns: 1fr 1fr; }
   .gnopt {
-    display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; height: 42px; padding: 0 12px;
-    border: 1px solid transparent; border-radius: 11px; background: #f5f6fa; color: var(--ink); font-size: 14px; font-family: inherit;
+    display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; padding: 0 12px;
+    border: 1px solid transparent; background: #f5f6fa; color: var(--ink); font-size: 14px; font-family: inherit;
     cursor: pointer; text-align: left; transition: background .12s, border-color .12s, color .12s;
   }
   .gnopt > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1175,7 +1143,7 @@
   }
   .fcard input[type=date], .fcard .timeBtn { min-height: var(--fld); }
   .fcard textarea { padding: 10px 12px; border-radius: 10px; }
-  .fcard #text { padding: 13px 14px 34px; border-radius: 12px; }
+  .fcard #text, .fcard #pre { padding: 13px 14px 34px; border-radius: 12px; }
   #cDate { height: var(--fld); padding: 0 12px; }
   .gnchev { width: 32px; height: 32px; margin-top: -16px; }
   .gngrid { gap: var(--gap); }
@@ -1192,7 +1160,6 @@
   .thead { margin: 0; }
   .fcard .paper { margin-top: 12px; }
   .gbtn { height: var(--ctl); padding: 0 12px; font-size: 13px; font-weight: 500; }
-  #writer #rateBox #gOpen2 { height: var(--ctl); padding: 0 12px; }
 
   /* 가이드 질문 창 */
   .gtabs { gap: var(--gap); padding: 8px 16px; }
@@ -1207,10 +1174,16 @@
   .cbtns button { height: var(--fld); padding: 0; border-radius: 999px; font-size: 14px; }
   .ampm { gap: var(--gap); }
   .ampm button { height: var(--ctl); padding: 0 12px; font-size: 13px; }
-  .btns { gap: 8px; }
-  .btns button { height: var(--fld); padding: 0; border-radius: 999px; font-size: 14px; }
 
   .fcard textarea { display: block; }
+  /* 기록 창 세부 정보 칸: 세로 크기 줄이기 (칸 높이 40→34, 칸 사이·라벨 간격 줄임) */
+  #sheet .fcard input[type=text], #sheet .fcard input[type=date], #sheet .fcard .timeBtn { min-height: 34px; padding-top: 0; padding-bottom: 0; }
+  #sheet .fcard input[type=text].bigtitle { min-height: 0; padding-bottom: 10px; }
+  #sheet .fcard .fld, #sheet .fcard #creatorBox { margin-top: 8px; }
+  #sheet .fcard .row2 { margin-top: 8px; }
+  #sheet .fcard .row2 > .fld, #sheet .fcard .row2 #creatorBox { margin-top: 0; }
+  #sheet .fcard label:not(.tl) { margin-bottom: 3px; }
+  #sheet #cast { min-height: 34px; padding-top: 5px; padding-bottom: 5px; overflow: hidden; }   /* 한 줄로 시작, 길어지면 늘어남 */
   .range input { border-radius: 10px; }
   .barbtn { border-radius: 999px; }
 
@@ -1231,11 +1204,6 @@
   #hBody { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
   .hq .gqh { align-items: center; cursor: default; padding-bottom: 6px; }
   .hq .gqt { font-size: 15.5px; }
-  .hchev {
-    flex: none; width: 8px; height: 8px; margin: -3px 4px 0 0; border-right: 2px solid var(--sub); border-bottom: 2px solid var(--sub);
-    transform: rotate(45deg); transition: transform .18s;
-  }
-  .hq.open .hchev { transform: rotate(-135deg); margin-top: 3px; }
   .hq.open { box-shadow: 0 0 0 1.5px var(--ink); }
   .hp { padding: 0 16px 15px; font-size: 14.5px; line-height: 1.75; color: var(--ink); letter-spacing: -0.01em; }
   .hp b { font-weight: 700; }
@@ -1269,9 +1237,28 @@
   #welcome .wbtns { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
   #welcome .wguide { height: 44px; border: 0; border-radius: 999px; background: var(--ink); color: #fff; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
   #welcome .wnever { height: 38px; border: 0; background: transparent; color: var(--sub); font-family: inherit; font-size: 13.5px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-  .text.lp { -webkit-touch-callout: none; }
   .noreview { margin-top: 12px; font-size: 13.5px; color: var(--mute); opacity: .6; cursor: pointer; display: inline-block; }
   .noreview:active { opacity: 1; }
+  .fcard #pre { min-height: max(130px, 20vh); }
+  .vtabs { display: flex; gap: 2px; margin-top: 12px; padding: 2px; background: var(--line); border-radius: 9px; }
+  .vtabs[hidden] { display: none; }
+  .vtab { flex: 1; border: 0; background: transparent; color: var(--sub); font: inherit; font-size: 13px; font-weight: 600; padding: 5px 0; border-radius: 7px; cursor: pointer; }
+  .vtab.on { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  /* 안 보이는 탭 옆 점: 저장된 기록이 있으면 빈 동그라미, 고친 내용이 있으면(지워서 비운 경우 포함) 채운 동그라미 */
+  .vtab.has:not(.on)::after, .vtab.mod:not(.on)::after { content: ""; display: inline-block; box-sizing: border-box; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--c, #7d8bff); background: transparent; margin-left: 5px; vertical-align: middle; }
+  .vtab.mod:not(.on)::after { background: var(--c, #7d8bff); }
+  .vtab.clr:not(.on)::after { content: ""; display: inline-block; box-sizing: border-box; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--c, #7d8bff); background: var(--c, #7d8bff); opacity: .3; margin-left: 5px; vertical-align: middle; }   /* 있던 내용을 지워 비움: 연한 동그라미 */
+  .prewrap { margin-top: 12px; }   /* 후기처럼 박스 없이 글로만 */
+  .prehd { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; min-height: 20px; line-height: 20px; }
+  .prehd b { font-weight: 700; }
+  .prewrap + .rvwrap { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line2); }   /* 「덧붙인 생각」과 같은 점선 구분선 */
+  .rvhd { font-size: 13.5px; font-weight: 700; line-height: 20px; }
+  .prehd .prechev { font-size: 12.5px; color: var(--sub); }
+  .prewrap .rmrow { position: relative; }   /* 「수정」은 날짜·시각 줄 오른쪽 끝(접기 화살표와 같은 선)에 */
+  .prewrap .rvstick { position: static; }
+  .prewrap .pretext { margin-top: 0; font-size: 15px; line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
+  .prebtn { margin-top: 12px; border: 0; background: none; padding: 0; font: inherit; font-size: 13.5px; color: var(--mute); opacity: .7; cursor: pointer; display: inline-block; }
+  .prebtn:active { opacity: 1; }
   /* 업데이트 내역 탭: 다른 탭보다 연한 색 */
   .gtabs button.logtab { opacity: .55; }
   .gtabs button.logtab.on { opacity: .8; }
@@ -1374,6 +1361,24 @@
     #printArea .pr-ld { font: 700 8.5pt/1.5 var(--sans); color: #222; break-after: avoid; page-break-after: avoid; }
     #printArea .pr-lt { font-family: var(--serif); font-size: 10pt; white-space: pre-wrap; overflow-wrap: anywhere; }
   }
+  /* 별점 칸·작성 창 고정 줄 줄이기 */
+  .fcard .rate button { font-size: 24px; padding: 0 1px; }
+  .fcard .rate .rval { font-size: 14px; margin-left: 4px; min-width: 24px; }
+  #writer .rate button { font-size: 22px; padding: 0 1px; }
+  #writer #rateBox .rval { font-size: 14px; margin-left: 2px; min-width: 22px; }
+  #writer #rateBox, #writer #wPreBox { height: 34px; padding: 0 12px; }
+  #writer #rateBox #gOpen2, #writer #wPreBox .gbtn { height: 24px; padding: 0 10px; font-size: 12.5px; }
+  #writer .vtabs { margin: 4px 12px 4px; }
+  /* 관람 전 줄(글 또는 「기대 쓰기」)과 후기 줄 사이 점선 구분선 */
+  .prebtn + .rvwrap { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line2); }
+  .prewrap + .noreview { display: block; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line2); }
+  /* 접힌 「관람 전」: 제목을 연하게 */
+  .prehd.shut b { color: var(--mute); font-weight: 600; }
+  .prehd .prechev { margin-left: auto; display: inline-flex; align-items: center; }
+  /* 후기(또는 위쪽 칸)와 「덧붙인 생각」 사이는 실선 */
+  .detail > .later:not(.rlog) { border-top: 1px solid var(--line2); }
+  /* 읽는 중·중단 책 카드에 후기·생각·읽는 중 감상이 하나도 없어 「완독/중단/다시 읽기」가 맨 위면 점선 없음 */
+  .detail > .qs:first-child { border-top: 0; padding-top: 0; }
 </style>
 </head>
 <body>
@@ -1534,7 +1539,7 @@
         <button data-k="musical">뮤지컬</button>
       </div>
 
-      <section class="fcard" id="cardInfo">
+      <section class="fcard">
         <input type="text" id="title" class="bigtitle" placeholder="제목" aria-label="제목">
 
         <div id="creatorBox" class="fld">
@@ -1576,23 +1581,39 @@
         <div class="row2" id="row2" hidden>
           <div id="seatBox" class="fld" hidden>
             <label for="seat">좌석</label>
-            <input type="text" id="seat" placeholder="예: 1층 G열 23">
+            <input type="text" id="seat">
           </div>
         </div>
 
         <div id="castBox" class="fld" hidden>
           <label for="cast">캐스팅</label>
-          <textarea id="cast" placeholder="예: 홍길동, 김철수 (여러 명이면 쉼표나 줄바꿈으로 구분)"></textarea>
+          <textarea id="cast" rows="1" placeholder="콤마, 띄어쓰기, 줄바꿈으로 구분"></textarea>
         </div>
 
-        <div id="noteBox" class="fld">
+        <div class="fld">
           <label for="note">비고</label>
           <input type="text" id="note" maxlength="100" placeholder="예: 친구랑 같이 봄, 2층 앞줄, 재관람">
         </div>
 
-        <div id="tagBox" class="fld">
+        <div class="fld">
           <label for="tags">태그</label>
           <input type="text" id="tags" maxlength="120" placeholder="예: #재관람 #가족" autocomplete="off">
+        </div>
+      </section>
+
+      <div class="vtabs" id="vtabs" role="tablist" hidden>
+        <button type="button" class="vtab" id="vtPre" role="tab" aria-selected="false">관람 전</button>
+        <button type="button" class="vtab on" id="vtPost" role="tab" aria-selected="true">관람 후</button>
+      </div>
+
+      <section class="fcard" id="cardPre" hidden>
+        <div class="thead">
+          <label class="tl" for="pre">관람 전</label>
+          <button type="button" class="gbtn" id="gOpenPre">가이드 질문</button>
+        </div>
+        <div class="paper">
+          <textarea id="pre" readonly placeholder="기대한 점이나 보기 전부터 알고 있던 점을 적어요. 여기를 눌러 전체 화면으로 적어보세요." aria-label="관람 전"></textarea>
+          <span class="cnt" id="preCnt">0자</span>
         </div>
       </section>
 
@@ -1634,6 +1655,11 @@
       <button type="button" class="barbtn mbtn" id="wMin" aria-label="작성 화면 잠깐 내리기"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>내리기</button>
       <button type="button" class="barbtn save" id="wdone">완료</button>
     </div>
+    <div class="vtabs" id="wtabs" role="tablist" hidden>
+      <button type="button" class="vtab" id="wtPre" role="tab" aria-selected="false">관람 전</button>
+      <button type="button" class="vtab on" id="wtPost" role="tab" aria-selected="true">관람 후</button>
+    </div>
+    <div id="wPreBox" hidden><button type="button" class="gbtn" id="gOpenPre2">가이드 질문</button></div>
     <textarea id="wtext" placeholder="이 작품은 어땠나요? 자유롭게 적어보세요." aria-label="후기 쓰기"></textarea>
     <span class="wc" id="wcnt">0자</span>
   </div>
@@ -1795,7 +1821,7 @@
       /* 예전 버전 데이터 변환은 한 번만(스키마 버전 2 미만일 때) */
       if (ver < 2 && r.type === "show") r.type = "play";
       if (!KIND[r.type]) { dropped++; return; }
-      ["title", "creator", "genre", "cast", "seat", "note", "time", "take", "quote", "text"].forEach(function (k) {
+      ["title", "creator", "genre", "cast", "seat", "note", "time", "take", "quote", "text", "pre", "preD"].forEach(function (k) {
         if (typeof r[k] !== "string") r[k] = r[k] == null ? "" : String(r[k]);
       });
       if (r.type !== "book" || (r.status !== "reading" && r.status !== "paused")) r.status = "done";
@@ -1819,6 +1845,9 @@
       /* ta: 후기를 처음 쓴 시각, te: 마지막으로 고친 시각(밀리초). 후기가 없으면 둘 다 없앰 */
       ["ta", "te"].forEach(function (k) { if (r[k] != null && !(isFinite(+r[k]) && +r[k] > 0)) delete r[k]; else if (r[k] != null) r[k] = +r[k]; });
       if (!r.text.trim()) { delete r.ta; delete r.te; }
+      /* pta: 관람 전 기록을 처음 쓴 시각, pte: 마지막으로 고친 시각(밀리초). 관람 전 기록이 없으면 둘 다 없앰 */
+      ["pta", "pte"].forEach(function (k) { if (r[k] != null && !(isFinite(+r[k]) && +r[k] > 0)) delete r[k]; else if (r[k] != null) r[k] = +r[k]; });
+      if (!String(r.pre || "").trim()) { delete r.pta; delete r.pte; }
       if (r.id == null || !isFinite(+r.id) || seen[r.id]) { r.id = ++maxId; migrated = true; }
       seen[r.id] = 1;
       out.push(r);
@@ -1939,7 +1968,34 @@
       if (hasReview(r)) add("후기 작성", false);
     });
     if (fresh) { try { localStorage.setItem(ASKEY, JSON.stringify(done)); } catch (e) {} }
+    added += syncPreActs();
     if (added) persistActs();
+    return added;
+  }
+  /* 이미 쓴 「관람 전」 글도 타임라인에 「관람 전 기대 작성」 줄로 채움(한 번만, 지운 줄은 되살리지 않음) */
+  var PSKEY = "reviews-presynced-v1";
+  function loadPreSynced() {
+    try { var a = JSON.parse(localStorage.getItem(PSKEY)); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+  }
+  function markPreSynced(id) {
+    var a = loadPreSynced();
+    if (a.indexOf(id) < 0) { a.push(id); try { localStorage.setItem(PSKEY, JSON.stringify(a)); } catch (e) {} }
+  }
+  function syncPreActs() {
+    var done = loadPreSynced(), have = {}, added = 0, fresh = 0, byRid = {};
+    done.forEach(function (i) { have[i] = 1; });
+    acts.forEach(function (a) { if (a.rid) byRid[a.rid] = (byRid[a.rid] || "") + "\n" + a.t; });
+    data.forEach(function (r) {
+      if (r.type === "book" || !String(r.pre || "").trim() || have[r.id]) return;
+      have[r.id] = 1; done.push(r.id); fresh++;
+      if ((byRid[r.id] || "").indexOf("관람 전 기대 작성") >= 0) return;
+      var d, tm = "";
+      if (r.pta) { var t = new Date(+r.pta); d = ymd(t); tm = pad(t.getHours()) + ":" + pad(t.getMinutes()); }
+      else { var it = idTime(r.id); d = r.preD || (it ? it.d : (r.date || today())); tm = it && !r.preD ? it.tm : ""; }
+      acts.push({ id: Date.now() + (tseq++), d: d, tm: tm, t: "\u300C" + r.title + "\u300D 관람 전 기대 작성", rid: r.id, ty: r.type, w: false });
+      added++;
+    });
+    if (fresh) { try { localStorage.setItem(PSKEY, JSON.stringify(done)); } catch (e) {} }
     return added;
   }
   function persistThoughts() {
@@ -1964,6 +2020,7 @@
   }
 
   /* ---------- 목록 ---------- */
+  function isUpcoming(r) { return r.type !== "book" && !!r.date && r.date >= today(); }   /* 아직 안 본(관람일이 오늘 이후) 영화·연극·뮤지컬 */
   function hasReview(r) { return !!(r.text && r.text.trim()); }
   var SOPT = [["all", "별점 전체", "별점 전체"], ["5", "별점 5", "★5"], ["4.5", "별점 4.5 이상", "★4.5↑"], ["4", "별점 4 이상", "★4↑"],
               ["3", "별점 3 이상", "★3↑"], ["lt3", "별점 3 미만", "★3 미만"], ["none", "별점 없음", "별점 없음"]];
@@ -1986,7 +2043,7 @@
       if (rfilter === "no" && hasReview(r)) return false;
       if (!starOk(r, sfilter)) return false;
       if (!q) return true;
-      return (r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.quote || "") + " " + (r.later || []).concat(r.rlog || []).map(function (x) { return x.t; }).join(" ") + " " + (r.tags || []).map(function (t) { return "#" + t; }).join(" ")).toLowerCase().indexOf(q) > -1;
+      return (r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.pre || "") + " " + (r.quote || "") + " " + (r.later || []).concat(r.rlog || []).map(function (x) { return x.t; }).join(" ") + " " + (r.tags || []).map(function (t) { return "#" + t; }).join(" ")).toLowerCase().indexOf(q) > -1;
     });
   }
 
@@ -2057,20 +2114,23 @@
     var d = new Date(ms);
     return d.getFullYear() + "." + pad(d.getMonth() + 1) + "." + pad(d.getDate()) + " " + fmtTime(pad(d.getHours()) + ":" + pad(d.getMinutes()));
   }
-  function reviewMeta(r) {
+  /* 처음 쓴 시각 + (수정됨) 표시. 누르면 최종 수정 시각. 후기·관람 전 기록이 같이 씀 */
+  function stampMeta(ta, te, fb, what) {
     var m = el("div", "rmeta");
-    if (!r.ta && !r.te) { m.textContent = "최초입력일 데이터 없음"; return m; }
-    if (!r.te) { m.textContent = stampOf(r.ta); return m; }
+    var first = ta ? stampOf(ta) : (fb || "최초입력일 데이터 없음");
+    if (!te) { m.textContent = first; return m; }
     var b = el("button", "rmedit"); b.type = "button";
     var showEd = false;
     function paint() {
-      b.textContent = showEd ? "최종 수정 " + stampOf(r.te) : (r.ta ? stampOf(r.ta) : "최초입력일 데이터 없음") + " (수정됨)";
-      b.setAttribute("aria-label", showEd ? "최종 수정 시각. 누르면 처음 쓴 시각으로" : "수정된 후기. 누르면 최종 수정 시각");
+      b.textContent = showEd ? "최종 수정 " + stampOf(te) : first + " (수정됨)";
+      b.setAttribute("aria-label", showEd ? "최종 수정 시각. 누르면 처음 쓴 시각으로" : "수정된 " + what + ". 누르면 최종 수정 시각");
     }
     b.onclick = function (e) { e.stopPropagation(); showEd = !showEd; paint(); };
     paint(); m.appendChild(b);
     return m;
   }
+  function reviewMeta(r) { return stampMeta(r.ta, r.te, "", "후기"); }
+  function preMeta(r) { return stampMeta(r.pta, r.pte, r.preD ? r.preD.replace(/-/g, ".") : "", "관람 전 기록"); }
   function buildHead(r, when, mark) {
     var head = el("div", "chead");
     var hl = el("div", "hl");
@@ -2116,7 +2176,7 @@
     if (r.genre) line("장르", r.genre);
     if (r.take) info.appendChild(mkTake(r.take));
     if (r.seat) line("좌석", r.seat);
-    if (r.cast) line("캐스팅", r.cast.replace(/\n/g, ", "));
+    if (r.cast) line("캐스팅", castNorm(r.cast));
     if (r.note) info.appendChild(el("div", "note", r.note));
     if (r.tags && r.tags.length) {
       var tw = el("div", "tags");
@@ -2312,7 +2372,7 @@
       var l1 = el("div", "l1");
       l1.appendChild(el("h2", "", r.title));
       if (r.rating) l1.appendChild(makeStars(r));
-      if (r.status === "done") l1.appendChild(makeRvIcon(r));   /* 후기 있으면 채운 말풍선, 없으면 흐린 빈 말풍선 */
+      if (r.status === "done" && !(isUpcoming(r) && !hasReview(r))) l1.appendChild(makeRvIcon(r));   /* 후기 있으면 채운 말풍선, 없으면 흐린 빈 말풍선 */
       card.appendChild(l1);
 
       var l2 = el("div", "l2");
@@ -2362,15 +2422,18 @@
       if (addingId === r.id) dockNeed = r;
       /* 읽는 중 감상(날짜별 독서 기록)를 메인 후기보다 위에 */
       buildLogSection(det, r, "rlog", "읽는 중 감상", "읽다가 든 생각…", false, "기록");
-      if (r.text) {
+      if (r.type !== "book") { var pb = buildPre(r); if (pb) det.appendChild(pb); }   /* 관람 전: 후기 위쪽 */
+      if (hasReview(r)) {   /* 공백·빈 줄만 있는 후기는 없는 것으로 봄(빈 칸이 점선을 만들지 않게) */
         /* 후기 위 줄: 왼쪽엔 입력 날짜·시각, 오른쪽엔 「후기 수정」 글자. 후기 글자는 그대로 선택·복사 가능 */
         var rvw = el("div", "rvwrap");
         var rvs = el("div", "rvstick");
-        var rbtn = el("button", "rmwr", "후기 수정"); rbtn.type = "button";
-        rbtn.setAttribute("aria-label", "후기 수정");
+        var rbtn = el("button", "rmwr", "수정"); rbtn.type = "button";
+        rbtn.setAttribute("aria-label", "수정");
         rbtn.onclick = function (e) { e.stopPropagation(); openReviewWriter(r.id); };
         rvs.appendChild(rbtn);
         rvw.appendChild(rvs);
+        /* 「후기」 제목은 「관람 전」 글이 같이 있거나 아직 안 본(미래) 기록일 때만(책은 그대로) */
+        if (r.type === "book" || r.pre || isUpcoming(r)) rvw.appendChild(el("div", "rvhd", "후기"));   /* 「관람 전」과 같은 제목 서식 */
         var rmrow = el("div", "rmrow");
         var rmeta = reviewMeta(r);
         rmrow.appendChild(rmeta || el("span", "rmeta"));
@@ -2378,8 +2441,8 @@
         var tx = el("div", "text", r.text);
         rvw.appendChild(tx);
         det.appendChild(rvw);
-      } else if (r.status === "done") {   /* 읽는 중·중단 책엔 메인 후기 칸 대신 「읽는 중 감상」만 */
-        var nr = el("div", "noreview", "후기 쓰기");
+      } else if (r.status === "done" && !isUpcoming(r)) {   /* 읽는 중·중단 책엔 메인 후기 칸 대신 「읽는 중 감상」만. 아직 안 본(예정) 기록엔 「후기 쓰기」 없이 「관람 전」만 */
+        var nr = el("div", "noreview", r.type === "book" ? "후기 쓰기" : "후기 없음");   /* 영화·연극·뮤지컬: 눌러서 후기를 쓸 수 있음 */
         nr.setAttribute("role", "button"); nr.tabIndex = 0;
         nr.setAttribute("aria-label", "후기 쓰기");
         nr.onclick = function (e) { e.stopPropagation(); openReviewWriter(r.id); };
@@ -2406,6 +2469,40 @@
     return card;
   }
 
+  /* 카드의 「관람 전」 블록: 내용이 있으면 접고 펼 수 있게(관람일이 지나면 처음엔 접힘), 없으면 아직 안 본 기록에만 「관람 전 기대 쓰기」 */
+  var preOpen = {};
+  function buildPre(r) {
+    if (r.pre) {
+      var open = preOpen[r.id] != null ? preOpen[r.id] : true;   /* 처음엔 항상 펼친 상태 */
+      var w = el("div", "prewrap");
+      var hd = el("div", "prehd" + (open ? "" : " shut")); hd.setAttribute("role", "button"); hd.tabIndex = 0; hd.setAttribute("aria-expanded", open ? "true" : "false");
+      hd.appendChild(el("b", "", "관람 전"));
+      var mb = el("button", "rmwr", "수정"); mb.type = "button";   /* 후기의 「수정」과 같은 서식 */
+      mb.setAttribute("aria-label", "관람 전 기대 수정");
+      mb.onclick = function (e) { e.stopPropagation(); openPreEditor(r.id); };
+      mb.onkeydown = function (e) { e.stopPropagation(); };
+      var chev = el("span", "prechev"); chev.setAttribute("aria-hidden", "true");
+      chev.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="' + (open ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6") + '"/></svg>';   /* 펼침: ︿ / 접힘: ﹀ */
+      hd.appendChild(chev);
+      function tg(e) { e.stopPropagation(); preOpen[r.id] = !open; render(); }
+      hd.onclick = tg;
+      hd.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tg(e); } };
+      w.appendChild(hd);
+      var prow = el("div", "rmrow");
+      if (open) { var pst = el("div", "rvstick"); pst.appendChild(mb); prow.appendChild(pst); }   /* 「수정」: 접기 화살표 아래 날짜·시각 줄 오른쪽(펼쳤을 때만) */
+      prow.appendChild(preMeta(r)); w.appendChild(prow);   /* 후기와 같은 날짜·시각 줄 */
+      if (open) {
+        w.appendChild(el("div", "pretext", r.pre));
+      }
+      return w;
+    }
+    if (r.date && r.date >= today()) {
+      var nb = el("button", "prebtn", "관람 전 기대 쓰기"); nb.type = "button";
+      nb.onclick = function (e) { e.stopPropagation(); openPreEditor(r.id); };
+      return nb;
+    }
+    return null;
+  }
   function updateToolH() {
     var t = document.querySelector(".tools");
     if (t) document.documentElement.style.setProperty("--toolh", t.offsetHeight + "px");
@@ -2472,7 +2569,7 @@
   }
 
   /* 독서 기록(rlog): 읽는 동안 남기는 날짜별 기록 / 생각 덧붙임(later): 다 읽은 뒤 다시 든 생각 */
-  var rlogFold = {}, editLog = null;   /* editLog: 고치는 중인 읽는 중 감상 {rid, idx} */
+  var rlogFold = {}, editLog = null;   /* editLog: 고치는 중인 읽는 중 감상·덧붙인 생각 {rid, idx, key} */
   /* 하단 고정 입력창: 후기를 읽던 자리에서 스크롤 이동 없이 바로 쓰기 */
   var dockEl = null, dockRid = null, dockNeed = null, dockPad = "", dockVV = null;
   function dockPlace() {
@@ -2538,16 +2635,18 @@
       fh.type = "button"; fh.setAttribute("aria-expanded", folded ? "false" : "true");
       fh.appendChild(el("span", "ft", label));
       if (folded) fh.appendChild(el("span", "fc", String(arr.length)));
-      fh.appendChild(el("span", "chev", "\u25BE"));
+      var fch = el("span", "chev"); fch.setAttribute("aria-hidden", "true");   /* 「관람 전」과 같은 접기/펼치기 화살표 */
+      fch.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="' + (folded ? "M6 9l6 6 6-6" : "M6 15l6-6 6 6") + '"/></svg>';
+      fh.appendChild(fch);
       fh.onclick = function (e) { e.stopPropagation(); rlogFold[r.id] = !folded; render(); };
       lw.appendChild(fh);
     } else lw.appendChild(el("div", "lh", label));
     if (folded) { det.appendChild(lw); return; }
     arr.forEach(function (x, idx) {
       var it = el("div", "li"), ld = el("div", "ld");
-      var editingLog = key === "rlog" && !!editLog && editLog.rid === r.id && editLog.idx === idx;
+      var editingLog = !!editLog && editLog.key === key && editLog.rid === r.id && editLog.idx === idx;
       var stamp = x.d.replace(/-/g, ".") + (x.tm ? " " + fmtTime(x.tm) : "");
-      if (key === "rlog" && x.te) {   /* 고친 감상: 처음 시각 뒤에 (수정됨), 누르면 최종 수정 시각 */
+      if (x.te) {   /* 고친 감상·생각: 처음 시각 뒤에 (수정됨), 누르면 최종 수정 시각 */
         var eb2 = el("button", "rmedit"); eb2.type = "button";
         var showEd = false;
         var paint = function () { eb2.textContent = showEd ? "최종 수정 " + stampOf(x.te) : stamp + " (수정됨)"; };
@@ -2570,15 +2669,13 @@
       };
       if (!editingLog) {
         var bw = el("span", "lbw");
-        if (key === "rlog") {
-          var ed = el("button", "", "수정"); ed.type = "button";
-          ed.onclick = function (e) { e.stopPropagation(); editLog = { rid: r.id, idx: idx }; render(); };
-          bw.appendChild(ed);
-        }
+        var ed = el("button", "", "수정"); ed.type = "button";
+        ed.onclick = function (e) { e.stopPropagation(); editLog = { rid: r.id, idx: idx, key: key }; render(); };
+        bw.appendChild(ed);
         bw.appendChild(del); ld.appendChild(bw);
       }
       it.appendChild(ld);
-      if (editingLog) {   /* 읽는 중 감상 고치기 */
+      if (editingLog) {   /* 읽는 중 감상·덧붙인 생각 고치기 */
         var cp2 = el("div", "compose");
         cp2.onclick = function (e) { e.stopPropagation(); };
         var ta2 = el("textarea"); ta2.rows = 3; ta2.value = x.t; ta2.placeholder = ph;
@@ -2604,8 +2701,7 @@
     det.appendChild(lw);
   }
   function appendDetailExtra(det, r) {
-    var adding = addingId === r.id, notDone = r.status !== "done";
-    buildLogSection(det, r, "later", "나중에 든 생각", "지금 다시 생각해 보니…", false, "생각");
+    buildLogSection(det, r, "later", "덧붙인 생각", "지금 다시 생각해 보니…", false, "생각");
   }
 
   /* ---------- 생각(타임라인) ---------- */
@@ -2678,6 +2774,7 @@
     if (/ 관람$/.test(t)) return "관람";
     if (/ 완독$/.test(t)) return "완독";
     if (/ 후기 작성$/.test(t)) return "후기";
+    if (/ 관람 전 기대 작성$/.test(t)) return "후기";   /* 관람 전 기대도 타임라인에선 「후기」 태그 */
     return "기록";
   }
   /* 「생각 기록됨」 줄을 누르면 달력 탭의 그 날짜, 그 생각 줄로 이동 */
@@ -2761,7 +2858,7 @@
       /* 후기·읽는 중·백업·가져오기·목표 기록: 타임라인 기록만 지움 */
       var note = gone.tid ? "\n생각 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요."
         : gone.ty === "sys" ? "\n타임라인의 기록만 지워지고, 저장한 백업 파일과 가져온 기록은 그대로 남아요."
-        : (kind === "후기" && rec) ? "\n후기 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요." : "";
+        : (kind === "후기" && rec) ? (/ 관람 전 기대 작성$/.test(gone.t) ? "\n관람 전 기대 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요." : "\n후기 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요.") : "";
       if (!confirm("이 활동 기록을 정말 삭제할까요?" + note + "\n\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.")) return;
       acts.splice(pos, 1); persistActs(); render();
       showUndoToast("기록을 삭제했어요", function () {
@@ -3116,7 +3213,7 @@
       var meta = [when, starText(r.rating), r.creator, r.genre].filter(function (x) { return x && String(x).trim(); });
       if (meta.length) blk.appendChild(el("div", "pr-meta", meta.join(" \u00B7 ")));
       if (r.tags && r.tags.length) blk.appendChild(el("div", "pr-tags", r.tags.map(function (t) { return "#" + t; }).join(" ")));
-      [["한줄평", r.take], ["캐스팅", r.cast], ["좌석", r.seat], ["비고", r.note]].forEach(function (f) {
+      [["한줄평", r.take], ["관람 전", r.pre], ["캐스팅", castNorm(r.cast)], ["좌석", r.seat], ["비고", r.note]].forEach(function (f) {
         var v = (f[1] || "").replace(/\s+$/, "").replace(/^\s+/, "");
         if (!v) return;
         var row = el("div", "pr-f");
@@ -3625,9 +3722,14 @@
 
   /* ---------- 가이드 질문 ---------- */
   var GUIDE_DATA = {"book":{"name":"책","themes":[{"t":"첫 인상과 경험","qs":[{"q":"책을 덮은 직후 가장 먼저 떠오른 것은 무엇인가?","s":["특정 장면이나 문장이 먼저 떠오르는가?","인물, 분위기, 사건 중 무엇이 가장 강하게 남았는가?","왜 하필 그것이 가장 먼저 기억났을까?"]},{"q":"읽는 동안 내가 가장 강하게 반응한 순간은 언제였나?","s":["정확히 어느 문장이나 장면에서 반응했나?","그 반응은 감정인가, 판단인가, 신체적인 느낌인가?","그 순간 작품이 직접 제시한 것과 내가 덧붙인 것은 무엇인가?"]},{"q":"읽기 전 예상과 실제 작품은 어디에서 달랐나?","s":["내가 처음 예상했던 작품의 모습은 무엇이었나?","예상과 달랐던 부분은 내용인가, 문체인가, 인물인가?","그 차이가 작품을 보는 내 태도를 어떻게 바꿨나?"]},{"q":"가장 이해되지 않았거나 마음에 걸리는 부분은 무엇인가?","s":["이해되지 않는 이유가 정보 부족 때문인가, 인물의 행동 때문인가?","작품이 의도적으로 설명하지 않은 부분일 가능성은 있는가?","지금 당장 결론을 내리지 않는다면 어떤 질문으로 남길 수 있을까?"]},{"q":"이 책을 한 문장으로 기억한다면 어떤 문장이 될까?","s":["그 문장을 뒷받침하는 구체적인 장면은?","‘재미있었다/슬펐다/좋았다’를 빼면 어떻게 표현할 수 있을까?","시간이 지난 뒤에도 이 문장이 유효할 것 같은가?"]}]},{"t":"문장과 언어","qs":[{"q":"가장 오래 붙잡고 싶은 문장은 무엇인가?","s":["왜 그 문장이 눈에 들어왔나?","단어 하나를 바꾸면 느낌이 어떻게 달라질까?","그 문장이 작품 전체에서 어떤 위치에 있나?"]},{"q":"작가가 유난히 반복하는 단어나 표현이 있는가?","s":["같은 표현이 등장하는 상황은 어떻게 다른가?","반복될 때 의미가 변하는가?","반복 자체가 독자에게 어떤 효과를 만드는가?"]},{"q":"말하지 않고 보여주는 부분은 어디인가?","s":["인물이 직접 설명하지 않는 것은 무엇인가?","행동이나 묘사가 대사를 대신하고 있는가?","직접 설명했다면 작품의 느낌이 어떻게 달라졌을까?"]},{"q":"평범해 보이지만 이상하게 기억에 남은 표현은 무엇인가?","s":["왜 특별해 보이지 않는 문장이 기억났을까?","앞뒤 문맥을 보면 의미가 달라지는가?","작가가 다른 표현을 사용할 수도 있었는데 이것을 선택한 이유는 무엇일까?"]},{"q":"내가 이 책을 설명할 때 자꾸 사용하는 단어는 무엇인가?","s":["그 단어가 실제 작품의 어떤 부분에서 나온 것인가?","너무 넓거나 추상적인 단어는 아닌가?","더 정확한 단어로 바꾼다면 무엇일까?"]}]},{"t":"인물과 관계","qs":[{"q":"가장 이해하고 싶은 인물은 누구인가?","s":["그 인물이 원하는 것은 무엇인가?","그 인물은 자신이 원하는 것을 정확히 알고 있는가?","말과 행동 사이에 차이가 있는가?"]},{"q":"인물의 행동 중 가장 판단하기 어려웠던 것은 무엇인가?","s":["그 행동을 설명할 수 있는 작품 속 근거는?","인물 본인은 그 행동을 어떻게 설명할 것 같은가?","내가 그 인물의 입장이라면 다른 선택을 할 수 있었을까?"]},{"q":"두 인물의 관계는 언제 달라졌다고 느꼈나?","s":["관계가 바뀌는 구체적인 사건은?","대사가 아니라 행동이나 침묵으로 드러나는 변화는?","두 사람 중 누가 관계의 변화를 먼저 알아차렸을까?"]},{"q":"내가 처음 판단했던 인물에 대한 생각이 바뀌었나?","s":["처음에는 무엇이라고 생각했나?","무엇 때문에 생각이 바뀌었나?","혹시 생각이 바뀐 것이 아니라 내가 새로운 정보를 추가했을 뿐일까?"]},{"q":"이 인물을 한 단어로 규정하는 것이 가능한가?","s":["그 단어와 맞지 않는 행동은 없는가?","반대되는 단어를 붙이면 어떤 모습이 보이는가?","한 단어 대신 한 문장으로 설명한다면?"]}]},{"t":"구조와 서술","qs":[{"q":"왜 이 이야기는 이런 순서로 진행되었을까?","s":["시간순으로 배열했다면 무엇이 달라졌을까?","정보가 늦게 공개되는 부분은 무엇인가?","독자가 특정 사실을 늦게 알게 만드는 효과는?"]},{"q":"작품에서 일부러 감춰진 정보는 무엇인가?","s":["누가 알고 독자는 모르는 정보가 있는가?","반대로 독자는 알지만 인물이 모르는 것은?","그 정보의 공개 시점이 왜 중요한가?"]},{"q":"이야기에서 반복되는 사건이나 구조가 있는가?","s":["반복될 때 같은 의미인가?","두 번째 등장하면서 무엇이 달라졌나?","반복을 하나 제거한다면 작품의 의미가 달라질까?"]},{"q":"가장 큰 전환점은 어디인가?","s":["사건 자체가 바뀐 것인가, 인물의 인식이 바뀐 것인가?","전환 전과 후의 작품 분위기는 어떻게 달라지는가?","그 전환을 준비하는 앞부분의 단서는 무엇이었나?"]},{"q":"없어도 될 것처럼 보이지만 계속 마음에 걸리는 부분은 무엇인가?","s":["정말 없어도 되는가?","다른 장면이나 인물과 연결되는가?","작가가 이것을 넣음으로써 무엇을 추가했을 가능성이 있을까?"]}]},{"t":"이미지·상징·모티프","qs":[{"q":"작품에서 반복적으로 등장하는 사물이나 이미지가 있는가?","s":["언제 등장하는가?","등장할 때마다 상황이 어떻게 다른가?","단순한 배경일 가능성과 상징일 가능성을 각각 생각해보면?"]},{"q":"제목은 작품의 어느 부분과 연결되는가?","s":["제목을 읽기 전과 읽은 후 의미가 달라졌나?","제목이 특정 인물/장면/이미지를 가리키는가?","다른 제목이었다면 작품의 인상이 달라졌을까?"]},{"q":"작품에서 유난히 강조되는 공간이나 장소가 있는가?","s":["그 장소에서 반복적으로 어떤 일이 일어나는가?","장소 자체가 인물의 상태와 연결되는가?","장소를 다른 곳으로 바꾸면 무엇이 사라질까?"]},{"q":"작품 속 이미지가 처음과 나중에 다르게 보이는 것이 있는가?","s":["처음에는 어떤 의미였나?","나중에는 왜 다르게 보이나?","그 변화가 인물이나 독자의 인식 변화와 연결되는가?"]},{"q":"내가 상징이라고 생각하는 것이 실제로 작품 안에서 반복·강조되는가?","s":["구체적인 근거는 몇 개나 있는가?","내가 의미를 과도하게 부여한 것은 아닐까?","상징이 아니라 단순한 사건으로 읽어도 설명이 되는가?"]}]},{"t":"관점 뒤집기와 반론","qs":[{"q":"내 해석과 정반대로 읽는다면 이 작품은 어떻게 보일까?","s":["내가 당연하게 전제한 것은 무엇인가?","반대 해석을 지지할 장면은?","두 해석 중 어느 쪽이 더 많은 텍스트를 설명하는가?"]},{"q":"내가 가장 비판하고 싶은 인물을 변호한다면 어떻게 말할 수 있을까?","s":["그 인물의 입장에서 가장 강력한 변론은?","작품 안에 그 변론을 뒷받침하는 증거가 있는가?","그래도 설명되지 않는 행동은 무엇인가?"]},{"q":"내 해석과 충돌하는 장면은 무엇인가?","s":["그 장면을 무시하고 있지는 않은가?","기존 해석을 수정하면 해결되는가?","아니면 작품 자체가 모순적인 두 방향을 동시에 열어두는가?"]},{"q":"작품을 싫어하는 사람이 가장 강하게 비판한다면 무엇을 지적할까?","s":["그 비판에 동의할 부분은?","반박할 수 있는 작품 속 근거는?","그 비판 때문에 내가 새롭게 보게 되는 부분은?"]},{"q":"내가 작품을 너무 쉽게 이해했다고 느끼는 지점은 없는가?","s":["내가 붙인 하나의 설명으로 너무 많은 것을 해결하고 있지는 않은가?","설명되지 않는 부분은?","그 모호함을 그대로 남겨둘 필요는 없는가?"]}]},{"t":"나의 생각과 가치관","qs":[{"q":"이 작품이 내게 다시 생각하게 만든 나의 생각은 무엇인가?","s":["원래 나는 어떻게 생각했나?","작품의 무엇이 그 생각을 흔들었나?","생각이 바뀐 것인가, 질문이 하나 더 생긴 것인가?"]},{"q":"내가 이 인물과 실제로 만난다면 어떻게 대할 것 같은가?","s":["왜 그렇게 행동할 것인가?","작품을 읽기 전에도 같은 선택을 했을까?","작품이 내 판단 기준을 드러내게 만든 부분은?"]},{"q":"내 경험 때문에 작품을 특정 방식으로 읽고 있을 가능성이 있는가?","s":["작품 자체에서 나온 판단과 내 경험에서 나온 판단은 무엇인가?","다른 경험을 가진 사람이라면 어떻게 다르게 읽을까?","그렇다고 해서 나의 독해가 무효가 되는가?"]},{"q":"이 작품이 내게 불편했던 이유는 무엇인가?","s":["작품의 내용이 불편했나, 표현 방식이 불편했나?","내가 지키고 싶은 가치와 충돌했나?","불편함이 작품에 대한 거부인가, 생각을 자극하는 신호인가?"]},{"q":"이 책을 읽기 전의 나와 읽은 후의 나 사이에 아주 작은 변화라도 있는가?","s":["무엇을 이전과 다르게 보게 되었나?","실제 행동까지 바뀔 정도인가?","아니면 단지 하나의 질문이 기억에 남은 것인가?"]}]},{"t":"표현 훈련","qs":[{"q":"“좋았다/별로였다”를 쓰지 않고 이 책을 평가한다면?","s":["무엇이 좋았는가?","어떤 방식으로 좋았는가?","그 효과를 만든 구체적인 요소는?"]},{"q":"내 감정을 가장 정확하게 표현하는 단어는 무엇인가?","s":["‘슬펐다’보다 정확한 단어가 있는가?","감정과 판단을 분리하면 어떻게 되는가?","그 감정을 만들어낸 장면은?"]},{"q":"한 문장의 감상을 세 문장으로 확장한다면?","s":["내가 주장하는 것은?","그렇게 생각한 이유는?","이를 보여주는 구체적인 장면은?"]},{"q":"내 후기에서 가장 추상적인 문장은 무엇인가?","s":["‘인간의 본질’, ‘삶의 의미’, ‘사회적 문제’ 같은 말을 구체화할 수 있는가?","실제 작품 속 무엇을 가리키는 말인가?","추상어 하나를 구체적인 장면으로 바꾼다면?"]},{"q":"누군가에게 이 책을 설명할 때 가장 먼저 말하고 싶은 것은 무엇인가?","s":["줄거리가 아니라 작품의 특징을 말한다면?","다른 작품과 비교하면 무엇이 두드러지는가?","“이 작품은 ___한 이야기다”에서 빈칸을 정확히 채운다면?"]}]}]},"movie":{"name":"영화","themes":[{"t":"첫 경험과 감정","qs":[{"q":"영화가 끝난 뒤 가장 먼저 떠오른 이미지는 무엇인가?","s":["왜 그 이미지가 다른 장면보다 먼저 떠올랐나?","화면의 구도·색·소리와 관련이 있는가?","이야기 때문인가, 영화적 표현 때문인가?"]},{"q":"가장 강하게 반응한 장면은 어디인가?","s":["무엇을 보고 그렇게 반응했나?","배우의 연기, 대사, 음악, 촬영 중 무엇이 영향을 줬나?","다른 방식으로 찍었다면 같은 반응이 나왔을까?"]},{"q":"영화가 예상과 달랐던 부분은 무엇인가?","s":["내용의 반전인가, 영화의 스타일인가?","기대했던 영화와 실제 영화의 차이는?","그 차이가 장점/단점이라는 판단 이전에 무엇을 보여주는가?"]},{"q":"영화를 보면서 가장 궁금했던 것은 무엇인가?","s":["영화가 끝날 때 그 질문에 답했나?","답하지 않았다면 의도적인 공백일 가능성은?","질문 자체가 영화의 중요한 경험이었을까?"]},{"q":"한 장면만 남긴다면 어떤 장면을 남기겠는가?","s":["왜 그 장면인가?","그 장면은 영화 전체를 압축하고 있는가?","그 장면만 봐도 영화의 특징을 설명할 수 있는가?"]}]},{"t":"장면과 미장센","qs":[{"q":"가장 기억에 남는 화면의 구도는 무엇인가?","s":["인물은 화면 어디에 있었나?","빈 공간은 얼마나 있었나?","그 배치가 인물의 상태와 어떤 관계를 만드는가?"]},{"q":"배경에 놓인 물건 중 이상하게 눈에 들어온 것은?","s":["단순한 배경인가?","이후 사건과 연결되는가?","카메라가 특별히 강조했는가?"]},{"q":"인물이 화면에 없는데도 존재감이 느껴지는 장면이 있는가?","s":["소리 때문인가?","공간의 흔적 때문인가?","다른 인물의 반응 때문인가?"]},{"q":"같은 공간이 반복해서 등장할 때 무엇이 달라지는가?","s":["인물의 위치가 달라지는가?","조명이나 소리가 달라지는가?","공간에 대한 관객의 의미가 바뀌는가?"]},{"q":"감독이 보여주지 않은 것은 무엇인가?","s":["카메라 밖에서 일어나는 사건은?","일부러 화면 밖에 남겨둔 것은?","직접 보여줬다면 장면의 의미가 어떻게 달라졌을까?"]}]},{"t":"카메라와 편집","qs":[{"q":"카메라는 누구의 시선을 따라가고 있는가?","s":["관객이 알고 있는 정보와 인물이 아는 정보가 다른가?","특정 인물에게 계속 붙어 있는가?","그 시점이 해석에 영향을 주는가?"]},{"q":"특히 가까이 찍은 장면은 무엇인가?","s":["왜 이 순간에 클로즈업했을까?","표정의 어떤 부분을 보게 만드는가?","멀리 찍었다면 무엇을 잃었을까?"]},{"q":"컷과 컷 사이에서 생략된 시간이 있는가?","s":["무엇이 생략되었나?","그 생략 때문에 관객이 추측하게 되는 것은?","모든 과정을 보여줬다면 긴장감이 달라졌을까?"]},{"q":"유난히 길게 유지되는 쇼트가 있었나?","s":["관객이 무엇을 기다리게 하는가?","배우의 움직임이나 공간을 관찰하게 하는가?","편집했다면 무엇이 달라질까?"]},{"q":"두 장면을 붙여놓은 방식 때문에 새로운 의미가 생기는 부분은?","s":["각각 따로 보면 어떤 의미인가?","연속해서 보면서 어떤 관계가 생겼나?","이것이 편집이 만든 의미라고 볼 근거는 무엇인가?"]}]},{"t":"소리와 음악","qs":[{"q":"음악이 없었다면 느낌이 달라졌을 장면은?","s":["음악이 어떤 감정을 유도했나?","화면만으로도 같은 의미가 전달되는가?","음악이 장면을 강화했나, 과잉 설명했나?"]},{"q":"갑자기 소리가 사라지는 순간이 있었나?","s":["무엇이 사라졌나?","침묵 때문에 무엇에 집중하게 되었나?","침묵 자체가 하나의 사건처럼 기능하는가?"]},{"q":"화면보다 소리가 먼저 정보를 알려준 장면은?","s":["관객은 무엇을 먼저 알았나?","인물은 그 사실을 알고 있었나?","긴장감은 어떻게 만들어졌나?"]},{"q":"같은 소리가 반복되는가?","s":["언제 반복되는가?","처음과 마지막의 의미가 달라지는가?","소리가 특정 인물이나 기억과 연결되는가?"]},{"q":"대사가 없어도 이해할 수 있는 장면은?","s":["무엇이 대사를 대신했나?","표정, 행동, 공간, 소리 중 무엇이 핵심인가?","대사를 넣었다면 오히려 의미가 좁아졌을까?"]}]},{"t":"인물과 연기","qs":[{"q":"배우가 대사보다 행동으로 보여준 것은 무엇인가?","s":["어떤 행동인가?","대사와 일치하는가, 충돌하는가?","그 차이가 인물을 어떻게 보이게 하는가?"]},{"q":"인물이 숨기고 있다고 느낀 것은 무엇인가?","s":["작품에서 그 근거가 있는가?","표정이나 행동이 대사와 다른가?","혹은 내가 인물에게 의미를 부여한 것일 뿐인가?"]},{"q":"인물에 대한 판단이 바뀌는 순간은?","s":["어떤 장면이 전환점인가?","정보가 새로 주어진 것인가?","같은 행동을 이전과 다르게 보게 된 것인가?"]},{"q":"두 배우의 관계가 말보다 몸으로 드러나는 순간은?","s":["거리감은 어떻게 표현되는가?","시선은 어디를 향하는가?","움직임이나 침묵이 관계를 어떻게 설명하는가?"]},{"q":"배우의 연기가 지나치게 설명적이라고 느껴진 부분이 있는가?","s":["무엇을 이미 대사나 화면이 설명하고 있었나?","연기가 추가한 것은 무엇인가?","그 표현이 없었다면 장면이 더 열려 있었을까?"]}]},{"t":"구조와 주제","qs":[{"q":"영화의 중심 갈등은 무엇인가?","s":["인물 간 갈등인가?","인물 내부의 갈등인가?","갈등이 시작되고 변화하는 지점은?"]},{"q":"영화가 반복해서 돌아오는 질문은 무엇인가?","s":["등장인물이 직접 말하는 질문인가?","사건을 통해 드러나는 질문인가?","영화가 답을 제시하는가?"]},{"q":"결말은 앞부분을 어떻게 다시 보게 만드는가?","s":["처음의 장면 중 의미가 달라지는 것이 있는가?","결말이 새로운 정보를 제공하는가?","아니면 기존 정보의 의미를 바꾸는가?"]},{"q":"중간에 없어도 될 것처럼 보이는 장면은 무엇인가?","s":["정말 없어도 되는가?","인물이나 주제와 연결되는가?","삭제했을 때 구조가 어떻게 달라지는가?"]},{"q":"영화가 하나의 해석으로 완전히 닫히는가?","s":["다른 해석이 가능한 장면은?","결말이 남겨놓은 빈칸은?","내가 확신하지 못하는 부분은 무엇인가?"]}]},{"t":"관점 뒤집기","qs":[{"q":"내 해석과 정반대로 이 영화를 읽으면?","s":["가장 강한 반대 해석은?","그것을 뒷받침하는 장면은?","내 해석으로 설명하기 어려운 장면은?"]},{"q":"이 영화에서 가장 억울하게 평가받는 인물은 누구일까?","s":["왜 그렇게 볼 수 있는가?","영화는 그 인물의 관점을 충분히 보여주는가?","반대로 그 인물을 비판할 근거는?"]},{"q":"감독이 이 장면을 전혀 다른 의도로 만들었다고 가정한다면?","s":["어떤 해석이 가능한가?","실제 화면과 충돌하는 부분은?","해석의 범위를 어디까지 열어둘 수 있을까?"]},{"q":"내가 영화에서 당연하게 받아들인 전제는 무엇인가?","s":["왜 당연하다고 생각했나?","영화가 실제로 그렇게 말했나?","내가 사회적 경험을 통해 가져온 판단은 아닌가?"]},{"q":"이 영화를 싫어하는 사람의 가장 설득력 있는 비판은?","s":["그 비판이 겨냥하는 영화의 선택은?","반박할 수 있는 근거는?","반박할 수 없다면 내 감상을 어떻게 수정할 것인가?"]}]},{"t":"영화에서 나에게로","qs":[{"q":"이 영화가 내게 불편했던 지점은 무엇인가?","s":["내용 때문인가, 표현 방식 때문인가?","내가 가진 가치관과 충돌했나?","그 불편함이 작품에 대한 판단과 같은 것인가?"]},{"q":"영화를 보고 나서 현실에서 다르게 보게 된 것은?","s":["특정 사람인가?","특정 상황인가?","이전에도 알고 있었지만 다르게 느끼게 된 것인가?"]},{"q":"내가 이 영화의 인물이었다면 어떤 선택을 했을까?","s":["왜 그렇게 선택할까?","내가 비판했던 인물과 실제로 얼마나 다른 선택을 할까?","작품은 그 선택의 대가를 어떻게 보여주는가?"]},{"q":"이 영화에 대한 내 감정을 가장 정확한 문장으로 쓰면?","s":["감정과 평가를 분리하면?","“재밌었다”를 제거하면?","가장 구체적인 장면 하나를 넣는다면?"]},{"q":"시간이 지나도 이 영화를 기억하게 할 요소는 무엇일까?","s":["이야기인가?","특정 이미지인가?","배우의 연기인가?","영화가 내게 남긴 질문인가?"]}]}]},"perf":{"name":"공연","themes":[{"t":"공연 직후 기억","qs":[{"q":"공연장을 나온 직후 가장 선명하게 남은 장면은 무엇인가?","s":["정확히 무엇이 기억나는가?","배우의 행동인가, 대사인가, 무대 이미지인가?","그 장면을 실제로 본 것과 내가 나중에 재구성한 것을 구분할 수 있는가?"]},{"q":"가장 강하게 반응한 순간은 언제였나?","s":["웃음, 불쾌함, 긴장, 슬픔, 당혹감 중 무엇에 가까운가?","정확히 어떤 자극이 그 반응을 만들었나?","대사 자체 때문인가, 공연의 표현 방식 때문인가?"]},{"q":"공연이 끝난 뒤에도 머릿속에서 반복되는 대사나 이미지가 있는가?","s":["정확한 표현은 무엇인가?","왜 그것만 반복되는가?","작품 전체에서 그 표현이 어떤 위치에 있는가?"]},{"q":"공연에서 내가 놓쳤다고 느끼는 부분은 무엇인가?","s":["기억나지 않는 장면인가?","이해하지 못한 장면인가?","당시에는 느꼈지만 지금 언어화하지 못하는 부분인가?"]},{"q":"전체 공연을 하나의 장면으로 압축한다면 무엇인가?","s":["왜 그 장면인가?","그 장면이 작품의 무엇을 대표하는가?","반대로 그 장면만으로는 설명되지 않는 부분은?"]}]},{"t":"희곡과 텍스트","qs":[{"q":"이 장면에서 실제로 인물들이 주고받는 것은 무엇인가?","s":["표면적으로 말하는 내용은?","말하지 않고 있는 내용은?","대사의 목적이 서로 다른가?"]},{"q":"특정 대사가 앞뒤 맥락에서 어떻게 달라지는가?","s":["같은 단어가 이전에도 나왔나?","인물의 상황이 바뀌면서 의미가 변했나?","배우의 표현 때문에 의미가 달라졌다고 느낀다면 텍스트 자체와 구분할 수 있는가?"]},{"q":"이 장면은 배우와 대사만으로도 성립할까?","s":["성립한다면 무엇이 그것을 가능하게 하는가?","성립하지 않는다면 어떤 공연적 요소가 필수적인가?","그 요소는 텍스트의 의미를 확장하는가, 설명하는가?"]},{"q":"작품에서 일부러 설명하지 않는 것은 무엇인가?","s":["관객이 추측해야 하는 부분은?","그 공백이 작품의 효과에 기여하는가?","공연이 그 공백을 너무 많이 채웠다고 느꼈나?"]},{"q":"이번 공연을 보고 나서 희곡의 문장을 다시 읽는다면 달라질 부분은?","s":["특정 대사가 새롭게 들리는가?","인물 관계가 달라 보이는가?","공연이 텍스트에 추가한 것과 텍스트에서 발견한 것을 구분할 수 있는가?"]}]},{"t":"배우와 인물","qs":[{"q":"배우가 대사 없이 인물의 상태를 보여준 순간은?","s":["표정인가?","호흡인가?","시선인가?","몸의 방향이나 움직임인가?"]},{"q":"가장 작은 연기 디테일 하나를 기억해본다면?","s":["손, 시선, 자세, 말의 속도 중 무엇인가?","그 디테일은 언제 등장했나?","그것을 빼면 인물의 모습이 달라지는가?"]},{"q":"배우의 해석 때문에 인물을 특정한 방식으로 보게 된 순간은?","s":["텍스트에도 그런 해석의 근거가 있는가?","배우가 새롭게 만들어낸 부분은 무엇인가?","다른 배우가 연기하면 달라질 수 있는 부분인가?"]},{"q":"배우가 일부러 보여주지 않는 것처럼 느껴진 부분은?","s":["감정을 직접 표현하지 않았나?","관객에게 판단을 맡겼나?","그 절제가 인물에게 어떤 효과를 만드는가?"]},{"q":"가장 기억에 남은 연기와 가장 좋은 연기를 구분한다면?","s":["기억에 남은 이유는 무엇인가?","극 전체에 필요한 연기였나?","순간적으로 강렬했을 뿐인지, 인물의 구조를 이해하게 만든 연기인지?"]}]},{"t":"연출과 공연 언어","qs":[{"q":"연출이 텍스트에서 특별히 강조한 것은 무엇인가?","s":["반복적으로 강조되는 이미지가 있는가?","배우의 위치나 움직임이 특정 의미를 만드는가?","텍스트 자체에서도 그 강조를 뒷받침할 근거가 있는가?"]},{"q":"연출이 관객에게 해석을 미리 제시한 것처럼 느껴지는 부분은?","s":["무엇을 어떻게 보여줬나?","텍스트만 읽었을 때보다 해석의 방향이 좁아졌나?","반대로 해석의 가능성을 넓힌 부분은?"]},{"q":"연출 장치 하나를 제거한다면 가장 크게 달라질 장면은?","s":["무엇을 제거할 것인가?","그 장치가 없으면 텍스트가 더 잘 보이는가?","아니면 오히려 작품의 핵심이 사라지는가?"]},{"q":"무대적 선택이 텍스트에 없는 새로운 의미를 만들었나?","s":["어떤 선택인가?","텍스트와 모순되는가, 확장하는가?","다른 연출에서도 유지되어야 하는 의미인가?"]},{"q":"이 공연의 연출적 개성이 가장 잘 드러나는 순간은?","s":["무엇을 다르게 했나?","그것이 작품의 본질적인 부분인가, 프로덕션의 스타일인가?","그 차이가 나에게 어떤 경험을 만들었나?"]}]},{"t":"공간·소품·조명·음향","qs":[{"q":"무대 공간이 인물의 관계를 어떻게 보여주는가?","s":["가까움과 멀어짐은 어떻게 표현되는가?","누가 어느 공간을 차지하는가?","공간의 경계가 존재하는가?"]},{"q":"소품 하나가 극의 의미를 바꾸는 순간이 있었나?","s":["그 소품은 언제 등장했나?","인물에게 어떤 의미인가?","소품 없이 장면을 상상하면 무엇이 달라지는가?"]},{"q":"조명 변화가 장면의 의미를 어떻게 바꿨나?","s":["단순히 분위기를 만드는가?","시간이나 장소를 구분하는가?","관객의 시선을 특정 부분으로 유도하는가?"]},{"q":"음향이나 음악이 장면의 해석을 유도했나?","s":["배우만으로 전달되는 정보와 구분되는가?","음악이 감정을 설명했나?","오히려 장면과 모순되는 효과를 만들었나?"]},{"q":"무대의 제약이 오히려 작품의 의미가 된 부분은?","s":["제한된 공간이나 소품인가?","반복되는 구조인가?","그 제약을 제거하면 오히려 평범해지는 부분은?"]}]},{"t":"구조·리듬·관객 경험","qs":[{"q":"공연의 리듬이 가장 크게 변하는 순간은?","s":["속도가 빨라지거나 느려지는가?","침묵이 길어지는가?","장면 전환 때문인가?","인물 관계의 변화 때문인가?"]},{"q":"관객의 시선이 어디로 이동하도록 설계되었다고 느꼈나?","s":["배우인가, 소품인가, 공간인가?","동시에 여러 곳을 봐야 하는 순간이 있었나?","내가 놓친 것이 생겼을 가능성은?"]},{"q":"관객의 존재 자체가 의미를 만드는 순간이 있었나?","s":["배우가 관객을 의식했나?","관객의 웃음이나 침묵이 장면에 영향을 주었나?","관객이 없으면 같은 장면이 성립할까?"]},{"q":"공연에서 가장 긴장도가 높은 구간은 어디였나?","s":["사건이 가장 큰 부분인가?","아무 일도 일어나지 않는 순간인가?","무엇이 긴장감을 만들었나?"]},{"q":"중간에 장면 하나를 삭제한다면 어디를 삭제하겠는가?","s":["이야기상 없어도 되는가?","리듬상 필요한가?","인물 이해에 필요한가?","삭제했을 때 오히려 선명해지는 것이 있는가?"]}]},{"t":"해석과 반론","qs":[{"q":"내가 가장 강하게 밀고 있는 해석은 무엇인가?","s":["그 해석을 뒷받침하는 텍스트는?","공연의 구체적인 선택은?","반대로 그 해석과 충돌하는 부분은?"]},{"q":"내 해석과 정반대로 이 작품을 본다면?","s":["어떤 장면을 중심으로 보게 될까?","그 해석은 무엇을 더 잘 설명하는가?","반대로 무엇을 설명하지 못하는가?"]},{"q":"작가가 의도한 것과 내가 읽어낸 것이 다를 가능성을 생각해본다면?","s":["작품 안에서 내 해석을 독립적으로 지지하는 근거는?","작가의 의도를 몰라도 성립하는 해석인가?","작가의 의도와 달라도 텍스트와 모순되지 않는가?"]},{"q":"이번 공연이 나의 해석을 특정 방향으로 유도했을 가능성은?","s":["배우의 연기 때문인가?","음악/조명/무대 때문인가?","희곡만 읽었을 때도 같은 해석이 나올 것 같은가?"]},{"q":"내가 작품에 너무 쉽게 붙인 단어는 무엇인가?","s":["실제로 그 단어가 정확히 무엇을 의미하는가?","작품 안에서 그것을 구체적으로 보여주는 장면은?","더 좁고 정확한 단어로 바꿀 수 있는가?"]}]},{"t":"표현과 자기화","qs":[{"q":"“좋았다/별로였다”를 제외하고 이번 공연을 평가한다면?","s":["무엇이 인상적이었나?","그 인상은 어떻게 만들어졌나?","작품과 공연 중 어느 쪽의 장점인가?"]},{"q":"가장 작은 디테일 하나로 공연 전체를 설명한다면?","s":["배우의 한 동작인가?","대사의 한 단어인가?","조명이나 공간의 변화인가?","왜 그 작은 부분이 전체를 대표할 수 있다고 생각하는가?"]},{"q":"내가 쓴 후기에서 가장 ‘있어 보이려고 쓴 것 같은’ 표현은?","s":["실제로 내가 무슨 말을 하려는지 설명할 수 있는가?","추상어를 장면으로 바꿀 수 있는가?","그 문장을 평범한 말로 다시 쓴다면?"]},{"q":"이 공연을 세 문장으로만 남긴다면?","s":["무엇을 보았는가?","그것을 어떻게 해석했는가?","그래서 나는 무엇을 생각하게 되었는가?"]},{"q":"이 공연을 본 경험이 이제 내 것이 되었다고 느끼는 순간은 무엇인가?","s":["작품에 대해 새롭게 알게 된 것인가?","나 자신에 대해 새롭게 알게 된 것인가?","다른 작품을 볼 때도 적용할 수 있는 질문이나 관점이 생겼는가?"]}]}]}};
+  GUIDE_DATA.pre = {"name":"관람 전 기대","themes":[
+    {"t":"관람 전 기대","qs":[
+      {"q":"알고 간 정보는 무엇인가?","s":["줄거리, 원작, 출연진, 평 중 미리 알고 있던 것은 무엇인가?","그 정보는 어디서, 누구에게서 알게 되었는가?","그 정보 때문에 생긴 선입견이나 예상이 있는가?"]},
+      {"q":"이 작품을 고른 이유는 무엇인가?","s":["가장 보고 싶었던 장면, 배우, 연출은 무엇인가?","오늘 보고 싶었던 것, 기대한 것은 무엇인가?","어떤 기분이나 경험을 기대하고 있는가?"]}
+    ]}
+  ]};
   var GENRE_GUIDE = {"essay":{"name":"에세이","themes":[{"t":"첫 인상과 경험","qs":[{"q":"글을 다 읽고 가장 먼저 남은 것은 무엇인가?","s":["한 문장, 한 장면, 한 기분 중 무엇이 먼저 떠올랐나?","왜 하필 그것이 먼저 남았을까?","시간이 지나도 남아 있을 것 같은가?"]},{"q":"읽다가 고개를 끄덕이거나 마음이 걸린 대목은 어디인가?","s":["정확히 어느 문장이나 문단이었나?","동의였나, 반감이었나, 낯선 느낌이었나?","그 반응은 글의 힘 때문인가, 내 사정 때문인가?"]},{"q":"읽기 전에 기대한 글과 실제 글은 어떻게 달랐나?","s":["제목과 소개글에서 기대한 것은 무엇이었나?","달랐던 것은 주제인가, 어조인가, 깊이인가?","그 차이가 읽는 태도를 어떻게 바꿨나?"]},{"q":"글쓴이는 어떤 사람처럼 느껴졌나?","s":["어떤 문장 때문에 그런 인상을 받았나?","나는 이 사람을 믿고 싶었나, 거리를 두고 싶었나?","글 속의 모습과 실제 글쓴이는 같을까?"]},{"q":"이 글을 한 문장으로 말한다면 어떤 문장이 될까?","s":["그 문장을 뒷받침하는 글 속 대목은?","‘좋았다/공감됐다’를 빼면 어떻게 표현할 수 있을까?","글쓴이가 이 요약에 동의할까?"]}]},{"t":"글쓴이의 시선과 목소리","qs":[{"q":"글쓴이는 자기 자신을 어떤 거리에서 바라보고 있는가?","s":["자기 이야기를 솔직하게 드러내는가, 한 발 물러서서 말하는가?","부끄러움이나 약점이 드러나는 대목은 어디인가?","그 거리가 글의 신뢰감에 어떤 영향을 주는가?"]},{"q":"글의 어조는 어떻게 느껴졌나?","s":["어조가 가장 잘 드러난 문장은 무엇인가?","중간에 어조가 바뀌는 지점이 있는가?","같은 내용을 다른 어조로 썼다면 어떻게 달라졌을까?"]},{"q":"글쓴이는 독자를 어떤 사람으로 가정하고 쓰는 것 같은가?","s":["독자에게 설명하는가, 설득하는가, 그냥 털어놓는가?","나는 그 독자에 해당한다고 느꼈나?","독자를 다르게 가정했다면 글이 어떻게 달라졌을까?"]},{"q":"글쓴이가 끝까지 말하지 않는 것은 무엇인가?","s":["일부러 건너뛴 사건이나 감정은 무엇인가?","말하지 않아서 오히려 전해지는 것은 무엇인가?","말했다면 글의 힘이 달라졌을까?"]},{"q":"같은 경험을 다른 사람이 썼다면 어떤 차이가 생길까?","s":["이 글만의 관점은 어디서 드러나는가?","글쓴이의 직업, 나이, 환경이 관점에 영향을 주었나?","그 관점이 내게 새로운 시각을 주었나?"]}]},{"t":"경험에서 주장으로","qs":[{"q":"글쓴이의 핵심 주장은 무엇인가?","s":["한 문장으로 쓴다면 무엇인가?","글쓴이가 직접 말한 부분과 내가 읽어낸 부분을 구분하면?","주장이 글의 어디쯤에서 분명해지는가?"]},{"q":"경험이 주장으로 넘어가는 지점은 어디인가?","s":["어떤 문장에서 개인의 이야기가 일반적인 이야기로 바뀌는가?","그 연결이 자연스러운가, 비약처럼 느껴지는가?","경험이 하나뿐인데 일반화하고 있지는 않은가?"]},{"q":"주장을 뒷받침하는 근거는 무엇인가?","s":["경험, 통계, 인용, 비유 중 무엇이 중심인가?","가장 설득력 있는 근거는 무엇인가?","근거 하나를 바꾸면 주장은 달라지는가?"]},{"q":"구체적인 장면과 추상적인 말은 글에서 어떻게 섞여 있는가?","s":["가장 구체적인 장면은 무엇인가?","가장 추상적인 문장은 무엇인가?","추상적인 말을 장면으로 바꿀 수 있는가?"]},{"q":"글쓴이가 놓치고 있는 관점은 없는가?","s":["이 주장이 적용되지 않는 사람이나 상황은?","글쓴이의 경험 바깥에서 보면 어떻게 달라지는가?","그 빈틈이 글을 약하게 하는가, 오히려 솔직하게 만드는가?"]}]},{"t":"문장과 구성","qs":[{"q":"가장 오래 붙잡고 싶은 문장은 무엇인가?","s":["왜 그 문장이 눈에 들어왔나?","단어 하나를 바꾸면 느낌이 어떻게 달라질까?","그 문장이 글 전체에서 어떤 위치에 있나?"]},{"q":"글은 어떤 순서로 이야기를 풀어가는가?","s":["도입, 전개, 마무리는 어떻게 나뉘는가?","순서를 바꾸면 무엇이 달라질까?","중간에 방향이 바뀌는 지점은 어디인가?"]},{"q":"첫 문장과 마지막 문장은 서로 어떻게 연결되는가?","s":["첫 문장이 마지막에 다른 의미로 돌아오는가?","마지막 문장은 결론인가, 여운인가?","다른 문장으로 끝냈다면 어땠을까?"]},{"q":"반복되는 소재나 단어가 있는가?","s":["반복될 때마다 의미가 달라지는가?","반복이 글의 리듬을 만드는가, 주제를 강조하는가?","하나를 지우면 글이 어떻게 변하는가?"]},{"q":"빼도 될 것 같지만 계속 마음에 남는 대목이 있는가?","s":["정말 빼도 되는가?","다른 대목과 연결되는가?","글쓴이가 그것을 남긴 이유는 무엇일까?"]}]},{"t":"관점 뒤집기와 나의 생각","qs":[{"q":"글쓴이와 정반대 입장에서 이 글을 읽는다면 어떻게 보일까?","s":["가장 강한 반론은 무엇인가?","그 반론을 뒷받침할 사실이나 경험은 무엇인가?","글쓴이는 그 반론에 어떻게 답할 것 같은가?"]},{"q":"내가 쉽게 동의한 부분은 어디인가?","s":["왜 아무 의심 없이 받아들였나?","한 번 의심해본다면 어떤 질문을 던질 수 있을까?","동의가 글의 힘 때문인지, 내 기존 생각과 맞아서인지?"]},{"q":"이 글이 내 경험과 겹치거나 충돌하는 지점은 어디인가?","s":["비슷한 경험이 있는가?","내 경험은 글쓴이와 어떻게 다른 결론을 내렸나?","그 차이는 어디서 생기는가?"]},{"q":"이 글이 불편했다면 그 이유는 무엇인가?","s":["내용이 불편했나, 말하는 방식이 불편했나?","내가 지키고 싶은 생각과 부딪혔나?","불편함이 거부인가, 생각을 자극하는 신호인가?"]},{"q":"이 글을 읽기 전의 나와 읽은 후의 나 사이에 변화가 있는가?","s":["무엇을 다르게 보게 되었나?","실제 행동이나 말투까지 바뀔 정도인가?","아니면 질문 하나가 남은 정도인가?"]}]}]},"suhpil":{"name":"수필","themes":[{"t":"첫 인상과 경험","qs":[{"q":"글을 덮고 나서 마음에 남은 결은 무엇인가?","s":["장면, 문장, 분위기 중 무엇이 먼저 남았나?","그 느낌을 한 단어로 하면 무엇인가?","왜 그 느낌이 남았을까?"]},{"q":"읽는 동안 가장 천천히 읽게 된 대목은 어디였나?","s":["어느 문장이나 문단이었나?","천천히 읽게 된 이유는 내용 때문인가, 문장 때문인가?","그 대목에서 나는 무엇을 떠올렸나?"]},{"q":"이 글을 읽던 때의 나는 어떤 상태였나?","s":["읽던 장소와 시간, 기분은 어땠나?","그 상태가 글의 느낌에 영향을 줬을까?","다른 때 읽는다면 다르게 읽힐까?"]},{"q":"읽기 전 기대와 실제 글의 분위기는 어디서 달랐나?","s":["기대한 분위기는 무엇이었나?","달랐던 것은 소재인가, 어조인가, 속도인가?","그 차이가 반가웠나, 아쉬웠나?"]},{"q":"이 글의 분위기를 날씨나 풍경에 비유한다면?","s":["어떤 날씨, 어떤 시간대인가?","그 비유를 뒷받침하는 문장은 무엇인가?","그 비유가 놓치는 부분은 없는가?"]}]},{"t":"일상의 장면과 소재","qs":[{"q":"글감이 된 일상의 순간은 무엇인가?","s":["아주 사소한데 글이 된 소재는 무엇인가?","글쓴이는 왜 그 순간을 붙잡았을까?","나였다면 같은 순간을 그냥 지나쳤을까?"]},{"q":"가장 선명하게 그려지는 장면은 어디인가?","s":["어떤 묘사가 그 장면을 선명하게 만드는가?","눈에 보이는 것인가, 소리나 냄새인가?","그 장면이 없었다면 글의 느낌이 어떻게 달라졌을까?"]},{"q":"사소한 소재가 어떻게 더 큰 이야기로 이어지는가?","s":["소재에서 생각으로 넘어가는 지점은 어디인가?","그 이어짐이 자연스러운가?","이어지지 않고 소재로만 남겼다면 어땠을까?"]},{"q":"글 속의 사람이나 사물은 어떤 방식으로 등장하는가?","s":["가장 기억에 남는 인물이나 사물은 무엇인가?","직접 설명하는가, 행동이나 장면으로 보여주는가?","그것이 글쓴이의 마음을 어떻게 비추는가?"]},{"q":"시간은 글 속에서 어떻게 흐르는가?","s":["현재와 과거가 오가는가?","계절이나 하루의 시간이 중요한 역할을 하는가?","시간의 흐름이 정서에 어떤 효과를 주는가?"]}]},{"t":"정서와 여운","qs":[{"q":"글 전체에 깔린 정서는 무엇인가?","s":["어떤 문장이 그 정서를 가장 잘 드러내는가?","정서가 직접 말해지는가, 은근히 풍기는가?","한 단어로 고른다면 무엇인가?"]},{"q":"글쓴이가 감정을 누르는 순간이 있는가?","s":["감정을 설명하는 대신 무엇을 보여주는가?","누르고 있어서 오히려 전해지는 것은 무엇인가?","감정을 길게 말했다면 어땠을까?"]},{"q":"끝맺음은 어떤 여운을 남기는가?","s":["마지막 문장은 무엇을 남기고 끝나는가?","글이 끝난 뒤에도 이어지는 생각은 무엇인가?","다른 끝맺음이었다면 글의 인상이 달라졌을까?"]},{"q":"읽는 동안 내 마음이 움직인 순간은 언제였나?","s":["어떤 대목이었나?","슬픔, 그리움, 웃음, 쓸쓸함 중 무엇에 가까웠나?","그 감정은 글에서 온 것인가, 내 기억에서 온 것인가?"]},{"q":"이 글의 여운은 시간이 지나면 어떻게 변할까?","s":["지금 가장 강한 느낌은 무엇인가?","몇 년 뒤에 다시 읽으면 어떨까?","그때도 남아 있을 문장은 무엇일까?"]}]},{"t":"문체와 호흡","qs":[{"q":"문장의 길이와 속도는 어떠한가?","s":["긴 문장과 짧은 문장은 어디서 쓰이는가?","읽을 때 숨이 어디서 쉬어지는가?","문장을 끊거나 이으면 느낌이 어떻게 달라질까?"]},{"q":"글쓴이가 자주 쓰는 표현이나 말버릇은 무엇인가?","s":["반복되는 단어나 어미는 무엇인가?","그 습관이 글의 인상을 어떻게 만드는가?","그 말버릇을 바꾸면 글쓴이다움이 사라질까?"]},{"q":"평범한 단어인데 이상하게 기억에 남는 표현은 무엇인가?","s":["왜 그 표현이 눈에 들어왔나?","다른 단어로 바꿔 보면 어떻게 달라지는가?","앞뒤 문맥 속에서 그 표현은 어떤 역할을 하는가?"]},{"q":"비유나 묘사 중 가장 마음에 든 것은 무엇인가?","s":["무엇을 무엇에 빗댔나?","그 비유로 새롭게 보이는 것은 무엇인가?","너무 흔하거나 과하다고 느낀 비유는 없는가?"]},{"q":"여백이나 생략이 느껴지는 부분은 어디인가?","s":["일부러 쓰지 않은 것은 무엇일까?","그 여백을 나는 어떻게 채워 읽었나?","다 썼다면 글이 더 좋아졌을까?"]}]},{"t":"관점 뒤집기와 나의 생각","qs":[{"q":"같은 장면을 다른 사람의 눈으로 본다면 어떻게 보일까?","s":["글에 등장하는 다른 사람은 이 순간을 어떻게 기억할까?","글쓴이의 시선이 놓치고 있는 것은 무엇인가?","다른 시선이 더해지면 글의 정서가 달라질까?"]},{"q":"글쓴이가 지나치게 미화하거나 감상적이라고 느낀 대목은 없는가?","s":["어떤 문장이 그랬나?","담담하게 썼다면 어땠을까?","내가 그렇게 느낀 이유는 무엇인가?"]},{"q":"이 글이 내 기억 속 어떤 순간을 불러냈나?","s":["어떤 장면이 떠올랐나?","내 기억과 글 속 순간은 어떻게 다른가?","그 기억을 글로 쓴다면 첫 문장은 무엇일까?"]},{"q":"이 글에서 낯설거나 와닿지 않았던 부분은 무엇인가?","s":["정서가 맞지 않았나, 소재가 낯설었나?","내 취향이 작용했나?","그 낯섦은 글의 약점일까, 내 경험의 한계일까?"]},{"q":"이 글을 읽은 뒤 내 하루나 시선에 작은 변화가 있는가?","s":["일상의 무엇을 다르게 보게 되었나?","오늘 바로 해보고 싶은 것이 생겼나?","아니면 느낌만 남았나?"]}]}]},"poem":{"name":"시","themes":[{"t":"첫 인상과 경험","qs":[{"q":"시를 읽고 가장 먼저 남은 것은 무엇인가?","s":["어느 행이나 단어였나?","뜻이 이해되기 전에 느껴진 것은 무엇인가?","왜 그것이 먼저 남았을까?"]},{"q":"소리 내어 읽는다면 어디서 걸리거나 흐르는가?","s":["읽다가 멈추게 되는 곳은 어디인가?","입에 붙는 구절은 무엇인가?","조용히 읽을 때와 소리 내어 읽을 때 어떤 차이가 있는가?"]},{"q":"처음 읽었을 때와 다시 읽었을 때 달라진 점은 무엇인가?","s":["처음에 놓친 것은 무엇인가?","두 번째에 새로 보인 단어나 행은 무엇인가?","몇 번쯤 읽으면 이 시가 내 것이 될까?"]},{"q":"이해되지 않는데도 끌리는 부분은 어디인가?","s":["이해되지 않는 이유는 낯선 말 때문인가, 연결 때문인가?","이해하지 못해도 남는 것은 무엇인가?","지금 풀지 않고 질문으로 남긴다면 어떤 질문일까?"]},{"q":"이 시를 한 장면이나 한 이미지로 압축한다면 무엇인가?","s":["어떤 장면인가?","그 장면을 뒷받침하는 시어는 무엇인가?","그 장면이 설명하지 못하는 부분은 무엇인가?"]}]},{"t":"이미지와 비유","qs":[{"q":"시에서 가장 또렷한 이미지는 무엇인가?","s":["눈, 귀, 촉각 중 무엇에 닿는 이미지인가?","그 이미지가 만들어내는 분위기는 무엇인가?","이미지를 다른 것으로 바꾸면 어떻게 달라질까?"]},{"q":"비유는 무엇과 무엇을 연결하고 있는가?","s":["두 대상은 어떤 점에서 닮았나?","그 비유 덕분에 새롭게 보이는 것은 무엇인가?","식상하거나 과하다고 느낀 비유는 없는가?"]},{"q":"반복되는 이미지나 단어가 있는가?","s":["반복될 때 의미가 달라지는가?","그 반복이 시 전체에 어떤 효과를 주는가?","하나를 지운다면 시가 어떻게 변할까?"]},{"q":"구체적인 사물과 추상적인 말은 시에서 어떻게 섞여 있는가?","s":["가장 구체적인 시어는 무엇인가?","가장 추상적인 시어는 무엇인가?","추상어가 이미지와 만날 때 생기는 효과는 무엇인가?"]},{"q":"제목은 시의 어느 부분과 연결되는가?","s":["제목을 읽기 전과 후에 시가 다르게 읽히는가?","제목이 알려주는 것과 감추는 것은 무엇인가?","다른 제목이었다면 인상이 어떻게 달라질까?"]}]},{"t":"소리와 리듬과 행갈이","qs":[{"q":"행과 연은 어디서 나뉘어 있는가?","s":["행이 끊기는 곳에서 어떤 생각이 멈추는가?","연 사이의 빈 줄은 무엇을 의미하는가?","줄을 이어 산문처럼 읽으면 무엇이 사라지는가?"]},{"q":"소리의 반복이나 운율이 느껴지는 곳은 어디인가?","s":["비슷한 소리를 가진 단어는 무엇인가?","그 소리가 의미와 어떻게 어울리거나 어긋나는가?","소리만으로 전해지는 분위기는 무엇인가?"]},{"q":"속도가 빨라지거나 느려지는 지점은 어디인가?","s":["어떤 장치가 속도를 바꾸는가?","가장 느리게 읽히는 행은 어디인가?","속도 변화가 감정과 어떻게 연결되는가?"]},{"q":"문장부호나 띄어쓰기에서 특이한 점이 있는가?","s":["일부러 생략하거나 덧붙인 부분은 어디인가?","그 선택이 읽는 방식을 어떻게 바꾸는가?","일반적인 문장으로 고치면 느낌이 어떻게 달라지는가?"]},{"q":"시의 마지막 행은 시를 어떻게 닫는가?","s":["마무리가 결론인가, 열린 끝인가?","끝에서 처음으로 되돌아가 읽으면 달라지는 것은 무엇인가?","마지막 행이 없다면 시는 어떻게 변할까?"]}]},{"t":"화자와 말하지 않는 것","qs":[{"q":"이 시에서 말하는 사람은 누구인가?","s":["어떤 상황에서 말하고 있는가?","누구에게 말하고 있는가?","화자와 시인을 같은 사람으로 읽어도 되는가?"]},{"q":"화자의 감정은 어떻게 드러나는가?","s":["감정을 직접 말하는가, 사물에 담아 보여주는가?","감정이 변하는 지점은 어디인가?","감정을 나타내는 단어를 하나도 쓰지 않았다면 무엇이 남는가?"]},{"q":"시가 말하지 않고 비워둔 것은 무엇인가?","s":["생략된 사건이나 대상은 무엇인가?","그 빈칸을 나는 어떻게 채워 읽었나?","채우는 방식에 따라 시가 어떻게 달라지는가?"]},{"q":"시의 시간과 공간은 어디인가?","s":["지금인가, 기억인가?","장소가 구체적으로 나타나는가?","시간과 장소를 바꾸면 의미가 달라지는가?"]},{"q":"시 안에서 일어나는 변화는 무엇인가?","s":["처음과 끝 사이에 무엇이 달라졌나?","전환이 일어나는 행은 어디인가?","변화가 없다면 그것은 무엇을 의미하는가?"]}]},{"t":"관점 뒤집기와 나의 생각","qs":[{"q":"내 해석과 다르게 읽는다면 이 시는 어떻게 보일까?","s":["같은 시어를 반대 의미로 읽을 수 있는가?","그 해석을 지지하는 행은 어디인가?","두 해석 중 시 전체를 더 잘 설명하는 쪽은 어느 쪽인가?"]},{"q":"내가 시에 의미를 과하게 덧붙이고 있지는 않은가?","s":["내가 덧붙인 의미는 무엇인가?","시 안의 근거로 지지되는가?","그냥 이미지로 읽어도 충분하지 않은가?"]},{"q":"이 시가 내 기억이나 감정의 어떤 부분을 건드렸나?","s":["어떤 행에서 무엇이 떠올랐나?","내 경험이 시를 읽는 방식에 어떤 영향을 줬나?","다른 경험을 가진 사람은 어떻게 읽을까?"]},{"q":"이 시가 와닿지 않았다면 그 이유는 무엇인가?","s":["소재, 어조, 형식 중 무엇이 맞지 않았나?","내가 시에 기대한 것은 무엇이었나?","와닿지 않음이 시의 한계인가, 지금 내 상태인가?"]},{"q":"이 시를 읽고 나서 내 말이나 시선에 작은 변화가 있는가?","s":["어떤 사물이나 순간을 다르게 보게 되었나?","기억해 두고 싶은 구절이 있는가?","나도 한 줄 써본다면 무엇을 쓸까?"]}]}]},"drama":{"name":"희곡","themes":[{"t":"첫 인상과 경험","qs":[{"q":"희곡을 덮고 가장 먼저 떠오른 장면이나 대사는 무엇인가?","s":["장면, 대사, 인물 중 무엇이 먼저였나?","왜 그것이 먼저 떠올랐나?","읽으면서 머릿속에 어떤 무대가 그려졌나?"]},{"q":"읽는 동안 가장 강하게 반응한 순간은 언제였나?","s":["정확히 어느 대사나 지문에서였나?","그 반응은 감정, 판단, 긴장 중 무엇이었나?","공연으로 봤다면 같은 반응이 나왔을까?"]},{"q":"읽기 전 예상과 실제 희곡은 어디에서 달랐나?","s":["제목이나 소개에서 예상한 이야기는 무엇이었나?","달랐던 것은 내용인가, 문체인가, 형식인가?","그 차이가 읽는 태도를 어떻게 바꿨나?"]},{"q":"이해되지 않거나 마음에 걸리는 장면은 무엇인가?","s":["이유가 대사 때문인가, 인물의 행동 때문인가?","희곡이 일부러 설명하지 않은 부분일 가능성은 있는가?","공연으로 본다면 어떻게 풀릴 것 같은가?"]},{"q":"이 희곡을 한 문장으로 기억한다면 어떤 문장이 될까?","s":["그 문장을 뒷받침하는 장면은 무엇인가?","줄거리 요약과는 어떻게 다른가?","시간이 지난 뒤에도 이 문장이 유효할 것 같은가?"]}]},{"t":"대사와 말하지 않는 것","qs":[{"q":"인물들이 실제로 주고받는 것은 무엇인가?","s":["표면적으로 말하는 내용은 무엇인가?","말하지 않고 있는 내용은 무엇인가?","두 사람의 대사가 서로 다른 목적을 가지고 있는가?"]},{"q":"가장 기억에 남는 대사는 무엇인가?","s":["왜 그 대사가 눈에 들어왔나?","앞뒤 맥락을 보면 의미가 달라지는가?","단어 하나를 바꾸면 인물이 다르게 보이는가?"]},{"q":"침묵이나 멈춤이 중요한 장면이 있는가?","s":["지문에서 침묵은 어떻게 표시되어 있는가?","그 침묵이 말보다 많은 것을 전하는가?","침묵에 대사를 넣는다면 무엇이 사라질까?"]},{"q":"같은 말이 반복되는 부분이 있는가?","s":["반복될 때마다 누가 말하고 어떤 상황인가?","처음과 나중의 의미는 어떻게 다른가?","반복이 인물이나 주제를 어떻게 드러내는가?"]},{"q":"대사가 인물의 말투와 성격을 어떻게 만들어내는가?","s":["말의 길이, 속도, 어휘에서 드러나는 차이는 무엇인가?","두 인물의 말투를 바꿔 보면 어떻게 되는가?","말투가 인물 관계를 보여주는 대목은 어디인가?"]}]},{"t":"인물과 갈등","qs":[{"q":"이 희곡에서 가장 이해하고 싶은 인물은 누구인가?","s":["그 인물이 원하는 것은 무엇인가?","원하는 것을 얻지 못하게 막는 것은 무엇인가?","말과 행동 사이에 차이가 있는가?"]},{"q":"중심 갈등은 무엇인가?","s":["인물 사이의 갈등인가, 인물 내부의 갈등인가?","갈등이 시작되고 커지는 지점은 어디인가?","갈등이 해결되는가, 그대로 남는가?"]},{"q":"두 인물의 관계는 어디서 달라지는가?","s":["관계가 바뀌는 구체적인 장면은 무엇인가?","대사가 아니라 행동이나 침묵으로 드러나는 변화는 무엇인가?","누가 변화를 먼저 알아차렸을까?"]},{"q":"인물에 대한 내 판단이 바뀐 순간이 있는가?","s":["처음에는 어떻게 보았나?","무엇 때문에 판단이 달라졌나?","새로운 정보가 주어진 것인가, 같은 행동을 다르게 본 것인가?"]},{"q":"가장 낯설게 느껴진 인물은 누구인가?","s":["왜 낯설게 느껴졌나?","그 인물이 극에서 하는 역할은 무엇인가?","그 인물이 없다면 극이 어떻게 달라질까?"]}]},{"t":"지문과 무대 상상","qs":[{"q":"지문에서 가장 인상 깊은 묘사는 무엇인가?","s":["지문이 알려주는 것은 행동인가, 분위기인가, 장소인가?","지문이 대사만으로는 알 수 없는 무엇을 보여주는가?","지문을 모두 지운다면 무엇이 달라지는가?"]},{"q":"무대를 머릿속에 그린다면 어떤 모습인가?","s":["공간은 어떻게 생겼는가?","조명, 소리, 소품은 어떻게 쓰일 것 같은가?","가장 상상하기 어려웠던 장면은 어디인가?"]},{"q":"인물은 무대 어디에 서 있고 어떻게 움직이는가?","s":["가까움과 멀어짐은 어떻게 표현될까?","등장과 퇴장은 어떤 의미를 가지는가?","위치를 바꾸면 장면이 어떻게 달라질까?"]},{"q":"읽기에서는 좋았지만 공연으로 옮기기 어려운 부분은 무엇인가?","s":["무엇 때문에 어려운가?","연출이 어떤 방식으로 풀 수 있을까?","옮기기 어렵다는 것이 이 희곡의 특징일 수도 있는가?"]},{"q":"이 희곡을 공연한다면 가장 먼저 정하고 싶은 선택은 무엇인가?","s":["배우에게 요구하고 싶은 것은 무엇인가?","무대에서 꼭 지키고 싶은 이미지는 무엇인가?","어떤 부분은 과감하게 바꾸고 싶은가?"]}]},{"t":"관점 뒤집기와 나의 생각","qs":[{"q":"내 해석과 정반대로 이 희곡을 읽는다면 어떻게 보일까?","s":["가장 강한 반대 해석은 무엇인가?","그 해석을 뒷받침할 장면이나 대사는 무엇인가?","내 해석으로 설명하기 어려운 대사는 무엇인가?"]},{"q":"가장 비판하고 싶은 인물을 변호한다면 어떻게 말할 수 있을까?","s":["그 인물의 입장에서 가장 강력한 변론은 무엇인가?","희곡 안에 그 변론을 뒷받침하는 근거가 있는가?","그래도 설명되지 않는 행동은 무엇인가?"]},{"q":"작가가 의도한 것과 내가 읽어낸 것이 다를 가능성은 없는가?","s":["내 해석을 희곡 안에서 독립적으로 지지하는 근거는 무엇인가?","작가의 의도를 몰라도 성립하는 해석인가?","다른 시대나 다른 사람이 읽으면 어떻게 달라질까?"]},{"q":"이 희곡이 내게 불편했다면 그 이유는 무엇인가?","s":["내용이 불편했나, 표현 방식이 불편했나?","내가 지키고 싶은 가치와 부딪혔나?","불편함이 거부인가, 생각을 자극하는 신호인가?"]},{"q":"이 희곡을 읽기 전의 나와 읽은 후의 나 사이에 작은 변화가 있는가?","s":["무엇을 다르게 보게 되었나?","이 인물과 실제로 만난다면 어떻게 대할 것 같은가?","아니면 질문 하나가 남은 정도인가?"]}]}]},"philo":{"name":"철학","themes":[{"t":"첫 인상과 경험","qs":[{"q":"책을 덮고 가장 먼저 남은 것은 무엇인가?","s":["하나의 개념, 질문, 문장 중 무엇이었나?","이해했다는 느낌이었나, 흔들렸다는 느낌이었나?","왜 그것이 먼저 남았을까?"]},{"q":"읽다가 가장 크게 멈칫한 대목은 어디인가?","s":["어느 문장이나 단락이었나?","이해가 안 되어서인가, 동의할 수 없어서인가?","다시 읽으면 달라지는가?"]},{"q":"읽기 전에 기대한 책과 실제 책은 어디에서 달랐나?","s":["기대한 주제나 난이도는 무엇이었나?","달랐던 것은 문체인가, 난이도인가, 서술 방식인가?","그 차이가 읽는 태도를 어떻게 바꿨나?"]},{"q":"가장 이해되지 않았거나 계속 마음에 걸리는 부분은 무엇인가?","s":["용어 때문인가, 논리의 연결 때문인가?","내가 모르는 배경지식 때문인가?","지금 결론 내리지 않고 질문으로 남긴다면 어떤 질문일까?"]},{"q":"이 책의 핵심을 한 문장으로 말한다면?","s":["그 문장을 뒷받침하는 대목은 무엇인가?","저자의 문장과 내가 바꿔 말한 문장은 어떻게 다른가?","이 요약에 저자가 동의할까?"]}]},{"t":"핵심 개념과 용어","qs":[{"q":"이 책의 핵심 개념은 무엇인가?","s":["저자가 직접 정의하는가, 쓰면서 드러나는가?","일상에서 쓰는 뜻과 어떻게 다른가?","내 말로 다시 정의해본다면 무엇인가?"]},{"q":"저자가 구분하려고 하는 것은 무엇인가?","s":["어떤 두 개념을 나누고 있나?","그 구분이 왜 필요한가?","구분하지 않으면 어떤 혼란이 생기는가?"]},{"q":"저자가 반복해서 쓰는 용어나 표현은 무엇인가?","s":["반복될 때 의미가 조금씩 달라지는가?","이 용어를 다른 말로 바꾸면 무엇이 달라지는가?","번역어 때문에 생기는 오해는 없는가?"]},{"q":"개념을 설명하는 데 쓰인 예시나 비유는 무엇인가?","s":["그 예시는 개념을 얼마나 잘 보여주는가?","예시가 오히려 오해를 만들지는 않는가?","내가 더 나은 예시를 든다면 무엇일까?"]},{"q":"이 개념을 내 삶의 한 장면에 적용해본다면?","s":["어떤 장면에서 이 개념이 쓰이는가?","적용했을 때 새로 보이는 것은 무엇인가?","적용하다 보면 개념이 어긋나는 지점은 어디인가?"]}]},{"t":"논증의 흐름","qs":[{"q":"저자가 풀려는 문제는 무엇인가?","s":["어떤 질문에서 출발하는가?","그 질문이 왜 중요하다고 보는가?","질문 자체를 다르게 던질 수는 없는가?"]},{"q":"결론에 이르는 길은 어떻게 이어지는가?","s":["주요 단계를 순서대로 적어본다면 무엇인가?","각 단계는 앞 단계에서 자연스럽게 따라 나오는가?","한 단계를 건너뛰면 결론이 무너지는가?"]},{"q":"가장 설득력 있었던 논거는 무엇인가?","s":["왜 설득력이 있었나?","논리 때문인가, 예시 때문인가, 문장의 힘 때문인가?","그 논거가 빠지면 논증은 어떻게 되는가?"]},{"q":"가장 약해 보이는 연결은 어디인가?","s":["어떤 점에서 비약처럼 느껴졌나?","저자가 암묵적으로 전제한 것은 무엇인가?","그 부분을 보완한다면 무엇이 필요한가?"]},{"q":"결론은 처음의 질문에 답하고 있는가?","s":["답을 주는가, 질문을 바꾸는가?","남은 문제는 무엇인가?","저자가 스스로 인정하는 한계는 무엇인가?"]}]},{"t":"예시와 사고실험","qs":[{"q":"책에서 가장 인상 깊었던 예시나 사고실험은 무엇인가?","s":["어떤 상황을 가정하는가?","그 상황에서 무엇을 판단하게 하는가?","이 예시가 없었다면 논증이 얼마나 약해졌을까?"]},{"q":"사고실험의 조건을 바꾸면 결론도 바뀌는가?","s":["어떤 조건을 바꿀 수 있는가?","바꾸면 내 직관은 어떻게 달라지는가?","저자는 그 변형에 어떻게 답할까?"]},{"q":"이 책이 기대는 직관에 나는 동의하는가?","s":["직관이 일치하는 대목은 어디인가?","직관이 부딪히는 대목은 어디인가?","나의 직관이 다른 사람과 같을지 의문이 드는가?"]},{"q":"이 개념은 극단적인 경우에도 성립하는가?","s":["가장 극단적인 사례는 무엇인가?","그 사례에서 저자의 주장은 유지되는가?","유지되지 않는다면 어떤 수정이 필요한가?"]},{"q":"저자의 주장이 실제 사회나 현실에 적용되면 어떻게 될까?","s":["구체적으로 어떤 제도나 행동으로 이어지는가?","현실에서 부딪힐 어려움은 무엇인가?","이론과 현실의 간극은 이론의 약점인가?"]}]},{"t":"관점 뒤집기와 나의 생각","qs":[{"q":"저자와 정반대 입장에서 이 책을 읽는다면 어떻게 보일까?","s":["가장 강한 반론은 무엇인가?","그 반론을 뒷받침하는 철학적 입장은 무엇인가?","저자는 그 반론에 어떻게 답할 것 같은가?"]},{"q":"저자가 당연하게 전제하는 것은 무엇인가?","s":["증명하지 않고 받아들이는 가정은 무엇인가?","그 가정을 의심하면 논증이 어떻게 달라지는가?","나 역시 그 전제를 당연하게 받아들이고 있었는가?"]},{"q":"내가 너무 쉽게 동의했다고 느끼는 곳은 어디인가?","s":["왜 의심 없이 받아들였나?","한 번 의심해본다면 어떤 질문을 던질 수 있을까?","동의가 논리 때문인지, 문장의 분위기 때문인지?"]},{"q":"이 책이 내가 가진 생각을 어떻게 흔들었나?","s":["원래 내 생각은 무엇이었나?","책의 무엇이 그 생각을 흔들었나?","생각이 바뀐 것인가, 질문이 하나 더 생긴 것인가?"]},{"q":"이 책을 읽은 뒤 내 삶의 선택이나 태도가 달라질 부분이 있는가?","s":["일상에서 다르게 보게 된 것은 무엇인가?","실제 행동까지 바뀔 정도인가?","아니면 사고의 틀 하나가 늘어난 정도인가?"]}]}]},"selfhelp":{"name":"자기계발·실용서","themes":[{"t":"첫 인상과 경험","qs":[{"q":"책을 덮고 가장 먼저 남은 것은 무엇인가?","s":["하나의 방법, 문장, 사례 중 무엇이었나?","의욕이 생겼는가, 부담이 생겼는가?","왜 그것이 먼저 남았을까?"]},{"q":"읽는 동안 ‘이건 나한테 해당된다’고 느낀 대목은 어디인가?","s":["정확히 어느 문장이나 사례였나?","어떤 점이 나와 닮았나?","해당되지 않는다고 느낀 대목은 어디인가?"]},{"q":"읽기 전 기대와 실제 책은 어디에서 달랐나?","s":["이 책에서 기대한 도움은 무엇이었나?","달랐던 것은 내용인가, 깊이인가, 실천 방법인가?","그 차이가 책의 가치를 어떻게 바꿨나?"]},{"q":"읽는 동안 불편하거나 찔렸던 부분이 있는가?","s":["어떤 문장 때문이었나?","불편함의 원인은 나의 습관인가, 책의 말투인가?","그 불편함이 변화의 신호일 수 있는가?"]},{"q":"이 책을 한 문장으로 말한다면 어떤 문장이 될까?","s":["그 문장을 뒷받침하는 핵심 사례는 무엇인가?","광고 문구가 아니라 내 말로 바꾸면 어떻게 되는가?","이 한 문장만 알아도 책을 읽은 셈이 되는가?"]}]},{"t":"핵심 주장과 방법","qs":[{"q":"이 책이 말하는 핵심 주장은 무엇인가?","s":["저자가 반복하는 메시지는 무엇인가?","그 주장이 기존 통념과 어떻게 다른가?","한 문장이 아니라 세 문장으로 설명한다면?"]},{"q":"제시하는 방법은 구체적으로 무엇인가?","s":["단계로 정리한다면 몇 단계인가?","지금 당장 할 수 있는 것은 무엇인가?","설명은 쉬운데 실행하기 어려운 부분은 어디인가?"]},{"q":"방법과 주장 사이의 연결은 자연스러운가?","s":["방법이 주장에서 어떻게 따라 나오는가?","주장은 그럴듯한데 방법이 약한 부분은 어디인가?","방법을 하나 빼도 주장은 성립하는가?"]},{"q":"저자는 성공의 조건을 어떻게 설명하는가?","s":["의지, 환경, 시스템 중 무엇을 강조하는가?","운이나 배경은 얼마나 다뤄지는가?","내 상황에서 가장 중요한 조건은 무엇일까?"]},{"q":"책 속의 핵심 용어나 프레임은 무엇인가?","s":["저자가 만든 개념이나 공식은 무엇인가?","그 프레임이 복잡한 일을 단순하게 정리해 주는가, 왜곡하는가?","나만의 말로 바꿔 쓴다면 무엇인가?"]}]},{"t":"근거와 신뢰도","qs":[{"q":"저자의 주장을 뒷받침하는 근거는 무엇인가?","s":["연구, 통계, 사례, 개인 경험 중 무엇이 중심인가?","근거가 어디에서 왔는지 확인할 수 있는가?","근거가 가장 단단한 부분과 가장 약한 부분은 어디인가?"]},{"q":"사례는 어떻게 선택되었는가?","s":["성공한 사례만 소개되고 있지는 않은가?","실패했거나 효과가 없었던 사례도 나오는가?","반대 사례를 찾는다면 무엇을 찾아볼 수 있을까?"]},{"q":"저자는 어떤 위치에서 말하고 있는가?","s":["전문가인가, 경험자인가, 사업가인가?","저자의 이해관계가 주장에 영향을 줄 수 있는가?","같은 주제를 다른 위치의 사람이 쓴다면 어떻게 달라질까?"]},{"q":"과장되거나 단정적이라고 느낀 부분은 어디인가?","s":["어떤 표현이 그랬나?","‘항상’, ‘반드시’ 같은 말은 어디에서 쓰였나?","조건을 붙이면 주장은 어떻게 달라지는가?"]},{"q":"이 책의 내용을 확인해보려면 무엇이 필요한가?","s":["어떤 자료를 더 찾아볼 수 있는가?","직접 해보며 검증할 수 있는 부분은 무엇인가?","검증한 뒤에도 남을 것 같은 주장은 무엇인가?"]}]},{"t":"적용과 실행","qs":[{"q":"이 책에서 지금 내가 실제로 해볼 한 가지는 무엇인가?","s":["오늘 바로 할 수 있는 가장 작은 행동은 무엇인가?","언제, 어디서, 어떻게 할 것인가?","하다가 막힐 것 같은 지점은 어디인가?"]},{"q":"내 상황에 맞지 않아 바꿔야 하는 부분은 무엇인가?","s":["책의 전제와 내 환경은 어떻게 다른가?","어떻게 바꾸면 쓸 수 있을까?","바꾸고 나면 원래 방법의 효과가 남을까?"]},{"q":"지금까지 비슷한 방법을 시도해본 적이 있는가?","s":["어떤 결과였나?","이번에는 무엇이 다른가?","실패했다면 방법의 문제인가, 실행의 문제인가?"]},{"q":"실행을 방해하는 것은 무엇인가?","s":["시간, 의지, 환경, 관계 중 무엇인가?","책이 그 방해물을 다루고 있는가?","방해물을 줄이는 작은 장치를 만든다면 무엇일까?"]},{"q":"한 달 뒤에 이 책의 효과를 어떻게 확인할 수 있을까?","s":["무엇이 달라져 있어야 하는가?","숫자나 행동으로 확인할 수 있는 기준은 무엇인가?","효과가 없다면 어디를 다시 볼 것인가?"]}]},{"t":"관점 뒤집기와 나의 생각","qs":[{"q":"저자와 정반대 조언을 한다면 무엇이라고 말할까?","s":["반대 입장의 가장 강한 근거는 무엇인가?","그 조언이 더 맞는 사람은 어떤 사람인가?","두 조언 중 내게 더 맞는 쪽은 어느 쪽인가?"]},{"q":"이 책이 당연하게 전제하는 가치는 무엇인가?","s":["성공, 생산성, 효율 같은 가치를 나는 얼마나 받아들이고 있는가?","그 가치와 충돌하는 내 가치는 무엇인가?","전제를 바꾸면 조언이 어떻게 달라지는가?"]},{"q":"이 책을 읽고도 내가 달라지지 않는다면 이유는 무엇일까?","s":["아는 것과 하는 것 사이의 간극은 어디에 있는가?","책의 문제인가, 나의 문제인가?","그 간극을 메우는 가장 작은 단계는 무엇인가?"]},{"q":"이 책이 내가 가진 생각을 어떻게 흔들었나?","s":["원래 나는 어떻게 생각했나?","책의 어떤 대목이 그 생각을 흔들었나?","생각이 바뀐 것인가, 이미 알던 것이 확인된 것인가?"]},{"q":"이 책을 누구에게 권하고, 누구에게는 권하지 않겠는가?","s":["이 책이 도움이 될 사람은 누구인가?","도움이 되지 않거나 오히려 해가 될 수 있는 사람은 누구인가?","추천 한 줄을 쓴다면 무엇이라고 쓰겠는가?"]}]}]},"critic":{"name":"비평","themes":[{"t":"첫 인상과 경험","qs":[{"q":"책을 덮고 가장 먼저 남은 것은 무엇인가?","s":["하나의 주장, 문장, 시각 중 무엇이었나?","대상 작품을 다시 보고 싶어졌는가?","왜 그것이 먼저 남았을까?"]},{"q":"읽는 동안 가장 크게 반응한 대목은 어디인가?","s":["어느 문장이나 단락이었나?","동의, 반감, 놀라움 중 어디에 가까웠나?","그 반응은 논지 때문인가, 문장 때문인가?"]},{"q":"읽기 전 기대와 실제 글은 어디에서 달랐나?","s":["기대한 비평의 모습은 무엇이었나?","달랐던 것은 어조인가, 난이도인가, 대상인가?","그 차이가 읽는 태도를 어떻게 바꿨나?"]},{"q":"이해되지 않거나 따라가기 어려웠던 부분은 어디인가?","s":["용어 때문인가, 배경지식 때문인가, 논리 때문인가?","대상 작품을 모르기 때문인가?","지금 모르는 채로 남겨둘 것과 찾아볼 것은 무엇인가?"]},{"q":"이 비평을 한 문장으로 말한다면 어떤 문장이 될까?","s":["그 문장을 뒷받침하는 대목은 무엇인가?","비평가의 말과 내 말은 어떻게 다른가?","비평가가 이 요약에 동의할까?"]}]},{"t":"비평가의 관점과 기준","qs":[{"q":"비평가는 무엇을 좋은 작품의 기준으로 삼는가?","s":["직접 밝히는가, 읽어내야 하는가?","그 기준은 작품의 어떤 점을 높이 평가하게 만드는가?","다른 기준을 적용하면 평가가 어떻게 달라질까?"]},{"q":"비평가는 어떤 위치에서 이야기하는가?","s":["시대, 이론, 취향 중 무엇이 드러나는가?","그 위치가 보이게 하는 것과 가리는 것은 무엇인가?","같은 대상을 다른 위치에서 본다면 어떻게 보일까?"]},{"q":"비평가가 반복해서 쓰는 개념이나 틀은 무엇인가?","s":["그 틀은 작품을 어떻게 읽게 만드는가?","틀에 잘 맞는 부분과 맞지 않는 부분은 무엇인가?","틀 없이 작품을 읽는다면 무엇이 보일까?"]},{"q":"비평가의 어조는 어떠한가?","s":["단정적인가, 조심스러운가, 도발적인가?","어조가 설득력에 어떤 영향을 주는가?","같은 내용을 다른 어조로 썼다면 어떻게 달라질까?"]},{"q":"비평가가 말하지 않거나 피하는 것은 무엇인가?","s":["일부러 다루지 않은 측면은 무엇인가?","그 침묵이 논지에 필요한가?","다루었다면 비평이 어떻게 달라졌을까?"]}]},{"t":"근거와 해석 방식","qs":[{"q":"비평의 핵심 논지는 무엇인가?","s":["한 문장으로 쓴다면 무엇인가?","비평가가 직접 말한 부분과 내가 읽어낸 부분은 무엇인가?","논지가 글의 어디쯤에서 분명해지는가?"]},{"q":"논지를 뒷받침하기 위해 대상 작품의 어느 부분을 인용하는가?","s":["인용된 장면이나 문장은 논지를 잘 지지하는가?","인용하지 않은 부분 중 논지와 충돌하는 것은 없는가?","인용을 바꾸면 논지가 달라질까?"]},{"q":"작품 안의 근거와 작품 밖의 정보는 어떻게 쓰이는가?","s":["작가의 생애, 시대, 이론은 어느 정도 개입하는가?","그 정보 없이도 해석이 성립하는가?","작품 밖 정보가 해석을 넓히는가, 가두는가?"]},{"q":"해석이 지나치다고 느낀 대목이 있는가?","s":["어떤 부분이 과해 보였나?","근거가 부족한가, 비약이 있는가?","내가 더 적절하다고 생각하는 해석은 무엇인가?"]},{"q":"비평 덕분에 대상 작품이 다르게 보이게 된 부분은 어디인가?","s":["이전에 보지 못한 것은 무엇인가?","그 새로움이 작품 안에서 지지되는가?","비평 때문에 오히려 놓치게 되는 것은 없는가?"]}]},{"t":"평가의 언어와 대상과의 거리","qs":[{"q":"비평은 어떤 말로 평가하는가?","s":["‘좋다/나쁘다’ 대신 어떤 표현을 쓰는가?","가장 정확하다고 느낀 표현은 무엇인가?","모호하거나 과장되었다고 느낀 표현은 무엇인가?"]},{"q":"비평가는 대상 작품과 어느 정도 거리에 있는가?","s":["애정이 느껴지는가, 냉정한가?","그 거리 때문에 보이는 것과 보이지 않는 것은 무엇인가?","거리가 달라지면 평가가 달라질까?"]},{"q":"내가 대상 작품을 직접 접했다면 비평과 어떻게 비교되는가?","s":["비평과 내 감상이 일치하는 부분은 어디인가?","어긋나는 부분은 어디인가?","어긋남의 원인은 작품인가, 시선인가?"]},{"q":"대상 작품을 접하지 않았다면 이 비평만으로 얼마나 이해되는가?","s":["비평만으로 그려지는 작품의 모습은 무엇인가?","직접 보면 달라질 것 같은 부분은 무엇인가?","비평이 작품을 대신하지 않도록 하는 장치는 무엇인가?"]},{"q":"이 비평은 다른 비평이나 작품과 어떻게 이어지는가?","s":["함께 읽고 싶은 작품이나 글은 무엇인가?","이 비평이 반박하거나 이어받는 논의는 무엇인가?","이 비평 때문에 새로 생긴 궁금증은 무엇인가?"]}]},{"t":"관점 뒤집기와 나의 생각","qs":[{"q":"비평가와 정반대 입장에서 대상을 읽는다면 어떻게 보일까?","s":["가장 강한 반대 해석은 무엇인가?","그 해석을 뒷받침하는 대목은 무엇인가?","두 해석 중 작품을 더 잘 설명하는 쪽은 어느 쪽인가?"]},{"q":"비평가의 주장에 너무 쉽게 동의한 부분은 어디인가?","s":["왜 의심 없이 받아들였나?","한 번 의심해본다면 어떤 질문을 던질 수 있을까?","동의가 논리 때문인지, 문장의 힘 때문인지?"]},{"q":"내가 쓴다면 이 대상에 대해 어떤 비평을 쓸 것인가?","s":["비평가와 겹치는 점과 다른 점은 무엇인가?","내가 가장 강조하고 싶은 것은 무엇인가?","근거로 삼을 장면이나 문장은 무엇인가?"]},{"q":"이 비평이 불편하거나 와닿지 않았다면 그 이유는 무엇인가?","s":["대상에 대한 내 애정 때문인가?","비평의 방식이 맞지 않았나?","불편함이 거부인가, 생각을 자극하는 신호인가?"]},{"q":"이 비평을 읽고 나서 작품을 보는 내 눈이 달라졌는가?","s":["무엇을 다르게 보게 되었나?","다음에 작품을 볼 때 적용할 질문은 무엇인가?","아니면 비평가의 시선을 빌렸을 뿐일까?"]}]}]}};
-  var editingRec = null;
-  var gKey = "book", gTab = 0, gSel = {}, gInserted = false;
+  var gKey = "book", gTab = 0, gSel = {}, gInserted = false, gTarget = "post";   /* gTarget: 가이드 질문을 넣을 곳 — "post"(후기) / "pre"(관람 전 기대) */
   /* 입력한 장르 글자를 가이드 세트로 연결 (소설·기타·비어 있음 = 기본 책 질문) */
   function genreKey(g) {
     var s = String(g || "").toLowerCase().replace(/[\s·ㆍ・\/,._-]+/g, "");
@@ -3642,7 +3744,7 @@
     return "book";
   }
   function guideSet(k) { return GENRE_GUIDE[k] || GUIDE_DATA[k]; }
-  function guideKey() { return form.type === "book" ? genreKey($("genre").value) : form.type === "movie" ? "movie" : "perf"; }
+  function guideKey() { return gTarget === "pre" ? "pre" : form.type === "book" ? genreKey($("genre").value) : form.type === "movie" ? "movie" : "perf"; }
   function gst(ti, qi) {
     var id = ti + "-" + qi;
     if (!gSel[id]) gSel[id] = { on: false, subs: [] };
@@ -3657,11 +3759,15 @@
     });
     return [q, sub];
   }
-  function openGuide() {
-    if ($("writer").hidden) openWriter();
+  function openGuide(target) {
+    gTarget = target === "pre" && form.type !== "book" ? "pre" : "post";
+    if ($("writer").hidden) openWriter(gTarget);
+    else if (wTab !== gTarget) wSwitchTab(gTarget);
     $("wtext").blur();
     gKey = guideKey(); gTab = 0; gSel = {};
     $("guide").dataset.k = form.type;
+    $("gTabs").style.display = gTarget === "pre" ? "none" : "";   /* 관람 전 기대는 탭 없이 한 화면에 */
+    $("gRand").style.display = gTarget === "pre" ? "none" : "";   /* 랜덤 선택도 없음 */
     $("gTitle").textContent = guideSet(gKey).name + " 가이드 질문";
     $("guide").hidden = false;
     pushLayer("guide");
@@ -3694,9 +3800,10 @@
       {"h": "종류부터 골라요", "lines": ["책, 영화, 연극, 뮤지컬 중 무엇인지 먼저 골라요.", "종류에 따라 입력칸이 조금씩 달라져요.", "책은 저자, 장르, 읽기 상태, 완독한 날을 적어요.", "영화는 감독과 본 날을 적어요.", "연극·뮤지컬은 극장, 관람 일시, 좌석, 캐스팅을 적어요."]},
       {"h": "작품 정보와 날짜", "lines": ["제목과 저자(감독·극장)를 적어요. 나중에 \"그때 본 그 작품이 뭐였지?\" 싶을 때 찾는 기본 단서가 돼요.", "책의 장르는 목록에서 고르거나 직접 입력해요.", "책은 읽기 상태를 「읽는 중」 「중단」 「완독」 중에서 골라요. 날짜는 완독일 때만 입력해요.", "연극·뮤지컬은 관람 일시를 5분 단위로 맞출 수 있어요."]},
       {"h": "책 읽기 상태", "lines": ["읽는 중과 중단은 날짜 없이 제목만으로 바로 등록할 수 있어요. 병렬독서처럼 여러 권을 동시에 읽어도 부담 없어요.", "카드를 펼치면 아래쪽 버튼으로 상태를 바로 바꿀 수 있어요. 읽는 중은 「완독」 「중단」, 중단은 「다시 읽기」 「완독」이에요.", "완독으로 바꾸면 완독일이 오늘로 들어가요. 다른 날이면 「수정」에서 고쳐요.", "상태를 바꾸면 실수해도 잠깐 되돌릴 수 있고, 타임라인에는 「완독」 「독서 중단」 「다시 읽기」로 남아요."]},
-      {"h": "연극·뮤지컬 전용 칸", "lines": ["좌석을 적어두면 다음 관람 때 시야와 거리를 비교하기 좋아요.", "캐스팅은 쉼표나 줄바꿈으로 구분해요.", "같은 작품도 회차마다 다른 배우가 나오니, 그날의 기억을 남겨두면 좋아요."]},
+      {"h": "연극·뮤지컬 전용 칸", "lines": ["좌석을 적어두면 다음 관람 때 시야와 거리를 비교하기 좋아요.", "캐스팅은 콤마, 띄어쓰기, 줄바꿈으로 구분해요.", "같은 작품도 회차마다 다른 배우가 나오니, 그날의 기억을 남겨두면 좋아요."]},
       {"h": "별점·한줄평", "lines": ["별점은 0.5점 단위로 남겨요.", "한줄평은 120자까지 쓸 수 있어요.", "한줄평은 목록에 바로 보여서, 나중에 훑을 때 첫인상이 한눈에 떠올라요.", "길게 쓸 기운이 없는 날엔 이 두 가지만 남겨도 충분해요."]},
-      {"h": "후기 쓰기", "lines": ["카드를 펼친 뒤 눌러요.\n· 후기 있음 → 「후기 수정」\n· 후기 없음 → 「후기 쓰기」\n후기만 적는 창이 열리고, 「완료」를 누르면 바로 저장돼요. 후기 칸을 누르면 전체 화면에서 쓸 수 있고, 글자 수는 오른쪽 아래에 보여요.", "목록 제목 줄 오른쪽 말풍선으로 후기 여부를 알 수 있어요.\n· {빈말풍선} 후기 없음 · 누르면 후기 쓰기 창이 열려요\n· {찬말풍선} 후기 있음\n읽는 중·중단 책에는 보이지 않아요.", "후기를 고치다 닫으면 「저장하지 않고 닫을까요?」라고 물어봐요.\n기록 추가·수정 화면에서 연 창은 「완료」를 누르면 쓴 내용이 그 화면에 들어가고(최종 저장은 「저장」), 「닫기」로 닫으면 이번에 고친 내용은 버려져요.", "실수로 지웠다면 위쪽 ↶ ↷ 버튼으로 되돌릴 수 있어요."]},
+      {"h": "후기 쓰기", "lines": ["카드를 펼친 뒤 눌러요.\n· 후기 있음 → 「수정」\n· 후기 없음 → 「후기 쓰기」\n후기만 적는 창이 열리고, 「완료」를 누르면 바로 저장돼요. 후기 칸을 누르면 전체 화면에서 쓸 수 있고, 글자 수는 오른쪽 아래에 보여요.", "목록 제목 줄 오른쪽 말풍선으로 후기 여부를 알 수 있어요.\n· {빈말풍선} 후기 없음 · 누르면 후기 쓰기 창이 열려요\n· {찬말풍선} 후기 있음\n읽는 중·중단 책에는 보이지 않아요.", "후기를 고치다 닫으면 「저장하지 않고 닫을까요?」라고 물어봐요.\n기록 추가·수정 화면에서 연 창은 「완료」를 누르면 쓴 내용이 그 화면에 들어가고(최종 저장은 「저장」), 「닫기」로 닫으면 이번에 고친 내용은 버려져요.", "실수로 지웠다면 위쪽 ↶ ↷ 버튼으로 되돌릴 수 있어요."]},
+      {"h": "관람 전 기대 쓰기", "lines": ["영화·연극·뮤지컬은 기록 창에 「관람 전」 「관람 후」 탭이 있어요.\n· 「관람 전」 → 기대한 점, 보기 전부터 알고 있던 점\n· 「관람 후」 → 별점, 한줄평, 후기\n다른 탭에 쓴 내용이 있으면 탭 옆에 작은 점이 보여요. 책에는 탭이 없어요.", "관람 전 글은 관람한 뒤에 떠올려 적어도 돼요.", "카드에서는 후기 위쪽 「관람 전」 칸을 눌러 접고 펼 수 있어요. 아직 안 본 기록에는 「관람 전 기대 쓰기」가 보이고, 쓴 뒤에는 「관람 전」 제목 줄의 「수정」으로 고쳐요.", "「관람 전」 칸을 눌러도 후기처럼 전체 화면으로 열려요. 맨 위 「관람 전」·「관람 후」 탭으로 오가도 쓰던 내용은 그대로 남고, 저장은 「완료」를 누를 때 한꺼번에 돼요. 쓰다가 예기치 않게 닫혀도 둘 다 임시저장돼요.", "「관람 전」 탭에도 「가이드 질문」이 있어요. 「알고 간 정보는?」, 「기대한 것은?」 질문을 골라 넣을 수 있어요.", "관람일이 오늘 이후인 기록은 「관람 전」 탭이 먼저 열려요. 말풍선과 「후기 있음/없음」 필터는 「관람 후」 후기만 기준이에요."]},
       {"h": "막막할 땐 「가이드 질문」", "lines": ["별점 아래, 후기 위의 「가이드 질문」을 눌러요. 책은 장르에 따라 질문이 달라져요.", "위쪽 탭에서 주제를 고르고, 마음이 가는 질문을 눌러 선택해요.", "질문마다 딸림 질문이 있어요. 「딸림 질문 모두 선택」으로 한 번에 고를 수도 있어요.", "뭘 쓸지 감이 안 오면 「랜덤 선택」으로 주제마다 질문을 하나씩 뽑아봐요.", "「N개 넣기」를 누르면 고른 질문이 후기 칸에 들어가요. 그 아래에 내 생각을 이어서 쓰면 돼요.", "잘못 골랐다면 「비우기」로 선택을 초기화해요."]},
       {"h": "비고와 태그", "lines": ["비고는 같이 본 사람, 앉았던 자리, 재관람 여부 같은 짧은 메모예요. 100자까지 쓸 수 있어요.", "태그는 #재관람 #가족처럼 적어요.", "비고와 태그는 검색에도 잡혀요."]},
       {"h": "쓰다가 잠깐 내려두기", "lines": ["작성 화면 위쪽의 「내리기」 버튼을 누르거나, 위쪽 바를 아래로 쓸어내려요.", "작성 화면이 아래 「이어 쓰기」 막대로 내려가요.", "그동안 목록·달력 등 다른 화면을 볼 수 있어요.", "막대나 「+ 후기 추가」를 누르면 쓰던 내용 그대로 이어서 쓸 수 있어요."]},
@@ -3729,6 +3836,7 @@
     ] },
     /* 업데이트 내역: 코드를 수정할 때마다 맨 위(최신순)에 한 줄씩 추가 */
     { t: "업데이트 내역", log: true, items: [
+      {"d": "2026-10-03 23:27", "h": "관람 전 기대 쓰기", "p": "영화·연극·뮤지컬 기록 창에 「관람 전」 「관람 후」 탭이 생겼어요. 「관람 전」에는 기대한 점이나 미리 알고 있던 점을, 「관람 후」에는 별점·한줄평·후기를 적어요. 관람 뒤에 떠올려 적어도 돼요. 카드에서는 후기 위쪽에 접고 펼 수 있는 「관람 전」 칸으로 보여요."},
       {"d": "2026-10-03 21:10", "h": "통계 책 장르 그래프", "p": "통계의 책 장르 비율이 원형(도넛) 그래프로 바뀌었어요. 조각에 장르 이름과 비율이 보이고, 글자가 조각 안에 안 들어갈 만큼 작은 조각은 지시선으로 바깥에 표시돼요. 가운데에는 읽은 책 권수가, 아래에는 장르별 색, 이름, 권수, 비율이 한 줄씩 나와요."},
       {"d": "2026-10-03 19:02", "h": "후기 있음·없음 표시", "p": "목록 카드의 제목 줄 오른쪽에 말풍선 아이콘이 생겼어요. 후기를 쓴 기록은 카테고리 색으로 꽉 찬 말풍선, 아직 안 쓴 기록은 흐린 빈 말풍선이에요. 빈 말풍선을 누르면 후기만 적는 창이 바로 열리고, 후기를 쓰면 꽉 찬 말풍선으로 바뀌어요. 읽는 중·중단 책에는 나오지 않아요."},
       {"d": "2026-10-03 16:52", "h": "읽는 중 감상(독서 기록) 정리", "p": "읽는 중·중단 책에도 완독한 책처럼 후기 칸이 생겨서, 후기가 없으면 「후기 쓰기」로 바로 적을 수 있어요. 예전 「독서 기록」은 카드에서 「읽는 중 감상」이라는 이름으로 메인 후기 위에 보이고, 「읽는 중 감상 쓰기」 버튼으로 남겨요. 읽는 중 감상은 제목 줄을 눌러 접고 펼 수 있고(다시 열면 펼쳐져요), 입력한 시각이 날짜 옆에 보여요. 이제 고칠 수도 있어요. 고치면 날짜 뒤에 (수정됨)이 붙고, 누르면 최종 수정 시각으로 바뀌어요. 달력에서는 「그날의 생각」에서 빠지는 대신, 감상을 쓴 날에 「독서함」 카드와 노란 빈 동그라미가 보여요(완독한 날은 「완독」 카드, 달력에서만 보이고 목록에는 안 나와요). 후기·별점 필터에는 완독한 책만 보이고, 책의 완독일은 오늘 이후로 정할 수 없어요."},
@@ -3736,7 +3844,7 @@
       {"d": "2026-10-03 10:50", "h": "후기 창 닫기 버튼", "p": "후기 창 왼쪽 위에 「닫기」 버튼이 생겼어요. 기록 추가·수정 화면에서 열었을 때와 카드에서 바로 열었을 때 화면이 똑같아요. 내용을 고친 채 닫으면 「저장하지 않고 닫을까요?」라고 물어봐요. 바 크기는 그대로 두려고 글자 수는 글쓰기 칸 오른쪽 아래로 옮겼어요."},
       {"d": "2026-10-03 10:50", "h": "뒤로가기", "p": "폰 자판이 올라와 있을 때 뒤로가기를 누르면 자판만 내려가고, 한 번 더 누르면 닫혀요. 카드에서 바로 연 후기 창과 기록 창에서 연 후기 창 모두 내용을 고친 채 뒤로가기를 누르면 「저장하지 않고 닫을까요?」라고 물어봐요."},
       {"d": "2026-10-03 10:50", "h": "카드 세부정보", "p": "펼친 카드의 세부정보 영역을 누르면 카드가 접혀요(제목 줄을 눌렀을 때와 같아요). 스크롤로 세부정보가 살짝 가려졌을 때 「펼치기」를 누르면 세부정보가 두 번 보이던 오류도 고쳤어요. 이제 세부정보가 위, 버튼 줄이 아래 순서로 한 번만 보여요."},
-      {"d": "2026-10-03 10:16", "h": "후기 바로 고치기", "p": "카드에 보이는 후기 위쪽의 「후기 수정」을 누르면 후기만 고치는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요."},
+      {"d": "2026-10-03 10:16", "h": "후기 바로 고치기", "p": "카드에 보이는 후기 위쪽의 「수정」을 누르면 후기만 고치는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요."},
       {"d": "2026-10-03 10:11", "h": "후기 바로 쓰기", "p": "후기를 안 쓴 기록 카드에서 「후기 없음」을 누르면 후기만 적는 창이 바로 열려요. 「완료」를 누르면 바로 저장되고, 아무것도 안 쓰고 닫으면 저장 없이 돌아와요."},
       {"d": "2026-10-03 09:56", "h": "읽는 중·중단·완독 구분", "p": "책의 읽기 상태가 「읽는 중」 「중단」 「완독」 세 가지로 나뉘었어요. 날짜는 완독일만 입력하고, 읽는 중과 중단은 날짜 없이 바로 등록해요. 전체 탭에는 완독한 책만 보이고, 책 탭에서는 읽는 중(항상 펼침) · 중단(기본 접힘, 눌러서 펼침) · 완독(날짜별) 순으로 나뉘어 보여요. 카드 안의 버튼으로 완독 · 중단 · 다시 읽기도 바로 바꿀 수 있어요."},
       {"d": "2026-10-03 09:56", "h": "독서 기록", "p": "읽는 중이거나 중단한 책 카드에서 「기록 남기기」를 누르면 읽다가 든 생각을 날짜별로 남길 수 있어요. 한 번에 끝나는 공연과 달리 여러 날에 걸쳐 읽는 책을 위한 기록이에요. 완독 뒤에 다시 든 생각을 남기는 「생각 덧붙이기」와는 따로 저장되고, 완독해도 독서 기록은 그대로 남아요. 닫힌 카드에는 마지막 기록이 한 줄로 보여요."},
@@ -3878,7 +3986,7 @@
     tabs.textContent = "";
     set.themes.forEach(function (t, ti) {
       var cnt = 0;
-      t.qs.forEach(function (q, qi) { if (gSel[ti + "-" + qi] && gSel[ti + "-" + qi].on) cnt++; });
+      t.qs.forEach(function (_q, qi) { if (gSel[ti + "-" + qi] && gSel[ti + "-" + qi].on) cnt++; });
       var b = el("button", ti === gTab ? "on" : "", t.t);
       b.type = "button"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", ti === gTab ? "true" : "false");
       if (cnt) b.appendChild(el("span", "bd", String(cnt)));
@@ -3964,7 +4072,8 @@
     wSnap();
     var sep = !base ? "" : (/\n\n$/.test(base) ? "" : (/\n$/.test(base) ? "\n" : "\n\n"));
     t.value = base + sep + txt;
-    $("text").value = t.value;
+    wField().value = t.value;
+    updateWTabDots();
     $("wcnt").textContent = t.value.length + "자";
     wSnap();
     gInserted = true;
@@ -4087,6 +4196,7 @@
     $("statusBox").hidden = (k !== "book");
     if (k !== "book") form.status = "done";
     updateDateBox();
+    if ($("sheet").classList.contains("show")) setVTab(vTab);   /* 기록 창에서 종류를 바꾸면 탭도 맞춤(책은 탭 없음) */
   }
   function setStatus(st) {
     form.status = st;
@@ -4126,16 +4236,84 @@
     if (form.type === "book" && !r && $("date").value > today()) $("date").value = today();   /* 달력에서 미래 날짜로 책을 추가해도 오늘로 */
     updateTimeBtn();
     $("text").value = r ? r.text : "";
+    $("pre").value = r ? (r.pre || "") : "";
     buildRate();
     $("sheet").classList.add("show");
     document.body.style.overflow = "hidden";
     $("sheet").querySelector(".panel").scrollTop = 0;
-    growText();
+    growText(); growCast();
+    setVTab(form.type !== "book" && $("date").value > today() ? "pre" : "post");   /* 아직 안 본(관람일이 오늘 이후) 기록은 「관람 전」부터 */
     formSnap = snapForm();
     restoreDraft(id);
     pushLayer("form");
     if (!r) $("title").focus();
   }
+  /* 기록 창의 「관람 전」·「관람 후」 탭 (책은 탭 없이 지금처럼) */
+  var vTab = "post";
+  /* 캐스팅: 콤마·띄어쓰기·줄바꿈 어느 것으로 적어도 이름별로 나눠 "이름, 이름" 형태로 */
+  function castNorm(t) {
+    return String(t || "").split(/[\s,]+/).filter(Boolean).join(", ");
+  }
+  function growCast() {
+    var t = $("cast");
+    t.style.height = "auto";
+    if (!t.scrollHeight) return;
+    /* 세 줄까지만 늘어나고, 그 이후는 칸 안에서 스크롤 */
+    var cs = getComputedStyle(t);
+    var lh = parseFloat(cs.lineHeight) || (parseFloat(cs.fontSize) || 15) * 1.6;
+    var max = Math.ceil(lh * 3 + (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0) + 2);
+    var want = Math.max(34, t.scrollHeight + 2);
+    t.style.height = Math.min(want, max) + "px";
+    t.style.overflowY = want > max ? "auto" : "hidden";
+  }
+  function growPre() {
+    var t = $("pre");
+    t.style.height = "auto";
+    t.style.height = t.scrollHeight + "px";
+    $("preCnt").textContent = t.value.length + "자";
+  }
+  /* 탭 옆 점 상태: 저장된 기록과 지금 내용을 비교.
+     저장본과 같고 내용이 있으면 "has"(빈 동그라미), 저장본과 다르면 "mod"(채운 동그라미).
+     있던 내용을 지워서 비게 된 경우는 "clr"(연한 동그라미). 저장본도 지금도 비어 있으면 점 없음 */
+  function tabDotClass(which) {
+    var r = editingId ? data.filter(function (x) { return x.id === editingId; })[0] : null;
+    var curHas, same;
+    if (which === "pre") {
+      var cp = $("pre").value.trim(), sp = r ? String(r.pre || "").trim() : "";
+      curHas = !!cp; same = cp === sp;
+    } else {
+      var ct = $("text").value.trim(), ck = $("take").value.trim(), cr = form.rating || 0;
+      var st = r ? String(r.text || "").trim() : "", sk = r ? String(r.take || "").trim() : "", sr = r ? (r.rating || 0) : 0;
+      curHas = !!(ct || ck || cr);
+      same = ct === st && ck === sk && cr === sr;
+    }
+    if (!same) return curHas ? "mod" : "clr";   /* 고침(채운) / 있던 걸 지워 비움(연한) */
+    return curHas ? "has" : "";
+  }
+  function setTabDot(btn, which) {
+    var c = tabDotClass(which);
+    btn.classList.toggle("has", c === "has");
+    btn.classList.toggle("mod", c === "mod");
+    btn.classList.toggle("clr", c === "clr");
+  }
+  function updateVTabDots() {   /* 안 보이는 탭 옆에 작은 동그라미 (색은 카테고리 색) */
+    $("vtabs").dataset.t = form.type;
+    setTabDot($("vtPre"), "pre");
+    setTabDot($("vtPost"), "post");
+  }
+  function setVTab(t) {
+    vTab = (t === "pre" && form.type !== "book") ? "pre" : "post";
+    var pre = vTab === "pre";
+    $("vtabs").hidden = form.type === "book";
+    $("cardPre").hidden = !pre;
+    $("cardRate").hidden = pre; $("cardText").hidden = pre;
+    $("vtPre").classList.toggle("on", pre); $("vtPost").classList.toggle("on", !pre);
+    $("vtPre").setAttribute("aria-selected", pre ? "true" : "false"); $("vtPost").setAttribute("aria-selected", pre ? "false" : "true");
+    if (pre) growPre(); else growText();
+    updateVTabDots();
+  }
+  /* 카드의 「관람 전 기대 쓰기」·「관람 전 기대 수정」: 기록 창을 「관람 전」 탭으로 열어 줌 */
+  function openPreEditor(id) { openReviewWriter(id, "pre"); }
   function growText() {
     var t = $("text");
     t.style.height = "auto";
@@ -4162,25 +4340,59 @@
     wSyncBtns();
   }
   function wReset() { clearTimeout(wHistTimer); wHist = []; wPos = -1; wSnap(); }
+  /* 작성 창의 「관람 전」·「관람 후」 탭: 글자 칸은 하나, 탭마다 기록 창의 해당 칸(#pre / #text)과 바로 이어짐 → 탭을 바꿔도 쓰던 내용 유지, 저장은 완료를 눌러야 */
+  var wTab = "post", wStore = {};
+  function wField() { return $(wTab === "pre" ? "pre" : "text"); }
+  function updateWTabDots() {
+    $("wtabs").dataset.t = form.type;
+    setTabDot($("wtPre"), "pre");
+    setTabDot($("wtPost"), "post");
+  }
+  function wApplyTab() {
+    var pre = wTab === "pre", t = $("wtext");
+    t.placeholder = pre ? "기대한 점이나 보기 전부터 알고 있던 점을 적어보세요." : "이 작품은 어땠나요? 자유롭게 적어보세요.";
+    t.setAttribute("aria-label", pre ? "관람 전 쓰기" : "후기 쓰기");
+    $("wtPre").classList.toggle("on", pre); $("wtPost").classList.toggle("on", !pre);
+    $("wtPre").setAttribute("aria-selected", pre ? "true" : "false"); $("wtPost").setAttribute("aria-selected", pre ? "false" : "true");
+    $("rateBox").style.display = pre ? "none" : "";
+    $("wPreBox").hidden = !pre;
+    $("wcnt").textContent = t.value.length + "자";
+    updateWTabDots();
+  }
+  function wSwitchTab(tab) {
+    if (form.type === "book" || tab === wTab) return;
+    wSnap();
+    wStore[wTab] = { h: wHist, p: wPos };
+    wTab = tab;
+    var st = wStore[tab], t = $("wtext");
+    t.value = wField().value;
+    if (st) { wHist = st.h; wPos = st.p; wSyncBtns(); }
+    else { wHist = []; wPos = -1; wSnap(); }
+    wApplyTab();
+    t.scrollTop = 0;
+    try { t.focus({ preventScroll: true }); t.setSelectionRange(t.value.length, t.value.length); } catch (e) {}
+  }
   function wGo(d) {
     wSnap();
     var np = wPos + d;
     if (np < 0 || np >= wHist.length) return;
     wPos = np;
     var h = wHist[np], t = $("wtext");
-    t.value = h.v; $("text").value = h.v;
+    t.value = h.v; wField().value = h.v;
     $("wcnt").textContent = h.v.length + "자";
     try { t.focus({ preventScroll: true }); t.setSelectionRange(h.e, h.e); } catch (e) {}
     scheduleDraft(); wSyncBtns();
   }
-  function openWriter() {
-    var t = $("wtext");
-    t.value = $("text").value;
-    writerInit = t.value;
+  function openWriter(tab) {
+    var t = $("wtext"), isBook = form.type === "book";
+    wTab = (!isBook && tab === "pre") ? "pre" : "post"; wStore = {};
+    writerInitPost = $("text").value; writerInitPre = $("pre").value;
+    t.value = wField().value;
     wReset();
     $("wtitle").textContent = $("title").value.trim() || "후기";
-    $("wcnt").textContent = t.value.length + "자";
-    $("wbar").after($("rateBox"));
+    $("wtabs").hidden = isBook;
+    $("wtabs").after($("rateBox"));
+    wApplyTab();
     $("writer").hidden = false;
     pushLayer("writer");
     fitWriter();
@@ -4188,52 +4400,35 @@
     var n = t.value.length;
     try { t.setSelectionRange(n, n); } catch (e) {}
     t.scrollTop = t.scrollHeight;
-    $("text").blur();
+    $("text").blur(); $("pre").blur();
   }
-  function restoreExtra() { $("rateAnchor").before($("rateBox")); }
+  function restoreExtra() { $("rateAnchor").before($("rateBox")); $("rateBox").style.display = ""; }
   /* 카드의 「후기 쓰기」를 누르면 후기 입력창만 바로 열림(완료하면 바로 저장) */
-  var writerDirect = false, writerHad = false, writerInit = "";
-  /* 꾹 누르기(0.5초). 움직이면(스크롤) 취소. 끝나면 글자 선택이 따라 잡히지 않게 풀어줌 */
-  function attachLongPress(node, fn) {
-    var timer = 0, sx = 0, sy = 0;
-    function cancel() { clearTimeout(timer); timer = 0; }
-    node.classList.add("lp");
-    node.addEventListener("pointerdown", function (e) {
-      if (e.pointerType === "mouse" && e.button !== 0) return;
-      cancel(); sx = e.clientX; sy = e.clientY;
-      timer = setTimeout(function () {
-        timer = 0;
-        try { window.getSelection().removeAllRanges(); } catch (x) {}
-        if (navigator.vibrate) { try { navigator.vibrate(12); } catch (x) {} }
-        fn();
-      }, 700);   /* 꾹 누르는 시간(ms) — 700 = 0.7초 */
-    });
-    node.addEventListener("pointermove", function (e) { if (timer && (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10)) cancel(); });
-    ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) { node.addEventListener(ev, cancel); });
-    node.addEventListener("contextmenu", function (e) { e.preventDefault(); });
-  }
-  function openReviewWriter(id) {
+  var writerDirect = false, writerHad = false, writerInitPost = "", writerInitPre = "";
+  function openReviewWriter(id, tab) {
     var rv = data.filter(function (x) { return x.id === id; })[0];
     openForm(id);
     if (layers.indexOf("form") < 0 || layers.indexOf("writer") > -1) return;
-    writerDirect = true; writerHad = !!(rv && rv.text && rv.text.trim());
-    openWriter();
+    var pre = tab === "pre" && form.type !== "book";
+    writerDirect = true; writerHad = !!(rv && ((rv.text && rv.text.trim()) || (rv.pre && rv.pre.trim())));
+    setVTab(pre ? "pre" : "post");
+    openWriter(pre ? "pre" : "post");
   }
   function finishDirectWriter() {
-    var v = $("wtext").value.trim();
+    wField().value = $("wtext").value;
     writerDirect = false;
-    if (!v && !writerHad) { closeAllLayers(); return; }   /* 원래 후기가 없고 아무것도 안 썼으면 저장 없이 닫음(원래 있던 후기를 지운 경우는 저장) */
-    $("text").value = $("wtext").value;
+    /* 원래 아무 기록이 없고 둘 다 비어 있으면 저장 없이 닫음(원래 있던 내용을 지운 경우는 저장) */
+    if (!$("text").value.trim() && !$("pre").value.trim() && !writerHad) { closeAllLayers(); return; }
     save();
   }
   function hideWriter() {
     restoreExtra();
-    $("text").value = $("wtext").value;
+    wField().value = $("wtext").value;
     $("writer").hidden = true;
     $("writer").style.height = "";
     $("writer").style.top = "";
     $("wtext").blur();
-    growText();
+    growText(); growPre(); updateVTabDots();
   }
   function hideForm() {
     closeGenrePop();
@@ -4247,7 +4442,7 @@
   var skipPop = 0, skipConfirm = false, exitArmedAt = 0, formSnap = "";
   function snapForm() {
     return JSON.stringify([form.type, form.status, form.rating, form.time, $("title").value, $("creator").value, $("genre").value, $("date").value,
-      $("seat").value, $("cast").value, $("note").value, $("tags").value, $("take").value, $("text").value]);
+      $("seat").value, $("cast").value, $("note").value, $("tags").value, $("take").value, $("text").value, $("pre").value]);
   }
   function formDirty() { return !!formSnap && snapForm() !== formSnap; }
   function pushLayer(name) { armGuard(); layers.push(name); history.pushState({ g: 1 + layers.length }, ""); }
@@ -4294,7 +4489,7 @@
   function minimizeWriting() {
     var top = layers[layers.length - 1];
     if ((top !== "form" && top !== "writer") || !$("sheet").classList.contains("show")) return;
-    if (layers.indexOf("writer") > -1) { $("text").value = $("wtext").value; growText(); }
+    if (layers.indexOf("writer") > -1) { wField().value = $("wtext").value; growText(); growPre(); updateVTabDots(); }
     miniState = { layers: layers.slice(), eid: editingId };
     try { document.activeElement && document.activeElement.blur(); } catch (e) {}
     saveDraft();
@@ -4401,11 +4596,12 @@
       /* 카드에서 후기 창만 열었을 때(꾹 누르기·「후기 쓰기」)도 내용을 고쳤다면 같은 확인을 띄움 */
       if (top === "writer" && !skipConfirm) {
         var wDirty;
-        if (writerDirect) { $("text").value = $("wtext").value; wDirty = formDirty(); }
-        else wDirty = $("wtext").value !== writerInit;
+        wField().value = $("wtext").value;
+        if (writerDirect) wDirty = formDirty();
+        else wDirty = $("text").value !== writerInitPost || $("pre").value !== writerInitPre;
         if (wDirty) {
           if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) { history.pushState({ g: 1 + layers.length }, ""); return; }
-          if (!writerDirect) { $("wtext").value = writerInit; $("wcnt").textContent = writerInit.length + "자"; }   /* 기록 창에서 연 경우: 고친 내용은 버리고 원래대로 */
+          if (!writerDirect) { $("text").value = writerInitPost; $("pre").value = writerInitPre; $("wtext").value = wField().value; $("wcnt").textContent = $("wtext").value.length + "자"; }   /* 기록 창에서 연 경우: 고친 내용은 버리고 원래대로 */
         }
       }
       skipConfirm = false;
@@ -4453,7 +4649,7 @@
       type: form.type, title: title,
       creator: $("creator").value.trim(),
       genre: form.type === "book" ? $("genre").value.trim() : "",
-      cast: KIND[form.type].cast ? $("cast").value.trim() : "",
+      cast: KIND[form.type].cast ? castNorm($("cast").value) : "",
       seat: KIND[form.type].cast ? $("seat").value.trim() : "",
       note: $("note").value.trim(),
       time: KIND[form.type].cast ? form.time : "",
@@ -4461,7 +4657,8 @@
       date: (form.type === "book" && form.status !== "done") ? "" : $("date").value,
       rating: form.rating,
       text: $("text").value.trim(),
-      take: $("take").value.trim()
+      take: $("take").value.trim(),
+      pre: form.type !== "book" ? $("pre").value.trim() : ""
     };
     var prev = editingId ? data.filter(function (x) { return x.id === editingId; })[0] : null;
     /* 후기를 처음 쓴 시각(ta)과 마지막 수정 시각(te) 기록 */
@@ -4472,6 +4669,14 @@
       if (!prev || !hasReview(prev)) { rec.ta = nowMs; delete rec.te; }
       else if (rec.text !== String(prev.text || "").trim()) rec.te = nowMs;
     } else { delete rec.ta; delete rec.te; }
+    /* 관람 전 기록도 처음 쓴 시각(pta)과 마지막 수정 시각(pte) 기록 */
+    if (prev && prev.pta) rec.pta = prev.pta;
+    if (prev && prev.pte) rec.pte = prev.pte;
+    if (rec.pre) {
+      if (!prev || !String(prev.pre || "").trim()) { rec.pta = nowMs; delete rec.pte; }
+      else if (rec.pre !== String(prev.pre || "").trim()) rec.pte = nowMs;
+    } else { delete rec.pta; delete rec.pte; }
+    if (rec.pre) { var pd = (prev && prev.pre === rec.pre) ? (prev.preD || "") : today(); if (pd) rec.preD = pd; }   /* 「관람 뒤에 씀」 표시용: 관람 전 글을 쓰거나 고친 날 */
     rec.quote = prev ? (prev.quote || "") : "";
     rec.later = prev ? (prev.later || []) : [];
     rec.rlog = prev ? (prev.rlog || []) : [];
@@ -4486,6 +4691,7 @@
           evs.push({ v: "완독", w: true });
         } else evs.push({ v: rec.status === "done" ? "완독" : rec.status === "paused" ? "독서 중단" : "다시 읽기", w: false });
       }
+      if (rec.type !== "book" && rec.pre && !(prev && String(prev.pre || "").trim())) evs.push({ v: "관람 전 기대 작성", w: false });
       if (prev && !hasReview(prev) && hasReview(rec)) evs.push({ v: "후기 작성", w: false });
       data = data.map(function (x) { return x.id === editingId ? Object.assign({ id: x.id }, rec) : x; });
       openIds[editingId] = true; if (infoOpen[editingId] == null) infoOpen[editingId] = true;
@@ -4504,8 +4710,10 @@
         evs.push({ v: "기록 추가", w: false });
         evs.push({ v: "완독", w: true });
       } else evs.push({ v: actVerb(rec), w: false });
+      if (rec.type !== "book" && rec.pre) evs.push({ v: "관람 전 기대 작성", w: false });
       if (hasReview(rec)) evs.push({ v: "후기 작성", w: false });
     }
+    if (rec.type !== "book" && rec.pre) markPreSynced(editingId || rec.id);
     evs.forEach(function (ev) { logAct("\u300C" + rec.title + "\u300D " + ev.v, rec, ev.w); });
     if (rec.date) { calY = +rec.date.slice(0, 4); calM = +rec.date.slice(5, 7) - 1; selDate = rec.date; }
     persist(); clearDraft(); closeAllLayers(); render();
@@ -4664,7 +4872,7 @@
       type: form.type, status: form.status, rating: form.rating, time: form.time,
       title: $("title").value, creator: $("creator").value, genre: $("genre").value, date: $("date").value,
       seat: $("seat").value, cast: $("cast").value, note: $("note").value, tags: $("tags").value,
-      take: $("take").value, text: $("text").value } };
+      take: $("take").value, text: $("text").value, pre: $("pre").value } };
   }
   /* 임시저장은 기록별로 따로 보관: 새 기록 1개("new") + 수정 중이던 기록마다 1개.
      최근 5개까지만, 10일 지난 건 자동 삭제 → 다른 기록을 열어도 서로 덮어쓰지 않음 */
@@ -4715,11 +4923,11 @@
     setStatus(f.status === "reading" || f.status === "paused" ? f.status : "done");
     $("title").value = f.title || ""; $("creator").value = f.creator || ""; $("genre").value = f.genre || "";
     $("seat").value = f.seat || ""; $("cast").value = f.cast || ""; $("note").value = f.note || "";
-    $("tags").value = f.tags || ""; $("take").value = f.take || ""; $("text").value = f.text || "";
+    $("tags").value = f.tags || ""; $("take").value = f.take || ""; $("text").value = f.text || ""; $("pre").value = f.pre || "";
     form.rating = +f.rating || 0; buildRate();
     form.time = /^\d{2}:\d{2}$/.test(f.time) ? f.time : "";
     $("date").value = f.date || ""; updateTimeBtn();
-    growText();
+    growText(); growCast(); setVTab(vTab);
   }
 
   /* ---------- 올해 독서 목표 ---------- */
@@ -5321,11 +5529,12 @@
             return;
           }
           if (x && x.type === "show") x.type = "play";
-          /* 이미 있는 기록이라도 후기/나중에 든 생각이 비어 있으면 백업 내용으로 채움 (있는 내용은 건드리지 않음) */
+          /* 이미 있는 기록이라도 후기/덧붙인 생각이 비어 있으면 백업 내용으로 채움 (있는 내용은 건드리지 않음) */
           if (x && have[x.id]) {
             var fx = have[x.id], fc = false;
             if (!String(fx.text || "").trim() && String(x.text || "").trim()) { fx.text = String(x.text); fc = true; }
             else if (x.oldText != null && fx.text === String(x.oldText) && String(x.text || "") !== fx.text) { fx.text = String(x.text || ""); fc = true; }
+            if (fx.type !== "book" && !String(fx.pre || "").trim() && String(x.pre || "").trim()) { fx.pre = String(x.pre); if (/^\d{4}-\d{2}-\d{2}$/.test(String(x.preD || ""))) fx.preD = String(x.preD); if (isFinite(+x.pta) && +x.pta > 0) fx.pta = +x.pta; if (isFinite(+x.pte) && +x.pte > 0) fx.pte = +x.pte; fc = true; }
             if (!(fx.later && fx.later.length) && cleanLater(x.later).length) { fx.later = cleanLater(x.later); fc = true; }
             if (!(fx.rlog && fx.rlog.length) && cleanLater(x.rlog).length) { fx.rlog = cleanLater(x.rlog); fc = true; }
             if (String(fx.text || "").trim() && fx.ta == null && isFinite(+x.ta) && +x.ta > 0) {
@@ -5353,12 +5562,17 @@
               date: (x.type === "book" && (x.status === "reading" || x.status === "paused")) ? "" : normDate(x.date),
               rating: Math.max(0, Math.min(5, Math.round((+x.rating || 0) * 2) / 2)),
               text: (String(x.quote || "").trim() ? String(x.quote).trim() + (String(x.text || "").trim() ? "\n\n" : "") : "") + String(x.text || ""),
-              take: String(x.take || ""), quote: "", tags: cleanTags(x.tags), later: cleanLater(x.later), rlog: cleanLater(x.rlog)
+              take: String(x.take || ""), quote: "", tags: cleanTags(x.tags), later: cleanLater(x.later), rlog: cleanLater(x.rlog),
+              pre: x.type !== "book" ? String(x.pre || "") : "", preD: /^\d{4}-\d{2}-\d{2}$/.test(String(x.preD || "")) ? String(x.preD) : ""
             };
             /* ta: 후기를 처음 쓴 시각, te: 마지막으로 고친 시각 — 후기가 있을 때만 */
             if (rec.text.trim()) {
               if (isFinite(+x.ta) && +x.ta > 0) rec.ta = +x.ta;
               if (isFinite(+x.te) && +x.te > 0) rec.te = +x.te;
+            }
+            if (rec.pre.trim()) {
+              if (isFinite(+x.pta) && +x.pta > 0) rec.pta = +x.pta;
+              if (isFinite(+x.pte) && +x.pte > 0) rec.pte = +x.pte;
             }
             data.push(rec); have[newId] = rec;
             added++;
@@ -5427,9 +5641,15 @@
   $("tlPost").onclick = tlPost;
   var qTimer = 0;
   $("q").oninput = function () { clearTimeout(qTimer); qTimer = setTimeout(render, 200); };
-  $("text").addEventListener("click", openWriter);
+  $("text").addEventListener("click", function () { openWriter("post"); });
+  $("pre").addEventListener("click", function () { openWriter("pre"); });
+  $("pre").addEventListener("input", growPre);
+  $("cast").addEventListener("input", growCast);
+  $("vtPre").addEventListener("click", function () { setVTab("pre"); });
+  $("vtPost").addEventListener("click", function () { setVTab("post"); });
   $("wtext").addEventListener("input", function () {
-    $("text").value = this.value;
+    wField().value = this.value;
+    updateWTabDots();
     $("wcnt").textContent = this.value.length + "자";
     scheduleDraft();
     clearTimeout(wHistTimer); wHistTimer = setTimeout(wSnap, 500);
@@ -5450,8 +5670,14 @@
   });
   $("wdone").onclick = function () {
     if (writerDirect) finishDirectWriter();
-    else { writerInit = $("wtext").value; closeWriter(); }   /* 완료: 고친 내용을 기록 창에 넘기고 닫음(확인창 없음) */
+    else { wField().value = $("wtext").value; writerInitPost = $("text").value; writerInitPre = $("pre").value; closeWriter(); }   /* 완료: 고친 내용(관람 전·후 둘 다)을 기록 창에 넘기고 닫음(확인창 없음) */
   };
+  /* 작성 창 맨 위 탭: 키보드가 내려가지 않게 하고, 바꿔도 내용은 그대로 */
+  [["wtPre", "pre"], ["wtPost", "post"]].forEach(function (x) {
+    $(x[0]).addEventListener("mousedown", function (e) { e.preventDefault(); });
+    $(x[0]).addEventListener("click", function () { wSwitchTab(x[1]); });
+  });
+  $("gOpenPre2").onclick = function () { openGuide("pre"); };
   $("wClose").onclick = closeWriter;                          /* 닫기: 고친 내용이 있으면 확인 후 닫음 */
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", fitWriter);
@@ -5478,7 +5704,7 @@
     document.title = t;
   }
   var PEN = '<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>';
-  var CHECK = '<path d="M5 12.5l4.5 4.5L19 7.5"/>';
+  var CHECK_PATH = '<path d="M5 12.5l4.5 4.5L19 7.5"/>';
   var titleInput = null;
   function endTitleEdit(save) {
     if (!titleInput) return;
@@ -5509,7 +5735,7 @@
     h.parentNode.insertBefore(titleInput, h);
     var b = $("editBtn");
     b.querySelector("span").textContent = "확인";
-    b.querySelector("svg").innerHTML = CHECK;
+    b.querySelector("svg").innerHTML = CHECK_PATH;
     b.setAttribute("aria-label", "제목 수정 확인");
     titleInput.focus();
     titleInput.setSelectionRange(titleInput.value.length, titleInput.value.length);
@@ -5529,13 +5755,14 @@
 
   $("howtoBtn").onclick = openHowto;
   $("hClose").onclick = closeHowto;
-  $("gOpen").onclick = openGuide;
-  $("gOpen2").onclick = openGuide;
+  $("gOpen").onclick = function () { openGuide("post"); };
+  $("gOpen2").onclick = function () { openGuide("post"); };
+  $("gOpenPre").onclick = function () { openGuide("pre"); };
   $("gClose").onclick = closeGuide;
   $("gIns").onclick = insertGuideSel;
   $("gClear").onclick = function () { gSel = {}; renderGuide(); };
   $("gRand").onclick = randomGuide;
-  ["input", "change", "click"].forEach(function (ev) { $("sheet").addEventListener(ev, scheduleDraft); });
+  ["input", "change", "click"].forEach(function (ev) { $("sheet").addEventListener(ev, scheduleDraft); $("sheet").addEventListener(ev, updateVTabDots); });
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") saveDraft(); });
   window.addEventListener("pagehide", saveDraft);
   $("bkNow").onclick = exportData;
