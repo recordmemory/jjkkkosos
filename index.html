@@ -184,7 +184,8 @@
   .abar .tog:disabled { opacity: .35; cursor: default; }
   .abar .del { color: var(--movie); margin-left: auto; }
   .card.open .detail { border-top: 0; margin-top: 0; padding-top: 0; padding-bottom: 4px; }
-  .card.open .text { margin-top: 12px; }
+  .card.open .text { margin-top: 12px; padding-left: 5px; }   /* 후기 글 살짝 들여쓰기 */
+  .card.open .noreview { margin-left: 5px; }
   .empty { text-align: center; color: var(--sub); padding: 56px 20px; font-size: 14px; }
   .empty.small { padding: 14px 0 6px; }
 
@@ -438,7 +439,7 @@
   .li { margin-bottom: 9px; }
   .ld { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--mute); }
   .ld button { border: 0; background: none; color: var(--mute); font-size: 12px; cursor: pointer; padding: 0 2px; }
-  .lx { font-size: 14px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .lx { font-size: 14px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; padding-left: 5px; }   /* 독서 기록·나중에 든 생각 내용만 들여쓰기(제목·날짜는 그대로) */
   .compose { margin-top: 8px; }
   .compose textarea { min-height: 88px; font-size: 15px; padding: 10px 12px; }
   .cb { display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end; }
@@ -739,8 +740,8 @@
   #rtabs button.tgl::before {
     content: ""; width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor;
   }
-  #rtabs button.tgl.on { color: var(--ink); font-weight: 700; }
-  #rtabs button.tgl.on::before { background: var(--ink); box-shadow: none; }
+  #rtabs button.tgl.on { color: #5b6dd6; font-weight: 700; }   /* 켜지면 생각 색(남보라) */
+  #rtabs button.tgl.on::before { background: #5b6dd6; box-shadow: none; }
   #rtabs button.tgl::after { display: none; }
   #rtabs .fsel.act span { box-shadow: inset 0 -2px 0 var(--ink); }
   /* PDF 저장: 생각 포함 오른쪽, 모서리가 작게 둥근 사각형 */
@@ -779,6 +780,13 @@
   .tent .tlink b { color: var(--ct, var(--c)); font-weight: 700; }
   .tent .tx { font-size: 15px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 3px; }
   .tent.lt .tx { color: #3c4157; }
+  /* 목록의 생각 줄: 카드처럼 왼쪽에 생각 색(#5b6dd6) 띠, 접힌 상태는 한 줄 미리보기 */
+  .rows .tent.lst { padding-left: 20px; cursor: pointer; }
+  .tent.lst::before { content: ""; position: absolute; left: 9px; top: 11px; bottom: 11px; width: 3px; border-radius: 2px; background: #5b6dd6; }
+  .tent.lst .th .tag { border-color: #5b6dd6; color: #5b6dd6; }
+  .tent.lst:not(.open) .tx { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tent.lst:focus-visible { outline-offset: -3px; }
+  .tent.lst .tx .more { color: var(--mute); opacity: .7; }
   .rows .tent.lg { display: flex; align-items: center; gap: 8px; padding: 8px 14px; }
   .tent.lg::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--c, var(--line2)); }
   .tent.lg .tm { flex: none; font-size: 12px; color: var(--mute); font-variant-numeric: tabular-nums; }
@@ -1200,8 +1208,7 @@
   #welcome .wguide { height: 44px; border: 0; border-radius: 999px; background: var(--ink); color: #fff; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
   #welcome .wnever { height: 38px; border: 0; background: transparent; color: var(--sub); font-family: inherit; font-size: 13.5px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
   .text.lp { -webkit-touch-callout: none; }
-  .noreview { margin-top: 12px; font-size: 13.5px; color: var(--mute); opacity: .6; cursor: pointer; display: inline-block;
-    text-decoration: underline dotted; text-underline-offset: 3px; }
+  .noreview { margin-top: 12px; font-size: 13.5px; color: var(--mute); opacity: .6; cursor: pointer; display: inline-block; }
   .noreview:active { opacity: 1; }
   /* 업데이트 내역 탭: 다른 탭보다 연한 색 */
   .gtabs button.logtab { opacity: .55; }
@@ -2239,9 +2246,9 @@
         attachLongPress(tx, function () { openReviewWriter(r.id); });
         det.appendChild(tx);
       } else if (r.status === "done") {
-        var nr = el("div", "noreview", "후기 없음");
+        var nr = el("div", "noreview", "후기 추가하기");
         nr.setAttribute("role", "button"); nr.tabIndex = 0;
-        nr.setAttribute("aria-label", "후기 없음, 눌러서 후기 쓰기");
+        nr.setAttribute("aria-label", "후기 추가하기");
         nr.onclick = function (e) { e.stopPropagation(); openReviewWriter(r.id); };
         nr.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); openReviewWriter(r.id); } };
         det.appendChild(nr);
@@ -2574,10 +2581,29 @@
     row.appendChild(db);
     return row;
   }
+  /* 목록의 생각 줄: 평소엔 한 줄 미리보기, 누르면 펼침/접힘 */
+  var thOpen = {};
   function buildTEntry(e, withDate) {
     if (e.k === "a") return buildActEntry(e);
-    var box = el("div", "tent" + (e.k === "l" ? " lt" : ""));
+    var lst = !!withDate && e.k === "t";   /* withDate=true 는 목록에서만 쓰임 */
+    var lopen = lst && (!!thOpen[e.th.id] || tEditId === e.th.id);
+    var box = el("div", "tent" + (e.k === "l" ? " lt" : "") + (lst ? " lst" + (lopen ? " open" : "") : ""));
     if (e.k === "t") box.dataset.tid = e.th.id;
+    if (lst) {
+      box.tabIndex = 0; box.setAttribute("role", "button"); box.setAttribute("aria-expanded", lopen ? "true" : "false");
+      var tgl = function () { thOpen[e.th.id] = !lopen; render(); };
+      box.onclick = function (ev) {
+        if (tEditId === e.th.id) return;
+        if (ev.target.closest && ev.target.closest("button, textarea")) return;
+        var sel = window.getSelection && window.getSelection();
+        if (sel && String(sel).length) return;
+        tgl();
+      };
+      box.onkeydown = function (ev) {
+        if (ev.target !== box || (ev.key !== "Enter" && ev.key !== " ")) return;
+        ev.preventDefault(); tgl();
+      };
+    }
     var th = el("div", "th");
     var when = (withDate ? fmtDay(e.d) + (e.tm ? " " : "") : "") + (e.tm || "");
     if (e.k === "t" && isBack(e.th)) when = (withDate ? fmtDay(e.d) + " · " : "") + wroteText(e.th);
@@ -2585,10 +2611,10 @@
     th.appendChild(el("span", "tm", when || (e.k === "l" ? lbl : "")));
     if (withDate) th.appendChild(el("span", "tag", e.k === "t" ? "생각" : lbl));
     var editing = e.k === "t" && tEditId === e.th.id;
-    if (!editing) {
+    if (!editing && (!lst || lopen)) {
       if (e.k === "t") {
         var eb = el("button", "", "수정"); eb.type = "button";
-        eb.onclick = function () { tEditId = e.th.id; render(); };
+        eb.onclick = function () { tEditId = e.th.id; if (lst) thOpen[e.th.id] = true; render(); };
         th.appendChild(eb);
       }
       var db = el("button", "", "삭제"); db.type = "button";
@@ -2621,7 +2647,14 @@
       box.appendChild(ed);
       setTimeout(function () { ta.focus(); }, 0);
     } else {
-      box.appendChild(el("div", "tx", e.t));
+      var ptxt = e.t, more = false;
+      if (lst && !lopen) {   /* 접힌 미리보기: 첫 줄만, 줄이 더 있으면 끝에 연한 … 표시(한 줄이 넘치면 CSS가 …로 줄임) */
+        var pl = String(e.t).split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+        ptxt = pl[0] || ""; more = pl.length > 1;
+      }
+      var txd = el("div", "tx", ptxt);
+      if (more) txd.appendChild(el("span", "more", " \u2026"));   /* 내가 쓴 "…"와 구분되게 연한 색 */
+      box.appendChild(txd);
     }
     return box;
   }
@@ -3359,16 +3392,16 @@
       {"h": "책 읽기 상태", "lines": ["읽는 중과 중단은 날짜 없이 제목만으로 바로 등록할 수 있어요. 병렬독서처럼 여러 권을 동시에 읽어도 부담 없어요.", "카드를 펼치면 아래쪽 버튼으로 상태를 바로 바꿀 수 있어요. 읽는 중은 「완독」 「중단」, 중단은 「다시 읽기」 「완독」이에요.", "완독으로 바꾸면 완독일이 오늘로 들어가요. 다른 날이면 「수정」에서 고쳐요.", "상태를 바꾸면 실수해도 잠깐 되돌릴 수 있고, 타임라인에는 「완독」 「독서 중단」 「다시 읽기」로 남아요."]},
       {"h": "연극·뮤지컬 전용 칸", "lines": ["좌석을 적어두면 다음 관람 때 시야와 거리를 비교하기 좋아요.", "캐스팅은 쉼표나 줄바꿈으로 구분해요.", "같은 작품도 회차마다 다른 배우가 나오니, 그날의 기억을 남겨두면 좋아요."]},
       {"h": "별점·한줄평", "lines": ["별점은 0.5점 단위로 남겨요.", "한줄평은 120자까지 쓸 수 있어요.", "한줄평은 목록에 바로 보여서, 나중에 훑을 때 첫인상이 한눈에 떠올라요.", "길게 쓸 기운이 없는 날엔 이 두 가지만 남겨도 충분해요."]},
-      {"h": "후기 쓰기", "lines": ["이미 쓴 후기는 카드를 펼친 뒤 후기 글을 꾹 누르면 후기만 고치는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요.", "후기를 안 쓴 기록은 카드를 펼쳤을 때 보이는 「후기 없음」을 누르면 후기만 적는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요.", "후기 칸을 누르면 방해 없이 전체 화면에서 쓸 수 있어요.", "글자 수는 글쓰기 칸 오른쪽 아래에 보여요.", "왼쪽 위의 「닫기」를 누르면 후기 창만 닫혀요. 카드에서 바로 연 창이든 기록 추가·수정 화면에서 연 창이든 똑같아요. 고친 내용이 있으면 「저장하지 않고 닫을까요?」라고 먼저 물어봐요.", "기록 추가·수정 화면에서 연 후기 창은 「완료」를 누르면 쓴 내용이 그 화면에 들어가고(최종 저장은 「저장」), 「닫기」로 닫으면 이번에 고친 내용은 버려져요.", "실수로 지웠거나 잘못 썼다면 위쪽의 ↶(실행 취소)와 ↷(다시 실행) 버튼으로 되돌릴 수 있어요.", "잘 쓰려고 하지 않아도 돼요. 지금 드는 느낌을 그대로 적어두면 시간이 지난 뒤 가장 값진 기록이 돼요."]},
+      {"h": "후기 쓰기", "lines": ["이미 쓴 후기는 카드를 펼친 뒤 후기 글을 꾹 누르면 후기만 고치는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요.", "후기를 안 쓴 기록은 카드를 펼쳤을 때 보이는 「후기 추가하기」를 누르면 후기만 적는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요.", "후기 칸을 누르면 방해 없이 전체 화면에서 쓸 수 있어요.", "글자 수는 글쓰기 칸 오른쪽 아래에 보여요.", "왼쪽 위의 「닫기」를 누르면 후기 창만 닫혀요. 카드에서 바로 연 창이든 기록 추가·수정 화면에서 연 창이든 똑같아요. 고친 내용이 있으면 「저장하지 않고 닫을까요?」라고 먼저 물어봐요.", "기록 추가·수정 화면에서 연 후기 창은 「완료」를 누르면 쓴 내용이 그 화면에 들어가고(최종 저장은 「저장」), 「닫기」로 닫으면 이번에 고친 내용은 버려져요.", "실수로 지웠거나 잘못 썼다면 위쪽의 ↶(실행 취소)와 ↷(다시 실행) 버튼으로 되돌릴 수 있어요.", "잘 쓰려고 하지 않아도 돼요. 지금 드는 느낌을 그대로 적어두면 시간이 지난 뒤 가장 값진 기록이 돼요."]},
       {"h": "막막할 땐 「가이드 질문」", "lines": ["별점 아래, 후기 위의 「가이드 질문」을 눌러요. 책은 장르에 따라 질문이 달라져요.", "위쪽 탭에서 주제를 고르고, 마음이 가는 질문을 눌러 선택해요.", "질문마다 딸림 질문이 있어요. 「딸림 질문 모두 선택」으로 한 번에 고를 수도 있어요.", "뭘 쓸지 감이 안 오면 「랜덤 선택」으로 주제마다 질문을 하나씩 뽑아봐요.", "「N개 넣기」를 누르면 고른 질문이 후기 칸에 들어가요. 그 아래에 내 생각을 이어서 쓰면 돼요.", "잘못 골랐다면 「비우기」로 선택을 초기화해요."]},
       {"h": "비고와 태그", "lines": ["비고는 같이 본 사람, 앉았던 자리, 재관람 여부 같은 짧은 메모예요. 100자까지 쓸 수 있어요.", "태그는 #재관람 #가족처럼 적어요.", "비고와 태그는 검색에도 잡혀요."]},
       {"h": "쓰다가 잠깐 내려두기", "lines": ["작성 화면 위쪽의 「내리기」 버튼을 누르거나, 위쪽 바를 아래로 쓸어내려요.", "작성 화면이 아래 「이어 쓰기」 막대로 내려가요.", "그동안 목록·달력 등 다른 화면을 볼 수 있어요.", "막대나 「+ 후기 추가」를 누르면 쓰던 내용 그대로 이어서 쓸 수 있어요."]},
       {"h": "작성 중 갑자기 꺼져도 괜찮아요", "lines": ["작성 중인 내용(후기 포함)은 입력하는 동안 자동으로 임시저장돼요.", "앱이 꺼지거나 새로고침해도 남아 있고, 다시 열면 「이어서 쓸까요?」라고 물어봐요.", "기록별로 따로 보관돼서 다른 기록을 열어도 덮어쓰지 않아요. 최근 5개까지, 10일이 지나면 자동으로 지워져요.", "「저장」하거나 「닫기」로 닫으면 임시저장은 남지 않아요."]},
 
-      {"h": "수정·삭제", "lines": ["카드를 펼치면 「수정」「삭제」 버튼이 있어요.", "관람 직후 못 쓴 내용을 나중에 채우거나, 마음이 바뀌면 고칠 수 있어요.", "후기만 추가하고 싶다면 「수정」 대신 카드 안의 「후기 없음」을 눌러요. 후기를 고치고 싶을 땐 후기 글을 꾹 눌러요. 후기 창이 바로 열리고 「완료」로 저장돼요.", "「삭제」를 누르면 정말 삭제할지 한 번 더 물어봐요.", "삭제한 직후 몇 초 동안은 아래에 뜨는 「되돌리기」로 취소할 수 있어요.", "그 시간이 지나면 되돌릴 수 없으니, 백업을 해두면 안심이에요."]}
+      {"h": "수정·삭제", "lines": ["카드를 펼치면 「수정」「삭제」 버튼이 있어요.", "관람 직후 못 쓴 내용을 나중에 채우거나, 마음이 바뀌면 고칠 수 있어요.", "후기만 추가하고 싶다면 「수정」 대신 카드 안의 「후기 추가하기」를 눌러요. 후기를 고치고 싶을 땐 후기 글을 꾹 눌러요. 후기 창이 바로 열리고 「완료」로 저장돼요.", "「삭제」를 누르면 정말 삭제할지 한 번 더 물어봐요.", "삭제한 직후 몇 초 동안은 아래에 뜨는 「되돌리기」로 취소할 수 있어요.", "그 시간이 지나면 되돌릴 수 없으니, 백업을 해두면 안심이에요."]}
     ] },
     { t: "둘러보기", items: [
-      {"h": "목록", "lines": ["저장한 기록이 최근 순으로 보여요.", "위쪽 탭(전체, 책, 영화, 연극, 뮤지컬)으로 종류별로 모아 볼 수 있어요.", "「전체」 탭에는 완독한 책과 다른 기록만 보여요. 「책」 탭에서는 읽는 중(항상 펼침), 중단(기본 접힘, 제목 줄을 누르면 펼침), 완독(날짜별) 순으로 나뉘어요. 검색할 때는 읽는 중·중단인 책도 함께 찾아져요.", "카드를 펼치면 자세한 내용이 나와요.", "후기를 쓰지 않은 기록은 펼쳤을 때 연하게 「후기 없음」이 보여요. 이 글자를 누르면 후기만 적는 창이 바로 열려서, 수정 화면을 거치지 않고 후기를 추가할 수 있어요."]},
+      {"h": "목록", "lines": ["저장한 기록이 최근 순으로 보여요.", "위쪽 탭(전체, 책, 영화, 연극, 뮤지컬)으로 종류별로 모아 볼 수 있어요.", "「전체」 탭에는 완독한 책과 다른 기록만 보여요. 「책」 탭에서는 읽는 중(항상 펼침), 중단(기본 접힘, 제목 줄을 누르면 펼침), 완독(날짜별) 순으로 나뉘어요. 검색할 때는 읽는 중·중단인 책도 함께 찾아져요.", "카드를 펼치면 자세한 내용이 나와요.", "후기를 쓰지 않은 기록은 펼쳤을 때 연하게 「후기 추가하기」가 보여요. 이 글자를 누르면 후기만 적는 창이 바로 열려서, 수정 화면을 거치지 않고 후기를 추가할 수 있어요."]},
       {"h": "검색·필터", "lines": ["돋보기를 누르면 제목, 저자, 후기, 태그 등으로 검색할 수 있어요.", "후기 있음/없음, 별점(5점, 4.5↑, 4↑, 3↑, 3 미만, 별점 없음)으로 좁혀 볼 수 있어요.", "예를 들어 \"후기 쓴 연극 중 4점 이상\"만 모으면 나의 최애 목록이 돼요.", "필터 줄의 「생각 포함」을 켜면, 타임라인에서 직접 쓴 생각이 목록에 함께 보여요.", "후기에 덧붙인 생각은 후기를 열면 볼 수 있어서 여기엔 나오지 않아요."]},
       {"h": "달력", "lines": ["날짜 기준으로 언제 어떤 작품을 만났는지 한눈에 보여요.", "날짜를 누르고 「+ 이 날 기록하기」를 누르면 그날 바로 새 기록을 추가해요.", "그날 남긴 생각도 함께 볼 수 있어요.", "위쪽 목표 카드에서 목표 진행 상황을 볼 수 있어요.", "날짜를 누르면 아래 「그날의 생각」 줄 오른쪽에 「+ 적기」가 있어요. 눌러서 그날의 생각을 따로 적을 수 있어요. 지난 날짜에 적은 글에는 쓴 날짜가 함께 보여요."]},
       {"h": "타임라인", "lines": ["독립 생각과 덧붙인 생각이 날짜순으로 이어져요.", "타임라인에서는 지금 떠오른 생각만 적을 수 있어요. 지난 날짜의 생각은 달력에서 날짜를 골라 적어요. 그 생각은 해당 날짜 칸에 「나중에 씀」으로 올라가고(누르면 실제 쓴 날짜가 보여요), 쓴 날짜에는 「생각 기록됨」 줄이 남아요. 이 줄을 누르면 달력의 그 생각으로 이동해요.", "「전체」에는 관람 기록과 백업·가져오기 같은 활동도 함께 보여요.", "「내가 쓴 글 · 덧붙임」은 내가 직접 쓴 것만 모아 보여요.", "덧붙인 생각을 누르면 해당 작품으로 바로 이동해요.", "타임라인에서 생각, 덧붙임, 관람·완독 기록을 삭제하면 기록만이 아니라 원본(내가 쓴 생각, 덧붙인 내용, 그 후기 기록)도 함께 삭제돼요. 삭제 전 확인 창에서 한 번 더 알려줘요.", "「후기」·「기록」 태그가 붙은 줄(후기 작성, 읽는 중, 독서 중단, 백업, 불러오기, 목표 설정, 생각 기록됨)은 예외예요. 타임라인의 기록만 지워지고, 후기 원본과 백업 파일, 가져온 기록, 생각 원본은 그대로 남아요."]},
@@ -3836,7 +3869,7 @@
     $("text").blur();
   }
   function restoreExtra() { $("rateAnchor").before($("rateBox")); }
-  /* 카드의 「후기 없음」을 누르면 후기 입력창만 바로 열림(완료하면 바로 저장) */
+  /* 카드의 「후기 추가하기」를 누르면 후기 입력창만 바로 열림(완료하면 바로 저장) */
   var writerDirect = false, writerHad = false, writerInit = "";
   /* 꾹 누르기(0.5초). 움직이면(스크롤) 취소. 끝나면 글자 선택이 따라 잡히지 않게 풀어줌 */
   function attachLongPress(node, fn) {
@@ -4043,7 +4076,7 @@
       if (top === "form" && !skipConfirm && formDirty()) {
         if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) { history.pushState({ g: 1 + layers.length }, ""); return; }
       }
-      /* 카드에서 후기 창만 열었을 때(꾹 누르기·「후기 없음」)도 내용을 고쳤다면 같은 확인을 띄움 */
+      /* 카드에서 후기 창만 열었을 때(꾹 누르기·「후기 추가하기」)도 내용을 고쳤다면 같은 확인을 띄움 */
       if (top === "writer" && !skipConfirm) {
         var wDirty;
         if (writerDirect) { $("text").value = $("wtext").value; wDirty = formDirty(); }
