@@ -125,6 +125,17 @@
     flex: none; margin-left: 6px; background: var(--book); color: #4a3500; border-radius: 5px;
     padding: 0 6px; font-size: 11px; font-weight: 600; line-height: 17px;
   }
+  .badge.paused { background: #dcdfe9; color: #5b6076; }
+  .lastlog { margin-top: 5px; font-size: 13px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lastlog b { font-weight: 600; color: var(--mute); margin-right: 6px; font-size: 12px; }
+  .qs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line2); }
+  .qs button {
+    height: 28px; padding: 0 13px; border: 1px solid var(--line2); background: var(--paper); border-radius: 999px;
+    font-size: 13px; color: var(--ink); cursor: pointer; font-family: inherit;
+  }
+  .qs button.main { background: var(--book); border-color: var(--book); color: #4a3500; font-weight: 700; }
+  .gh.fold { cursor: pointer; user-select: none; }
+  .gh.fold .chev { margin-left: auto; font-size: 11px; color: var(--mute); }
   .detail { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
   .cast { font-size: 13.5px; color: var(--ink); margin-top: 3px; }
   .cast b { color: var(--sub); font-weight: 600; margin-right: 6px; }
@@ -387,7 +398,7 @@
     position: fixed; left: 0; right: 0; top: 0; height: 100dvh; background: var(--paper);
     z-index: 30; display: flex; justify-content: center; overscroll-behavior: contain;
   }
-  .wcol { width: 100%; max-width: 680px; height: 100%; display: flex; flex-direction: column; }
+  .wcol { position: relative; width: 100%; max-width: 680px; height: 100%; display: flex; flex-direction: column; }
   .wbar {
     flex: none; display: flex; align-items: center; gap: 10px; padding: 8px 12px;
     padding-top: max(8px, env(safe-area-inset-top)); border-bottom: 1px solid var(--line);
@@ -396,7 +407,9 @@
     flex: 1; min-width: 0; text-align: center; font-size: 15px; white-space: nowrap;
     overflow: hidden; text-overflow: ellipsis;
   }
-  .wbar .wc { color: var(--sub); font-size: 13px; min-width: 52px; }
+  /* 글자 수: 상단 바 자리를 쓰지 않도록 글쓰기 칸 오른쪽 아래에 작게 띄움 */
+  .wcol .wc { position: absolute; right: 12px; bottom: calc(8px + env(safe-area-inset-bottom)); z-index: 1; pointer-events: none; color: var(--sub); font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--paper); opacity: .92; font-variant-numeric: tabular-nums; }
+  .wbar #wClose { flex: none; margin-left: -6px; padding-left: 8px; padding-right: 8px; }
   .wbar .wundo { flex: none; width: 30px; height: 30px; margin-left: -6px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .wbar .wundo + .wundo { margin-left: -8px; }
   .wbar .wundo:disabled { opacity: .28; cursor: default; }
@@ -418,6 +431,8 @@
     font-family: var(--serif); font-size: 14px; line-height: 1.7; white-space: pre-wrap;
     color: #3a3f55; overflow-wrap: anywhere;
   }
+  .later.rlog { border-top-style: solid; border-top-color: var(--book); }
+  .later.rlog .lh { color: #8a6a00; }
   .later { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line2); }
   .lh { font-size: 12.5px; font-weight: 700; color: var(--sub); margin-bottom: 6px; }
   .li { margin-bottom: 9px; }
@@ -564,8 +579,11 @@
   .gnums span { color: var(--sub); font-size: 14px; }
   .gnums em { margin-left: auto; font-style: normal; font-weight: 700; color: var(--ct); }
   .gtrack { position: relative; display: block; height: 10px; border-radius: 5px; background: var(--line); margin: 8px 0 11px; }
-  .gtrack i { display: block; height: 100%; border-radius: 5px; background: var(--c); }
-  .gtrack u { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--ink); opacity: .5; border-radius: 1px; text-decoration: none; }
+  .gtrack i { position: relative; z-index: 1; display: block; height: 100%; border-radius: 5px; background: var(--c); }
+  /* 읽는 중: 완독 바 뒤에 깔리는 빗금 알약(완독 바가 그 위에 겹쳐 둥글게 끝남) */
+  .gtrack s { position: absolute; left: 0; top: 0; bottom: 0; z-index: 0; border-radius: 5px; text-decoration: none;
+    background: repeating-linear-gradient(135deg, var(--c) 0 2px, transparent 2px 5px); box-shadow: inset 0 0 0 1px var(--c); }
+  .gtrack u { z-index: 2; position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--ink); opacity: .5; border-radius: 1px; text-decoration: none; }
   .gnote { font-size: 13.5px; color: var(--sub); margin-top: 3px; }
   .gnote.hi { color: var(--ink); font-weight: 700; }
   .gline { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: 3px; }
@@ -1181,7 +1199,10 @@
   #welcome .wbtns { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
   #welcome .wguide { height: 44px; border: 0; border-radius: 999px; background: var(--ink); color: #fff; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
   #welcome .wnever { height: 38px; border: 0; background: transparent; color: var(--sub); font-family: inherit; font-size: 13.5px; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-  .noreview { margin-top: 12px; font-size: 13.5px; color: var(--mute); opacity: .6; }
+  .text.lp { -webkit-touch-callout: none; }
+  .noreview { margin-top: 12px; font-size: 13.5px; color: var(--mute); opacity: .6; cursor: pointer; display: inline-block;
+    text-decoration: underline dotted; text-underline-offset: 3px; }
+  .noreview:active { opacity: 1; }
   /* 업데이트 내역 탭: 다른 탭보다 연한 색 */
   .gtabs button.logtab { opacity: .55; }
   .gtabs button.logtab.on { opacity: .8; }
@@ -1192,6 +1213,12 @@
   .hq.warn .hp b { background: linear-gradient(transparent 58%, #ffe08a 58%); }
   .hq.warn .wline + .wline { margin-top: 8px; }
   .hq.log .gqt { word-break: keep-all; }
+  /* 최근 3일 이내 업데이트 표시: 주황색 N */
+  .newbadge {
+    flex: none; align-self: center; display: inline-flex; align-items: center; justify-content: center;
+    width: 13px; height: 13px; margin-right: -6px; border-radius: 4px; background: #ff7a1a; color: #fff;
+    font-size: 9px; font-weight: 800; line-height: 1; font-family: var(--sans, sans-serif);
+  }
   .hq.log .lsh { margin-top: 14px; font-size: 14px; font-weight: 700; }
   .hq.log .lsh:first-child { margin-top: 2px; }
   .hq.log .lsi { position: relative; margin-top: 4px; padding-left: 13px; }
@@ -1225,10 +1252,9 @@
 
   /* 스크롤 중 세부정보 펼치기: 후기 위치는 그대로 두고 버튼 줄 아래에 덮어서 보여줌 */
   .cfloat {
-    position: absolute; left: 0; right: 0; top: 100%; z-index: 2;
+    position: absolute; left: 0; right: 0; bottom: calc(100% + 1px); z-index: 2;
     max-height: min(55vh, 420px); overflow-y: auto; overscroll-behavior: contain;
-    padding: 0 14px 6px 20px; background: var(--paper);
-    border-bottom: 1px solid var(--line2);
+    padding: 0 14px 0 20px; background: var(--paper);
   }
 
   /* ---------- PDF 내보내기 ---------- */
@@ -1461,6 +1487,7 @@
           <label>읽기 상태</label>
           <div class="kinds" id="stKinds">
             <button type="button" data-s="reading">읽는 중</button>
+            <button type="button" data-s="paused">중단</button>
             <button type="button" data-s="done" class="on">완독</button>
           </div>
         </div>
@@ -1530,7 +1557,7 @@
 <div id="writer" hidden>
   <div class="wcol">
     <div class="wbar" id="wbar">
-      <span class="wc" id="wcnt">0자</span>
+      <button type="button" class="barbtn" id="wClose">닫기</button>
       <button type="button" class="wundo" id="wUndo" aria-label="실행 취소" disabled><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
       <button type="button" class="wundo" id="wRedo" aria-label="다시 실행" disabled><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
       <b id="wtitle">후기</b>
@@ -1538,6 +1565,7 @@
       <button type="button" class="barbtn save" id="wdone">완료</button>
     </div>
     <textarea id="wtext" placeholder="이 작품은 어땠나요? 자유롭게 적어보세요." aria-label="후기 쓰기"></textarea>
+    <span class="wc" id="wcnt">0자</span>
   </div>
 </div>
 
@@ -1627,6 +1655,25 @@
   var addingId = null;
   var recallSeed = 0;
   var form = { type: "book", rating: 0, status: "done" };
+  var PAKEY = "reviews-pausedopen-v1";
+  var pausedOpen = false;
+  try { pausedOpen = localStorage.getItem(PAKEY) === "1"; } catch (e) {}
+  function setPausedOpen(v) {
+    pausedOpen = v;
+    try { if (v) localStorage.setItem(PAKEY, "1"); else localStorage.removeItem(PAKEY); } catch (e) {}
+  }
+  function stOf(r) { return r.status === "reading" || r.status === "paused" ? r.status : "done"; }
+  /* 읽는 중·중단 책은 날짜를 따로 받지 않으니, 마지막 기록(없으면 등록 순)으로 정렬 */
+  function lastTouch(r) {
+    var m = "";
+    (r.rlog || []).forEach(function (x) { var k = x.d + (x.tm || ""); if (k > m) m = k; });
+    return m || String(r.id);
+  }
+  function lastLog(r) {
+    var best = null;
+    (r.rlog || []).forEach(function (x) { if (!best || (x.d + (x.tm || "")) >= (best.d + (best.tm || ""))) best = x; });
+    return best;
+  }
   var view = "list";
   var calY = new Date().getFullYear(), calM = new Date().getMonth(), selDate = today();
 
@@ -1677,8 +1724,15 @@
       ["title", "creator", "genre", "cast", "seat", "note", "time", "take", "quote", "text"].forEach(function (k) {
         if (typeof r[k] !== "string") r[k] = r[k] == null ? "" : String(r[k]);
       });
-      if (!r.status) r.status = "done";
+      if (r.type !== "book" || (r.status !== "reading" && r.status !== "paused")) r.status = "done";
+      if (r.status !== "done") r.date = "";
       r.tags = cleanTags(r.tags); r.later = cleanLater(r.later);
+      if (Array.isArray(r.rlog)) r.rlog = cleanLater(r.rlog);
+      else {   /* 독서 기록 칸이 생기기 전: 읽는 중·중단 책에 덧붙였던 생각은 독서 기록으로 옮김 */
+        r.rlog = r.status !== "done" ? r.later : [];
+        if (r.status !== "done" && r.later.length) r.later = [];
+        migrated = true;
+      }
       if (ver < 2 && r.quote.trim()) {
         /* 없앤 "인상 깊은 문장·장면" 칸에 남아 있던 내용은 후기 맨 위로 옮김 */
         r.text = r.text.trim() ? r.quote.trim() + "\n\n" + r.text : r.quote.trim();
@@ -1686,7 +1740,7 @@
       }
       var nd = normDate(r.date);
       if (nd !== String(r.date == null ? "" : r.date)) migrated = true;
-      r.date = nd;
+      r.date = r.status === "done" ? nd : "";
       r.rating = Math.max(0, Math.min(5, Math.round((+r.rating || 0) * 2) / 2));
       if (r.id == null || !isFinite(+r.id) || seen[r.id]) { r.id = ++maxId; migrated = true; }
       seen[r.id] = 1;
@@ -1729,7 +1783,7 @@
   function cleanAct(x) {
     if (!x || !String(x.t || "").trim()) return null;
     return { id: x.id || (Date.now() + (tseq++)), d: /^\d{4}-\d{2}-\d{2}$/.test(x.d) ? x.d : today(),
-             tm: /^\d{2}:\d{2}$/.test(x.tm) ? x.tm : "", t: String(x.t).slice(0, 200).replace(/ 관극$/, " 관람"),
+             tm: /^\d{2}:\d{2}$/.test(x.tm) ? x.tm : "", t: String(x.t).slice(0, 200).replace(/ 관극$/, " 관람").replace(/^(\u300C.*\u300D) 중단$/, "$1 독서 중단"),
              rid: +x.rid || 0, tid: +x.tid || 0, ty: (x.ty === "movie" || x.ty === "play" || x.ty === "musical" || x.ty === "sys") ? x.ty : "book",
              w: !!x.w || (!!x.rid && x.ty !== "book" && /^\u300C.*\u300D (관극|관람)$/.test(String(x.t))) };
   }
@@ -1761,7 +1815,7 @@
     persistActs();
   }
   function actVerb(r) {
-    if (r.type === "book") return r.status === "reading" ? "읽는 중 등록" : "완독";
+    if (r.type === "book") return r.status === "reading" ? "읽는 중 등록" : r.status === "paused" ? "독서 중단" : "완독";
     return "관람";
   }
   function goalLabel(k) { return k.slice(0, 4) + "년" + (k.length > 4 ? " " + (+k.slice(5, 7)) + "월" : "") + " 독서 목표"; }
@@ -1849,11 +1903,12 @@
     var q = useSearch ? $("q").value.trim().toLowerCase() : "";
     return data.filter(function (r) {
       if (filter !== "all" && r.type !== filter) return false;
+      if (filter !== "book" && r.status !== "done" && !q) return false;   /* 전체·다른 탭엔 완료된 것만(검색할 땐 읽는 중·중단도 찾음) */
       if (rfilter === "yes" && !hasReview(r)) return false;
       if (rfilter === "no" && hasReview(r)) return false;
       if (!starOk(r, sfilter)) return false;
       if (!q) return true;
-      return (r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.quote || "") + " " + (r.later || []).map(function (x) { return x.t; }).join(" ") + " " + (r.tags || []).map(function (t) { return "#" + t; }).join(" ")).toLowerCase().indexOf(q) > -1;
+      return (r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.quote || "") + " " + (r.later || []).concat(r.rlog || []).map(function (x) { return x.t; }).join(" ") + " " + (r.tags || []).map(function (t) { return "#" + t; }).join(" ")).toLowerCase().indexOf(q) > -1;
     });
   }
 
@@ -1901,7 +1956,7 @@
     var hl = el("div", "hl");
     hl.appendChild(el("span", "kind", KIND[r.type].name));
     hl.appendChild(el("span", "ht", r.title));
-    var w = r.status === "reading" ? "읽는 중" : when;
+    var w = r.status === "reading" ? "읽는 중" : r.status === "paused" ? "중단" : when;
     if (w) hl.appendChild(el("span", "hd", w));
     head.appendChild(hl);
     head.onclick = function () { closeCard(r.id); render(); keepVisible(r.id); };
@@ -1918,6 +1973,14 @@
   function buildInfo(r) {
     var info = el("div", "cinfo");
     info.hidden = !infoOpen[r.id];
+    /* 세부정보 영역(제자리·덮개 모두)을 누르면 카드 접힘. 글자를 드래그해 선택 중일 땐 접지 않음 */
+    info.style.cursor = "pointer";
+    info.onclick = function (e) {
+      e.stopPropagation();
+      var sel = window.getSelection && window.getSelection();
+      if (sel && String(sel).length) return;
+      closeCard(r.id); render(); keepVisible(r.id);
+    };
     var fr = el("div", "frow");
     fr.appendChild(el("div", "ftitle", r.title));
     if (r.rating) fr.appendChild(makeStars(r));
@@ -1947,31 +2010,31 @@
     return info;
   }
 
-  /* 세부정보가 스크롤로 제목줄 밑에 완전히 가려졌는지 */
+  /* 세부정보가 스크롤로 제목줄 밑에 조금이라도 가려졌는지 */
   function infoCovered(card) {
     var info = card.querySelector(".cinfo"), head = card.querySelector(".chead");
     if (!info || info.hidden || !head) return false;
-    /* 세부정보가 완전히 가려졌을 때만 true: 조금이라도 제자리에 보이면 덮개를 치워서 두 번 보이지 않게 함 */
-    return info.getBoundingClientRect().bottom <= head.getBoundingClientRect().bottom + 1;
+    /* 조금이라도 가려지면 true(→ 「펼치기」로 바뀌고 덮개를 띄울 수 있음). 온전히 보이면 false */
+    return info.getBoundingClientRect().top < head.getBoundingClientRect().bottom - 1;
   }
-  /* 버튼 줄 아래에 덮개를 보여줄 최소한의 자리가 기록칸에 남았는지 */
+  /* 제목줄 아래에 덮개(세부정보)+버튼 줄이 들어갈 최소한의 자리가 기록칸에 남았는지 */
   function floatRoom(card) {
-    var bar = card.querySelector(".abar");
-    if (!bar) return true;
-    return bar.getBoundingClientRect().bottom + 24 < card.getBoundingClientRect().bottom;
+    var bar = card.querySelector(".abar"), head = card.querySelector(".chead");
+    if (!bar || !head) return true;
+    return card.getBoundingClientRect().bottom - bar.offsetHeight - head.getBoundingClientRect().bottom > 24;
   }
-  /* 덮개가 기록칸 끝선을 넘지 않게: 넘친 만큼 위로 밀어 올리고, 버튼 줄 위로 올라간 부분은 잘라냄
-     → 스크롤로 기록칸 끝에 닿으면 덮개가 끝선에 밀리듯 안으로 들어감 */
+  /* 덮개는 버튼 줄 "위"에 놓아 세부정보 → 버튼 순서를 유지.
+     버튼 줄을 (덮개 높이 − 아직 보이는 세부정보 높이)만큼 아래로 내려 덮개가 제목줄 바로 밑에 오게 함.
+     기록칸 끝에 닿으면 버튼 줄이 끝선에 밀려 올라가고, 덮개는 제목줄 뒤로 들어감 */
   function placeFloat(card) {
-    var fl = card.querySelector(".cfloat"), bar = card.querySelector(".abar");
-    if (!fl || !bar) return;
-    var over = bar.getBoundingClientRect().bottom + fl.offsetHeight - card.getBoundingClientRect().bottom;
-    if (over > 0) {
-      fl.style.transform = "translateY(" + (-over) + "px)";
-      fl.style.clipPath = "inset(" + Math.min(over, fl.offsetHeight) + "px 0 0 0)";
-    } else {
-      fl.style.transform = ""; fl.style.clipPath = "";
-    }
+    var fl = card.querySelector(".cfloat"), bar = card.querySelector(".abar"), head = card.querySelector(".chead");
+    if (!fl || !bar || !head) return;
+    bar.style.transform = "";
+    var barTop = bar.getBoundingClientRect().top;
+    var shift = head.getBoundingClientRect().bottom + fl.offsetHeight - barTop;
+    var maxShift = card.getBoundingClientRect().bottom - bar.offsetHeight - barTop;
+    shift = Math.max(0, Math.min(shift, maxShift));
+    bar.style.transform = shift ? "translateY(" + shift + "px)" : "";
   }
   /* 펼쳐져 있어도 가려지기 시작하면 "펼치기", 온전히 보일 때만 "접기".
      스크롤로 기록칸 끝이 가까워져 덮개가 들어갈 자리가 없으면 덮개는 안으로 들어가고 「펼치기」는 비활성화 */
@@ -1981,14 +2044,18 @@
       var tg = card.querySelector(".abar .tog");
       if (!tg) return;
       var fl = card.querySelector(".cfloat");
+      if (!fl) { var bar0 = card.querySelector(".abar"); if (bar0) bar0.style.transform = ""; }
       var stuck = card.getBoundingClientRect().top < tl - 1;
       var roomOk = !stuck || floatRoom(card);
-      if (fl && !infoCovered(card)) { fl.remove(); fl = null; }  /* 제자리가 보이면 덮개는 치움 */
+      if (fl && !infoCovered(card)) { fl.remove(); fl = null; var bar1 = card.querySelector(".abar"); if (bar1) bar1.style.transform = ""; }  /* 제자리가 보이면 덮개는 치움 */
       if (fl) placeFloat(card);
       var on = fl ? true : (!!infoOpen[card.dataset.id] && !infoCovered(card));
       tg.textContent = on ? "접기" : "펼치기";
       tg.setAttribute("aria-expanded", on ? "true" : "false");
-      tg.disabled = !on && !roomOk;
+      /* 세부정보가 제자리에서 온전히 보이면(덮개도 없음) 접기·펼치기는 쓸 일이 없어 비활성화 */
+      var inf0 = card.querySelector(".cinfo"), hd0 = card.querySelector(".chead");
+      var shown = !!(inf0 && !inf0.hidden && hd0 && inf0.getBoundingClientRect().top >= hd0.getBoundingClientRect().bottom - 1);
+      tg.disabled = fl ? false : (on ? shown : !roomOk);
     });
   }
   var syncQueued = false;
@@ -2029,6 +2096,7 @@
       if (fl) {
         var wasNew = fl.dataset.isnew === "1";
         fl.remove();
+        bar.style.transform = "";
         if (wasNew) keepReview(function () { infoOpen[r.id] = false; info.hidden = true; });
         syncToggles();
         return;
@@ -2053,7 +2121,7 @@
       syncToggles();
     };
     var eb = el("button", "", "수정"); eb.type = "button";
-    var ab = el("button", "", "생각 덧붙이기"); ab.type = "button";
+    var ab = el("button", "", r.status !== "done" ? "기록 남기기" : "생각 덧붙이기"); ab.type = "button";
     var db = el("button", "del", "삭제"); db.type = "button";
     ab.onclick = function (e) { e.stopPropagation(); addingId = r.id; render(); };
     eb.onclick = function (e) { e.stopPropagation(); openForm(r.id); };
@@ -2079,6 +2147,37 @@
     return bar;
   }
 
+  /* 카드에서 폼을 열지 않고 읽기 상태만 바꿈 */
+  function changeStatus(r, st) {
+    var old = { status: r.status, date: r.date };
+    if (st === "done") r.date = today(); else r.date = "";
+    r.status = st;
+    var verb = st === "done" ? "완독" : st === "paused" ? "독서 중단" : "다시 읽기";
+    logAct("\u300C" + r.title + "\u300D " + verb, r, false);
+    if (st === "done") { calY = +r.date.slice(0, 4); calM = +r.date.slice(5, 7) - 1; selDate = r.date; }
+    if (st === "paused" && !pausedOpen) { openIds[r.id] = false; delete openIds[r.id]; }
+    persist(); persistActs(); render();
+    var rid = r.id;
+    showUndoToast(st === "done" ? "완독 처리했어요" : st === "paused" ? "중단으로 옮겼어요" : "읽는 중으로 옮겼어요", function () {
+      var cur = data.filter(function (x) { return x.id === rid; })[0];
+      if (!cur) return;
+      cur.status = old.status; cur.date = old.date;
+      for (var i = acts.length - 1; i >= 0; i--) { if (acts[i].rid === rid && acts[i].t === "\u300C" + cur.title + "\u300D " + verb) { acts.splice(i, 1); break; } }
+      persist(); persistActs(); render();
+    });
+  }
+  function buildQuickStatus(r) {
+    var qs = el("div", "qs");
+    function b(txt, st, main) {
+      var x = el("button", main ? "main" : "", txt); x.type = "button";
+      x.onclick = function (e) { e.stopPropagation(); changeStatus(r, st); };
+      qs.appendChild(x);
+    }
+    if (r.status === "reading") { b("완독", "done", true); b("중단", "paused"); }
+    else { b("다시 읽기", "reading", true); b("완독", "done"); }
+    return qs;
+  }
+
   function buildCard(r, inDay) {
     var selOn = selMode && view === "list" && !inDay;
     var isOpen = !selOn && !!openIds[r.id];
@@ -2096,14 +2195,25 @@
       var l2 = el("div", "l2");
       l2.appendChild(el("span", "kind", KIND[r.type].name));
       if (r.status === "reading") l2.appendChild(el("span", "badge", "읽는 중"));
+      if (r.status === "paused") l2.appendChild(el("span", "badge paused", "중단"));
       if (r.creator) l2.appendChild(el("span", "m", r.creator));
       var when = inDay
         ? (r.time ? fmtTime(r.time) : "")
         : (r.date ? shortDate(r.date) + (r.time ? " " + fmtTime(r.time) : "") : (r.time ? fmtTime(r.time) : ""));
       if (when) l2.appendChild(el("span", "m d", when));
-      if (r.later && r.later.length) l2.appendChild(el("span", "lcnt", "생각 +" + r.later.length));
+      var nLg = (r.rlog || []).length, nLt = (r.later || []).length;
+      if (nLg || nLt) l2.appendChild(el("span", "lcnt", (nLg ? "기록 " + nLg : "") + (nLg && nLt ? " · " : "") + (nLt ? "생각 +" + nLt : "")));
       card.appendChild(l2);
       if (r.take) card.appendChild(mkTake(r.take));
+      if (r.status !== "done") {   /* 어디까지 어떤 생각이었는지 한 줄로 */
+        var ll = lastLog(r);
+        if (ll) {
+          var lg = el("div", "lastlog");
+          lg.appendChild(el("b", "", shortDate(ll.d)));
+          lg.appendChild(document.createTextNode(ll.t.replace(/\s+/g, " ")));
+          card.appendChild(lg);
+        }
+      }
 
       /* 닫힌 카드만 눌러서 열림 (처음 열 땐 세부정보도 펼친 상태) */
       card.onclick = function () {
@@ -2124,9 +2234,20 @@
       card.appendChild(buildBar(r, info, card));
 
       var det = el("div", "detail");
-      if (r.text) det.appendChild(el("div", "text", r.text));
-      else det.appendChild(el("div", "noreview", "후기 없음"));
+      if (r.text) {
+        var tx = el("div", "text", r.text);
+        attachLongPress(tx, function () { openReviewWriter(r.id); });
+        det.appendChild(tx);
+      } else if (r.status === "done") {
+        var nr = el("div", "noreview", "후기 없음");
+        nr.setAttribute("role", "button"); nr.tabIndex = 0;
+        nr.setAttribute("aria-label", "후기 없음, 눌러서 후기 쓰기");
+        nr.onclick = function (e) { e.stopPropagation(); openReviewWriter(r.id); };
+        nr.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); openReviewWriter(r.id); } };
+        det.appendChild(nr);
+      }
       appendDetailExtra(det, r);
+      if (r.status !== "done") det.appendChild(buildQuickStatus(r));
       card.appendChild(det);
     }
     if (selOn) {   /* 선택 모드: 카드를 누르면 열리는 대신 체크됨 */
@@ -2151,8 +2272,8 @@
   }
 
   function render() {
-    var reading = data.filter(function (r) { return r.status === "reading"; }).length;
-    $("count").textContent = "지금까지 " + data.length + "편의 기록" + (reading ? ", 읽는 중 " + reading + "권" : "");
+    var doneN = data.filter(function (r) { return r.status === "done"; }).length;
+    $("count").textContent = "지금까지 " + doneN + "편의 기록";
     if (view !== "list") { selMode = false; selIds = {}; }
     $("list").hidden = view !== "list";
     $("calWrap").hidden = view !== "cal";
@@ -2165,7 +2286,7 @@
     $("tabs").hidden = view === "stat" || view === "tl";
     $("rtabs").hidden = view === "stat" || view === "tl";
     $("tgBtn").hidden = view !== "list" || selMode;
-    var inKind = data.filter(function (r) { return filter === "all" || r.type === filter; });
+    var inKind = data.filter(function (r) { return (filter === "all" || r.type === filter) && (filter === "book" || r.status === "done"); });
     var rPool = inKind.filter(function (r) { return starOk(r, sfilter); });
     var nYes = rPool.filter(hasReview).length;
     var rOpt = [["all", "후기 전체 (" + rPool.length + ")", "후기 전체"], ["yes", "후기 있음 (" + nYes + ")", "후기 있음"], ["no", "후기 없음 (" + (rPool.length - nYes) + ")", "후기 없음"]];
@@ -2200,32 +2321,34 @@
   }
   function labelOf(opts, cur) { for (var i = 0; i < opts.length; i++) if (opts[i][0] === cur) return opts[i][2]; return ""; }
 
-  function groupKey(r) { return r.status === "reading" ? "reading" : (r.date ? r.date.slice(0, 7) : "none"); }
+  function groupKey(r) { return r.status === "reading" ? "reading" : r.status === "paused" ? "paused" : (r.date ? r.date.slice(0, 7) : "none"); }
   function groupLabel(k) {
     if (k === "reading") return "읽는 중";
+    if (k === "paused") return "중단";
     if (k === "none") return "날짜 없음";
     return k.slice(0, 4) + "년 " + (+k.slice(5, 7)) + "월";
   }
 
-  function appendDetailExtra(det, r) {
-    var later = r.later || [];
-    if (!later.length && addingId !== r.id) return;
-    var lw = el("div", "later");
-    lw.appendChild(el("div", "lh", "나중에 든 생각"));
-    later.forEach(function (x, idx) {
+  /* 독서 기록(rlog): 읽는 동안 남기는 날짜별 기록 / 생각 덧붙임(later): 다 읽은 뒤 다시 든 생각 */
+  function buildLogSection(det, r, key, label, ph, composing, delMsg) {
+    var arr = r[key] || [];
+    if (!arr.length && !composing) return;
+    var lw = el("div", "later" + (key === "rlog" ? " rlog" : ""));
+    lw.appendChild(el("div", "lh", label));
+    arr.forEach(function (x, idx) {
       var it = el("div", "li"), ld = el("div", "ld");
       ld.appendChild(el("span", "", x.d.replace(/-/g, ".")));
       var del = el("button", "", "삭제"); del.type = "button";
       del.onclick = function (e) {
         e.stopPropagation();
-        if (!confirm("이 생각을 정말 삭제할까요?\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.")) return;
-        var item = r.later.splice(idx, 1)[0], rid = r.id;
+        if (!confirm("이 " + delMsg + "을(를) 정말 삭제할까요?\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.")) return;
+        var item = r[key].splice(idx, 1)[0], rid = r.id;
         persist(); render();
-        showUndoToast("생각을 삭제했어요", function () {
+        showUndoToast(delMsg + "을(를) 삭제했어요", function () {
           var cur = data.filter(function (x) { return x.id === rid; })[0];
           if (!cur) return;
-          cur.later = cur.later || [];
-          cur.later.splice(Math.min(idx, cur.later.length), 0, item);
+          cur[key] = cur[key] || [];
+          cur[key].splice(Math.min(idx, cur[key].length), 0, item);
           persist(); render();
         });
       };
@@ -2233,10 +2356,10 @@
       it.appendChild(ld); it.appendChild(el("div", "lx", x.t));
       lw.appendChild(it);
     });
-    if (addingId === r.id) {
+    if (composing) {
       var cp = el("div", "compose");
       cp.onclick = function (e) { e.stopPropagation(); };
-      var ta = el("textarea"); ta.rows = 3; ta.placeholder = "지금 다시 생각해 보니…";
+      var ta = el("textarea"); ta.rows = 3; ta.placeholder = ph;
       var cb = el("div", "cb");
       var cn = el("button", "", "취소"); cn.type = "button";
       cn.onclick = function (e) { e.stopPropagation(); addingId = null; render(); };
@@ -2245,7 +2368,7 @@
         e.stopPropagation();
         var v = ta.value.trim();
         if (!v) { ta.focus(); return; }
-        r.later = r.later || []; r.later.push({ d: today(), tm: nowHM(), t: v });
+        r[key] = r[key] || []; r[key].push({ d: today(), tm: nowHM(), t: v });
         addingId = null; persist(); render();
       };
       cb.appendChild(cn); cb.appendChild(sv);
@@ -2254,6 +2377,11 @@
       setTimeout(function () { ta.focus(); }, 0);
     }
     det.appendChild(lw);
+  }
+  function appendDetailExtra(det, r) {
+    var adding = addingId === r.id, notDone = r.status !== "done";
+    buildLogSection(det, r, "rlog", "독서 기록", "읽다가 든 생각…", adding && notDone, "기록");
+    buildLogSection(det, r, "later", "나중에 든 생각", "지금 다시 생각해 보니…", adding && !notDone, "생각");
   }
 
   /* ---------- 생각(타임라인) ---------- */
@@ -2268,7 +2396,8 @@
     var out = [];
     thoughts.forEach(function (t) { out.push({ k: "t", d: t.d, tm: t.tm || "", t: t.t, th: t }); });
     (reviews || data).forEach(function (r) {
-      (r.later || []).forEach(function (x, i) { out.push({ k: "l", d: x.d, tm: x.tm || "", t: x.t, r: r, idx: i }); });
+      (r.later || []).forEach(function (x, i) { out.push({ k: "l", d: x.d, tm: x.tm || "", t: x.t, r: r, idx: i, src: "later" }); });
+      (r.rlog || []).forEach(function (x, i) { out.push({ k: "l", d: x.d, tm: x.tm || "", t: x.t, r: r, idx: i, src: "rlog" }); });
     });
     return out;
   }
@@ -2277,8 +2406,11 @@
   var retTo = null;
   function gotoReview(id) {
     retTo = (view !== "list") ? { view: view, y: window.pageYOffset, id: id } : null;
-    view = "list"; filter = "all"; rfilter = "all"; sfilter = "all";
-    Array.prototype.forEach.call($("tabs").children, function (b) { b.classList.toggle("on", b.dataset.f === "all"); });
+    var tr = data.filter(function (x) { return x.id === id; })[0];
+    var notDone = !!(tr && tr.status !== "done");
+    if (tr && tr.status === "paused") setPausedOpen(true);
+    view = "list"; filter = notDone ? "book" : "all"; rfilter = "all"; sfilter = "all";
+    Array.prototype.forEach.call($("tabs").children, function (b) { b.classList.toggle("on", b.dataset.f === filter); });
     $("q").value = ""; searchOpen = false;
     openIds[id] = true; infoOpen[id] = true;
     render();
@@ -2302,13 +2434,13 @@
         thoughts.splice(Math.min(Math.max(tpos, 0), thoughts.length), 0, tgone); persistThoughts(); render();
       });
     } else {
-      var rid = e.r.id, lidx = e.idx, litem = e.r.later.splice(e.idx, 1)[0];
+      var rid = e.r.id, lidx = e.idx, lkey = e.src === "rlog" ? "rlog" : "later", litem = e.r[lkey].splice(e.idx, 1)[0];
       persist(); render();
-      showUndoToast("생각을 삭제했어요", function () {
+      showUndoToast(lkey === "rlog" ? "기록을 삭제했어요" : "생각을 삭제했어요", function () {
         var cur = data.filter(function (x) { return x.id === rid; })[0];
         if (!cur) return;
-        cur.later = cur.later || [];
-        cur.later.splice(Math.min(lidx, cur.later.length), 0, litem);
+        cur[lkey] = cur[lkey] || [];
+        cur[lkey].splice(Math.min(lidx, cur[lkey].length), 0, litem);
         persist(); render();
       });
     }
@@ -2344,7 +2476,7 @@
     if (e.k === "a") box.dataset.ck = actChip(e.lg.t);
     box.appendChild(el("span", "dot"));
     var bd = el("div", "bd"), hd = el("div", "hd");
-    hd.appendChild(el("span", "chip", e.k === "a" ? actChip(e.lg.t) : TL_CHIP[e.k]));
+    hd.appendChild(el("span", "chip", e.k === "a" ? actChip(e.lg.t) : (e.k === "l" && e.src === "rlog") ? "독서" : TL_CHIP[e.k]));
     var editing = e.k === "t" && tEditId === e.th.id;
     if (e.k === "a") {
       if (rec) { var lb = el("button", "lgt", e.t); lb.type = "button"; lb.onclick = function () { gotoReview(rec.id); }; hd.appendChild(lb); }
@@ -2449,8 +2581,9 @@
     var th = el("div", "th");
     var when = (withDate ? fmtDay(e.d) + (e.tm ? " " : "") : "") + (e.tm || "");
     if (e.k === "t" && isBack(e.th)) when = (withDate ? fmtDay(e.d) + " · " : "") + wroteText(e.th);
-    th.appendChild(el("span", "tm", when || (e.k === "l" ? "덧붙임" : "")));
-    if (withDate) th.appendChild(el("span", "tag", e.k === "t" ? "생각" : "덧붙임"));
+    var lbl = (e.k === "l" && e.src === "rlog") ? "독서 기록" : "덧붙임";
+    th.appendChild(el("span", "tm", when || (e.k === "l" ? lbl : "")));
+    if (withDate) th.appendChild(el("span", "tag", e.k === "t" ? "생각" : lbl));
     var editing = e.k === "t" && tEditId === e.th.id;
     if (!editing) {
       if (e.k === "t") {
@@ -2467,7 +2600,7 @@
       var lk = el("button", "tlink"); lk.type = "button"; lk.dataset.t = e.r.type;
       lk.appendChild(document.createTextNode("\u21B3 "));
       lk.appendChild(el("b", "", e.r.title));
-      lk.appendChild(document.createTextNode(" 에 덧붙임"));
+      lk.appendChild(document.createTextNode(e.src === "rlog" ? " 독서 기록" : " 에 덧붙임"));
       lk.onclick = function () { gotoReview(e.r.id); };
       box.appendChild(lk);
     }
@@ -2607,8 +2740,10 @@
 
   function renderList() {
     var items = getItems(true).sort(function (a, b) {
-      var ra = a.status === "reading" ? 1 : 0, rb = b.status === "reading" ? 1 : 0;
-      return (rb - ra) || (b.date || "").localeCompare(a.date || "") || (b.time || "").localeCompare(a.time || "") || b.id - a.id;
+      var ra = a.status === "reading" ? 2 : a.status === "paused" ? 1 : 0, rb = b.status === "reading" ? 2 : b.status === "paused" ? 1 : 0;
+      if (ra !== rb) return rb - ra;
+      if (ra) return lastTouch(b).localeCompare(lastTouch(a)) || b.id - a.id;
+      return (b.date || "").localeCompare(a.date || "") || (b.time || "").localeCompare(a.time || "") || b.id - a.id;
     });
     var list = $("list");
     list.textContent = "";
@@ -2641,14 +2776,26 @@
     function ens(k) { if (!groups[k]) { groups[k] = { rv: [], ex: [] }; order.push(k); } return groups[k]; }
     items.forEach(function (r) { ens(groupKey(r)).rv.push(r); });
     extra.forEach(function (e) { ens(e.d.slice(0, 7)).ex.push(e); });
-    function rank(k) { return k === "reading" ? 0 : k === "none" ? 2 : 1; }
-    order.sort(function (a, b) { return (rank(a) - rank(b)) || (rank(a) === 1 ? b.localeCompare(a) : 0); });
+    function rank(k) { return k === "reading" ? 0 : k === "paused" ? 1 : k === "none" ? 3 : 2; }
+    order.sort(function (a, b) { return (rank(a) - rank(b)) || (rank(a) === 2 ? b.localeCompare(a) : 0); });
     order.forEach(function (k) {
       var g = groups[k];
       var gh = el("div", "gh");
       gh.appendChild(el("span", "", groupLabel(k)));
       gh.appendChild(el("span", "n", (g.rv.length ? String(g.rv.length) : "") + (g.ex.length ? (g.rv.length ? " · " : "") + "생각 " + g.ex.length : "")));
       list.appendChild(gh);
+      if (k === "paused") {   /* 중단은 기본 접힘 (검색 중엔 펼침) */
+        var forceOpen = !!qv || selMode;
+        var isOpenP = pausedOpen || forceOpen;
+        gh.classList.add("fold");
+        gh.appendChild(el("span", "chev", isOpenP ? "접기 \u25B4" : "펼치기 \u25BE"));
+        gh.setAttribute("role", "button"); gh.tabIndex = 0; gh.setAttribute("aria-expanded", isOpenP ? "true" : "false");
+        if (!forceOpen) {
+          gh.onclick = function () { setPausedOpen(!pausedOpen); render(); };
+          gh.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); gh.onclick(); } };
+        }
+        if (!isOpenP) return;
+      }
       var rows = el("div", "rows");
       list.appendChild(rows);
       var all = g.rv.map(function (r, i) { return { kind: 0, d: r.date || "", tm: "", i: i, r: r }; })
@@ -2714,7 +2861,7 @@
     items.forEach(function (r) {
       var blk = el("section", "pr-blk");
       blk.appendChild(el("h2", "pr-title", "[" + KIND[r.type].name + "] " + (r.title || "(제목 없음)")));
-      var when = r.status === "reading" ? "읽는 중" : (dots(r.date) + (r.time ? (r.date ? " " : "") + r.time : ""));
+      var when = r.status === "reading" ? "읽는 중" : r.status === "paused" ? "중단" : (dots(r.date) + (r.time ? (r.date ? " " : "") + r.time : ""));
       var meta = [when, starText(r.rating), r.creator, r.genre].filter(function (x) { return x && String(x).trim(); });
       if (meta.length) blk.appendChild(el("div", "pr-meta", meta.join(" \u00B7 ")));
       if (r.tags && r.tags.length) blk.appendChild(el("div", "pr-tags", r.tags.map(function (t) { return "#" + t; }).join(" ")));
@@ -2728,10 +2875,11 @@
       });
       var body = (r.text || "").replace(/^\s*\n/, "").replace(/\s+$/, "");
       if (body) blk.appendChild(el("div", "pr-body", body));
-      var later = (r.later || []).slice().sort(function (a, b) { return (a.d + (a.tm || "")).localeCompare(b.d + (b.tm || "")); });
       var len = body.length;
-      if (later.length) {
-        blk.appendChild(el("div", "pr-lh", "\u2500\u2500 덧붙인 생각 \u2500\u2500"));
+      [["rlog", "독서 기록"], ["later", "덧붙인 생각"]].forEach(function (g) {
+        var later = (r[g[0]] || []).slice().sort(function (a, b) { return (a.d + (a.tm || "")).localeCompare(b.d + (b.tm || "")); });
+        if (!later.length) return;
+        blk.appendChild(el("div", "pr-lh", "\u2500\u2500 " + g[1] + " \u2500\u2500"));
         later.forEach(function (x) {
           var th = el("div", "pr-th");
           th.appendChild(el("div", "pr-ld", dots(x.d) + (x.tm ? " " + x.tm : "")));
@@ -2739,7 +2887,7 @@
           blk.appendChild(th);
           len += x.t.length;
         });
-      }
+      });
       if (len < 1200) blk.classList.add("keep");   /* 짧은 기록은 페이지 중간에서 끊기지 않게 */
       pa.appendChild(blk);
     });
@@ -3207,26 +3355,29 @@
     ] },
     { t: "기록하기", items: [
       {"h": "종류부터 골라요", "lines": ["책, 영화, 연극, 뮤지컬 중 무엇인지 먼저 골라요.", "종류에 따라 입력칸이 조금씩 달라져요.", "책은 저자, 장르, 읽기 상태, 완독한 날을 적어요.", "영화는 감독과 본 날을 적어요.", "연극·뮤지컬은 극장, 관람 일시, 좌석, 캐스팅을 적어요."]},
-      {"h": "작품 정보와 날짜", "lines": ["제목과 저자(감독·극장)를 적어요. 나중에 \"그때 본 그 작품이 뭐였지?\" 싶을 때 찾는 기본 단서가 돼요.", "책의 장르는 목록에서 고르거나 직접 입력해요.", "아직 읽고 있다면 「읽는 중」으로 두고, 다 읽은 뒤 완독으로 바꾸면 그날이 기록으로 남아요.", "연극·뮤지컬은 관람 일시를 5분 단위로 맞출 수 있어요."]},
+      {"h": "작품 정보와 날짜", "lines": ["제목과 저자(감독·극장)를 적어요. 나중에 \"그때 본 그 작품이 뭐였지?\" 싶을 때 찾는 기본 단서가 돼요.", "책의 장르는 목록에서 고르거나 직접 입력해요.", "책은 읽기 상태를 「읽는 중」 「중단」 「완독」 중에서 골라요. 날짜는 완독일 때만 입력해요.", "연극·뮤지컬은 관람 일시를 5분 단위로 맞출 수 있어요."]},
+      {"h": "책 읽기 상태", "lines": ["읽는 중과 중단은 날짜 없이 제목만으로 바로 등록할 수 있어요. 병렬독서처럼 여러 권을 동시에 읽어도 부담 없어요.", "카드를 펼치면 아래쪽 버튼으로 상태를 바로 바꿀 수 있어요. 읽는 중은 「완독」 「중단」, 중단은 「다시 읽기」 「완독」이에요.", "완독으로 바꾸면 완독일이 오늘로 들어가요. 다른 날이면 「수정」에서 고쳐요.", "상태를 바꾸면 실수해도 잠깐 되돌릴 수 있고, 타임라인에는 「완독」 「독서 중단」 「다시 읽기」로 남아요."]},
       {"h": "연극·뮤지컬 전용 칸", "lines": ["좌석을 적어두면 다음 관람 때 시야와 거리를 비교하기 좋아요.", "캐스팅은 쉼표나 줄바꿈으로 구분해요.", "같은 작품도 회차마다 다른 배우가 나오니, 그날의 기억을 남겨두면 좋아요."]},
       {"h": "별점·한줄평", "lines": ["별점은 0.5점 단위로 남겨요.", "한줄평은 120자까지 쓸 수 있어요.", "한줄평은 목록에 바로 보여서, 나중에 훑을 때 첫인상이 한눈에 떠올라요.", "길게 쓸 기운이 없는 날엔 이 두 가지만 남겨도 충분해요."]},
-      {"h": "후기 쓰기", "lines": ["후기 칸을 누르면 방해 없이 전체 화면에서 쓸 수 있어요.", "글자 수가 함께 보여요.", "실수로 지웠거나 잘못 썼다면 위쪽의 ↶(실행 취소)와 ↷(다시 실행) 버튼으로 되돌릴 수 있어요.", "잘 쓰려고 하지 않아도 돼요. 지금 드는 느낌을 그대로 적어두면 시간이 지난 뒤 가장 값진 기록이 돼요."]},
+      {"h": "후기 쓰기", "lines": ["이미 쓴 후기는 카드를 펼친 뒤 후기 글을 꾹 누르면 후기만 고치는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요.", "후기를 안 쓴 기록은 카드를 펼쳤을 때 보이는 「후기 없음」을 누르면 후기만 적는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요.", "후기 칸을 누르면 방해 없이 전체 화면에서 쓸 수 있어요.", "글자 수는 글쓰기 칸 오른쪽 아래에 보여요.", "왼쪽 위의 「닫기」를 누르면 후기 창만 닫혀요. 카드에서 바로 연 창이든 기록 추가·수정 화면에서 연 창이든 똑같아요. 고친 내용이 있으면 「저장하지 않고 닫을까요?」라고 먼저 물어봐요.", "기록 추가·수정 화면에서 연 후기 창은 「완료」를 누르면 쓴 내용이 그 화면에 들어가고(최종 저장은 「저장」), 「닫기」로 닫으면 이번에 고친 내용은 버려져요.", "실수로 지웠거나 잘못 썼다면 위쪽의 ↶(실행 취소)와 ↷(다시 실행) 버튼으로 되돌릴 수 있어요.", "잘 쓰려고 하지 않아도 돼요. 지금 드는 느낌을 그대로 적어두면 시간이 지난 뒤 가장 값진 기록이 돼요."]},
       {"h": "막막할 땐 「가이드 질문」", "lines": ["별점 아래, 후기 위의 「가이드 질문」을 눌러요. 책은 장르에 따라 질문이 달라져요.", "위쪽 탭에서 주제를 고르고, 마음이 가는 질문을 눌러 선택해요.", "질문마다 딸림 질문이 있어요. 「딸림 질문 모두 선택」으로 한 번에 고를 수도 있어요.", "뭘 쓸지 감이 안 오면 「랜덤 선택」으로 주제마다 질문을 하나씩 뽑아봐요.", "「N개 넣기」를 누르면 고른 질문이 후기 칸에 들어가요. 그 아래에 내 생각을 이어서 쓰면 돼요.", "잘못 골랐다면 「비우기」로 선택을 초기화해요."]},
       {"h": "비고와 태그", "lines": ["비고는 같이 본 사람, 앉았던 자리, 재관람 여부 같은 짧은 메모예요. 100자까지 쓸 수 있어요.", "태그는 #재관람 #가족처럼 적어요.", "비고와 태그는 검색에도 잡혀요."]},
       {"h": "쓰다가 잠깐 내려두기", "lines": ["작성 화면 위쪽의 「내리기」 버튼을 누르거나, 위쪽 바를 아래로 쓸어내려요.", "작성 화면이 아래 「이어 쓰기」 막대로 내려가요.", "그동안 목록·달력 등 다른 화면을 볼 수 있어요.", "막대나 「+ 후기 추가」를 누르면 쓰던 내용 그대로 이어서 쓸 수 있어요."]},
-      {"h": "작성 중 갑자기 꺼져도 괜찮아요", "lines": ["작성 중인 내용(제목, 별점, 한줄평, 후기 등)은 입력하는 동안 자동으로 임시저장돼요.", "앱이 갑자기 꺼지거나 새로고침, 브라우저 종료로 창이 닫혀도 내용이 남아 있어요.", "다시 「+ 후기 추가」를 누르면 「이어서 쓸까요?」라고 물어봐요. 기존 기록을 수정하던 중이었다면 그 기록의 「수정」을 다시 눌렀을 때 물어봐요.", "「확인」을 누르면 쓰던 내용이 그대로 채워져요. 「취소」를 누르면 임시저장이 지워져요.", "직접 「닫기」로 닫거나 「저장」으로 마친 경우에는 임시저장이 남지 않아요."]},
-      {"h": "수정·삭제", "lines": ["카드를 펼치면 「수정」「삭제」 버튼이 있어요.", "관람 직후 못 쓴 내용을 나중에 채우거나, 마음이 바뀌면 고칠 수 있어요.", "「삭제」를 누르면 정말 삭제할지 한 번 더 물어봐요.", "삭제한 직후 몇 초 동안은 아래에 뜨는 「되돌리기」로 취소할 수 있어요.", "그 시간이 지나면 되돌릴 수 없으니, 백업을 해두면 안심이에요."]}
+      {"h": "작성 중 갑자기 꺼져도 괜찮아요", "lines": ["작성 중인 내용(후기 포함)은 입력하는 동안 자동으로 임시저장돼요.", "앱이 꺼지거나 새로고침해도 남아 있고, 다시 열면 「이어서 쓸까요?」라고 물어봐요.", "기록별로 따로 보관돼서 다른 기록을 열어도 덮어쓰지 않아요. 최근 5개까지, 10일이 지나면 자동으로 지워져요.", "「저장」하거나 「닫기」로 닫으면 임시저장은 남지 않아요."]},
+
+      {"h": "수정·삭제", "lines": ["카드를 펼치면 「수정」「삭제」 버튼이 있어요.", "관람 직후 못 쓴 내용을 나중에 채우거나, 마음이 바뀌면 고칠 수 있어요.", "후기만 추가하고 싶다면 「수정」 대신 카드 안의 「후기 없음」을 눌러요. 후기를 고치고 싶을 땐 후기 글을 꾹 눌러요. 후기 창이 바로 열리고 「완료」로 저장돼요.", "「삭제」를 누르면 정말 삭제할지 한 번 더 물어봐요.", "삭제한 직후 몇 초 동안은 아래에 뜨는 「되돌리기」로 취소할 수 있어요.", "그 시간이 지나면 되돌릴 수 없으니, 백업을 해두면 안심이에요."]}
     ] },
     { t: "둘러보기", items: [
-      {"h": "목록", "lines": ["저장한 기록이 최근 순으로 보여요.", "위쪽 탭(전체, 책, 영화, 연극, 뮤지컬)으로 종류별로 모아 볼 수 있어요.", "카드를 펼치면 자세한 내용이 나와요.", "후기를 쓰지 않은 기록은 펼쳤을 때 연하게 「후기 없음」이 보여요."]},
+      {"h": "목록", "lines": ["저장한 기록이 최근 순으로 보여요.", "위쪽 탭(전체, 책, 영화, 연극, 뮤지컬)으로 종류별로 모아 볼 수 있어요.", "「전체」 탭에는 완독한 책과 다른 기록만 보여요. 「책」 탭에서는 읽는 중(항상 펼침), 중단(기본 접힘, 제목 줄을 누르면 펼침), 완독(날짜별) 순으로 나뉘어요. 검색할 때는 읽는 중·중단인 책도 함께 찾아져요.", "카드를 펼치면 자세한 내용이 나와요.", "후기를 쓰지 않은 기록은 펼쳤을 때 연하게 「후기 없음」이 보여요. 이 글자를 누르면 후기만 적는 창이 바로 열려서, 수정 화면을 거치지 않고 후기를 추가할 수 있어요."]},
       {"h": "검색·필터", "lines": ["돋보기를 누르면 제목, 저자, 후기, 태그 등으로 검색할 수 있어요.", "후기 있음/없음, 별점(5점, 4.5↑, 4↑, 3↑, 3 미만, 별점 없음)으로 좁혀 볼 수 있어요.", "예를 들어 \"후기 쓴 연극 중 4점 이상\"만 모으면 나의 최애 목록이 돼요.", "필터 줄의 「생각 포함」을 켜면, 타임라인에서 직접 쓴 생각이 목록에 함께 보여요.", "후기에 덧붙인 생각은 후기를 열면 볼 수 있어서 여기엔 나오지 않아요."]},
       {"h": "달력", "lines": ["날짜 기준으로 언제 어떤 작품을 만났는지 한눈에 보여요.", "날짜를 누르고 「+ 이 날 기록하기」를 누르면 그날 바로 새 기록을 추가해요.", "그날 남긴 생각도 함께 볼 수 있어요.", "위쪽 목표 카드에서 목표 진행 상황을 볼 수 있어요.", "날짜를 누르면 아래 「그날의 생각」 줄 오른쪽에 「+ 적기」가 있어요. 눌러서 그날의 생각을 따로 적을 수 있어요. 지난 날짜에 적은 글에는 쓴 날짜가 함께 보여요."]},
-      {"h": "타임라인", "lines": ["독립 생각과 덧붙인 생각이 날짜순으로 이어져요.", "타임라인에서는 지금 떠오른 생각만 적을 수 있어요. 지난 날짜의 생각은 달력에서 날짜를 골라 적어요. 그 생각은 해당 날짜 칸에 「나중에 씀」으로 올라가고(누르면 실제 쓴 날짜가 보여요), 쓴 날짜에는 「생각 기록됨」 줄이 남아요. 이 줄을 누르면 달력의 그 생각으로 이동해요.", "「전체」에는 관람 기록과 백업·가져오기 같은 활동도 함께 보여요.", "「내가 쓴 글 · 덧붙임」은 내가 직접 쓴 것만 모아 보여요.", "덧붙인 생각을 누르면 해당 작품으로 바로 이동해요.", "타임라인에서 생각, 덧붙임, 관람·완독 기록을 삭제하면 기록만이 아니라 원본(내가 쓴 생각, 덧붙인 내용, 그 후기 기록)도 함께 삭제돼요. 삭제 전 확인 창에서 한 번 더 알려줘요.", "「후기」·「기록」 태그가 붙은 줄(후기 작성, 읽는 중, 백업, 불러오기, 목표 설정, 생각 기록됨)은 예외예요. 타임라인의 기록만 지워지고, 후기 원본과 백업 파일, 가져온 기록, 생각 원본은 그대로 남아요."]},
-      {"h": "통계", "lines": ["이번 달, 최근 3개월, 올해, 전체 기간별로 얼마나 기록했는지 볼 수 있어요.", "달별·연도별 카테고리 편수와 책 장르까지 살펴보면 취향이 숫자로 보여요.", "날짜가 없는 기록(읽는 중인 책 등)은 통계에서 빠져요.", "「목표」 탭에서 연도별·월별 독서 목표 권수를 정하고, 그래프로 완독 권수와 비교해요."]},
+      {"h": "타임라인", "lines": ["독립 생각과 덧붙인 생각이 날짜순으로 이어져요.", "타임라인에서는 지금 떠오른 생각만 적을 수 있어요. 지난 날짜의 생각은 달력에서 날짜를 골라 적어요. 그 생각은 해당 날짜 칸에 「나중에 씀」으로 올라가고(누르면 실제 쓴 날짜가 보여요), 쓴 날짜에는 「생각 기록됨」 줄이 남아요. 이 줄을 누르면 달력의 그 생각으로 이동해요.", "「전체」에는 관람 기록과 백업·가져오기 같은 활동도 함께 보여요.", "「내가 쓴 글 · 덧붙임」은 내가 직접 쓴 것만 모아 보여요.", "덧붙인 생각을 누르면 해당 작품으로 바로 이동해요.", "타임라인에서 생각, 덧붙임, 관람·완독 기록을 삭제하면 기록만이 아니라 원본(내가 쓴 생각, 덧붙인 내용, 그 후기 기록)도 함께 삭제돼요. 삭제 전 확인 창에서 한 번 더 알려줘요.", "「후기」·「기록」 태그가 붙은 줄(후기 작성, 읽는 중, 독서 중단, 백업, 불러오기, 목표 설정, 생각 기록됨)은 예외예요. 타임라인의 기록만 지워지고, 후기 원본과 백업 파일, 가져온 기록, 생각 원본은 그대로 남아요."]},
+      {"h": "통계", "lines": ["이번 달, 최근 3개월, 올해, 전체 기간별로 얼마나 기록했는지 볼 수 있어요.", "달별·연도별 카테고리 편수와 책 장르까지 살펴보면 취향이 숫자로 보여요.", "날짜가 없는 기록(읽는 중·중단인 책)은 통계에서 빠져요.", "「목표」 탭에서 연도별·월별 독서 목표 권수를 정하고, 그래프로 완독 권수와 비교해요.", "올해·이번 달 목표 바에서는 지금 읽는 중인 책이 빗금으로 이어 붙어 보여요. 숫자와 퍼센트는 완독한 책만 센 값이에요."]},
       {"h": "새로고침해도 그대로", "lines": ["새로고침해도 보던 탭, 필터, 검색어, 펼쳐둔 카드, 스크롤 위치가 유지돼요.", "탭을 완전히 닫았다가 다시 열면 처음 화면으로 시작해요."]}
     ] },
     { t: "생각 남기기", items: [
-      {"h": "생각 덧붙이기", "lines": ["기록 카드의 「생각 덧붙이기」를 눌러요.", "원래 후기는 그대로 두고 새 생각만 날짜와 함께 쌓여요.", "처음엔 별로였는데 며칠 뒤 어느 장면이 자꾸 떠오를 때, 마음이 어떻게 자랐는지 볼 수 있어요.", "덧붙인 생각은 각각 따로 지울 수 있어요."]},
+      {"h": "독서 기록", "lines": ["읽는 중이거나 중단한 책 카드를 펼치고 「기록 남기기」를 눌러요.", "읽다가 든 생각이 날짜와 함께 쌓여요. 여러 날에 걸쳐 읽는 책을 위한 기록이에요.", "닫힌 카드에는 마지막 기록이 한 줄로 보여서, 어디까지 어떤 생각이었는지 바로 떠올릴 수 있어요.", "완독해도 독서 기록은 그대로 남아요. 완독한 뒤에 다시 든 생각은 아래 「생각 덧붙이기」로 따로 남겨요.", "기록은 각각 따로 지울 수 있고, 타임라인과 달력에도 「독서 기록」으로 보여요."]},
+      {"h": "생각 덧붙이기", "lines": ["완독한 기록 카드의 「생각 덧붙이기」를 눌러요.", "원래 후기는 그대로 두고 새 생각만 날짜와 함께 쌓여요.", "처음엔 별로였는데 며칠 뒤 어느 장면이 자꾸 떠오를 때, 마음이 어떻게 자랐는지 볼 수 있어요.", "덧붙인 생각은 각각 따로 지울 수 있어요."]},
       {"h": "독립 생각", "lines": ["작품과 상관없이 떠오른 생각은 타임라인 위쪽 입력칸에 적고 「올리기」를 눌러요.", "아직 정리되지 않은 생각을 가볍게 붙잡아두는 곳이에요.", "나중에 수정하거나 삭제할 수 있어요."]},
       {"h": "되돌아보기", "lines": ["30일 이상 지난 기록 중 하나를 골라 다시 보여줘요.", "1년 넘은 기록이 있다면 이맘때 본 작품이 먼저 나와요.", "「열어보기」로 전체를 보거나 「생각 덧붙이기」로 지금의 생각을 보탤 수 있어요.", "마음에 안 들면 「다른 기록」으로 넘겨요.", "보고 싶지 않을 땐 「숨기기」를 눌러요. 작은 「되돌아보기 보기」 글자를 누르면 다시 떠요."]}
     ] },
@@ -3241,12 +3392,43 @@
     ] },
     /* 업데이트 내역: 코드를 수정할 때마다 맨 위(최신순)에 한 줄씩 추가 */
     { t: "업데이트 내역", log: true, items: [
+      {"d": "2026-10-03 10:50", "h": "임시저장 개선", "p": "작성 중 임시저장이 기록별로 따로 보관돼요. 후기를 쓰다 꺼져도, 다른 기록을 열었다 닫아도 먼저 쓰던 내용이 지워지거나 덮어써지지 않아요. 해당 기록의 후기·수정 창을 다시 열면 「이어서 쓸까요?」라고 물어봐요. 최근 5개까지만 남기고, 10일이 지난 임시저장은 자동으로 지워져요."},
+      {"d": "2026-10-03 10:50", "h": "후기 창 닫기 버튼", "p": "후기 창 왼쪽 위에 「닫기」 버튼이 생겼어요. 기록 추가·수정 화면에서 열었을 때와 카드에서 바로 열었을 때 화면이 똑같아요. 내용을 고친 채 닫으면 「저장하지 않고 닫을까요?」라고 물어봐요. 바 크기는 그대로 두려고 글자 수는 글쓰기 칸 오른쪽 아래로 옮겼어요."},
+      {"d": "2026-10-03 10:50", "h": "뒤로가기", "p": "폰 자판이 올라와 있을 때 뒤로가기를 누르면 자판만 내려가고, 한 번 더 누르면 닫혀요. 카드에서 바로 연 후기 창과 기록 창에서 연 후기 창 모두 내용을 고친 채 뒤로가기를 누르면 「저장하지 않고 닫을까요?」라고 물어봐요."},
+      {"d": "2026-10-03 10:50", "h": "카드 세부정보", "p": "펼친 카드의 세부정보 영역을 누르면 카드가 접혀요(제목 줄을 눌렀을 때와 같아요). 스크롤로 세부정보가 살짝 가려졌을 때 「펼치기」를 누르면 세부정보가 두 번 보이던 오류도 고쳤어요. 이제 세부정보가 위, 버튼 줄이 아래 순서로 한 번만 보여요."},
+      {"d": "2026-10-03 10:16", "h": "후기 바로 고치기", "p": "카드에 보이는 후기 글을 꾹 누르면 후기만 고치는 창이 바로 열려요. 「완료」를 누르면 바로 저장돼요."},
+      {"d": "2026-10-03 10:11", "h": "후기 바로 쓰기", "p": "후기를 안 쓴 기록 카드에서 「후기 없음」을 누르면 후기만 적는 창이 바로 열려요. 「완료」를 누르면 바로 저장되고, 아무것도 안 쓰고 닫으면 저장 없이 돌아와요."},
+      {"d": "2026-10-03 09:56", "h": "읽는 중·중단·완독 구분", "p": "책의 읽기 상태가 「읽는 중」 「중단」 「완독」 세 가지로 나뉘었어요. 날짜는 완독일만 입력하고, 읽는 중과 중단은 날짜 없이 바로 등록해요. 전체 탭에는 완독한 책만 보이고, 책 탭에서는 읽는 중(항상 펼침) · 중단(기본 접힘, 눌러서 펼침) · 완독(날짜별) 순으로 나뉘어 보여요. 카드 안의 버튼으로 완독 · 중단 · 다시 읽기도 바로 바꿀 수 있어요."},
+      {"d": "2026-10-03 09:56", "h": "독서 기록", "p": "읽는 중이거나 중단한 책 카드에서 「기록 남기기」를 누르면 읽다가 든 생각을 날짜별로 남길 수 있어요. 한 번에 끝나는 공연과 달리 여러 날에 걸쳐 읽는 책을 위한 기록이에요. 완독 뒤에 다시 든 생각을 남기는 「생각 덧붙이기」와는 따로 저장되고, 완독해도 독서 기록은 그대로 남아요. 닫힌 카드에는 마지막 기록이 한 줄로 보여요."},
+      {"d": "2026-10-03 09:56", "h": "독서 목표", "p": "독서 목표 바에서 지금 읽는 중인 책이 빗금으로 함께 보여요. 숫자와 퍼센트는 지금처럼 완독한 책 기준이고, 올해와 이번 달 목표에만 표시돼요."},
       {"d": "2026-10-02 22:23", "h": "되돌아보기", "p": "되돌아보기 카드의 「다른 기록」 옆에 「숨기기」 버튼이 생겼어요. 누르면 카드가 사라지고 작은 「되돌아보기 보기」 글자만 남아요. 이 글자를 누르면 다시 떠요."},
       {"d": "2026-10-02 22:06", "h": "PDF 저장", "p": "목록 화면 필터 줄 오른쪽(「생각 포함」 옆)에 「PDF 저장」 버튼이 생겼어요. 누르면 필터 줄의 버튼은 사라지고 선택 바가 나타나요. 원하는 후기를 골라 「PDF 만들기」를 누르면 PDF로 저장할 수 있고, 「취소」를 누르면 원래대로 돌아와요."},
       {"d": "2026-10-02 21:02", "h": "독서 목표", "p": "통계 「목표」 탭 올해 카드에 「목록·달력 고정」 버튼이 생겼어요. 켜면 목록과 달력 맨 위에 독서 목표 바가 보이고, 끄면 바도 「독서 목표 보기」 글자도 안 보여요. 고정 중에 바 안의 「숨기기」는 잠깐 숨기는 용도라서, 「독서 목표 보기」 글자를 누르면 다시 떠요. 목록·달력의 독서 목표 한 줄을 누르면 그 자리에서 카드로 펼쳐지고, 다시 누르면 접혀요. 버튼은 「수정」과 「숨기기」예요."}
     ] }
   ];
   var hTab = 0;
+  /* 새 업데이트 표시(N): 내가 마지막으로 접속한 시각 이후에 올라온 항목.
+     내역을 읽었는지와 상관없이 접속 기준이고, 이 기기의 저장 공간만 사용해요.
+     새로고침해도 N이 바로 사라지지 않게 이번 접속의 기준 시각은 탭에 기억해 둠 */
+  var LVKEY = "reviews-lastvisit-v1", SBKEY = "reviews-lastvisit-base-v1", logBase = 0;
+  (function () {
+    var now = Date.now(), prev = 0, sess = null;
+    try { sess = sessionStorage.getItem(SBKEY); } catch (e) {}
+    try { prev = +localStorage.getItem(LVKEY) || 0; } catch (e) {}
+    if (sess != null && sess !== "") logBase = +sess || 0;
+    else {
+      /* 첫 접속(기준 없음): 이미 쓰던 기록이 있으면 최근 48시간 것만, 완전 새 사용자면 표시 안 함 */
+      logBase = prev || (data.length ? now - 48 * 3600000 : now);
+      try { sessionStorage.setItem(SBKEY, String(logBase)); } catch (e) {}
+    }
+    try { localStorage.setItem(LVKEY, String(now)); } catch (e) {}
+  })();
+  function isRecentLog(d) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/.exec(String(d || ""));
+    if (!m) return false;
+    var e = new Date(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0)).getTime();
+    return e > logBase;
+  }
   function hRichText(node, txt) {
     /* **굵게** 표시만 지원 */
     String(txt).split("**").forEach(function (part, i) {
@@ -3306,6 +3488,7 @@
       var card = el("div", "gq hq" + (it.d ? " log" : "") + (it.warn ? " warn" : "") + (it.hl ? " hwpurple" : ""));
       var head = el("div", "gqh hh");
       if (it.warn) head.appendChild(el("span", "wbadge", "중요"));
+      if (it.d && isRecentLog(it.d)) { var nb = el("span", "newbadge", "N"); nb.setAttribute("aria-label", "새 업데이트"); head.appendChild(nb); }
       head.appendChild(el("span", "gqt", it.h));
       if (it.d) head.appendChild(el("span", "logdt", it.d));
       card.appendChild(head);
@@ -3559,7 +3742,7 @@
     updateDateBox();
   }
   function updateDateBox() {
-    $("dateBox").hidden = (form.type === "book" && form.status === "reading");
+    $("dateBox").hidden = (form.type === "book" && form.status !== "done");
   }
   function openForm(id) {
     if (miniState) {
@@ -3638,6 +3821,7 @@
   function openWriter() {
     var t = $("wtext");
     t.value = $("text").value;
+    writerInit = t.value;
     wReset();
     $("wtitle").textContent = $("title").value.trim() || "후기";
     $("wcnt").textContent = t.value.length + "자";
@@ -3652,6 +3836,41 @@
     $("text").blur();
   }
   function restoreExtra() { $("rateAnchor").before($("rateBox")); }
+  /* 카드의 「후기 없음」을 누르면 후기 입력창만 바로 열림(완료하면 바로 저장) */
+  var writerDirect = false, writerHad = false, writerInit = "";
+  /* 꾹 누르기(0.5초). 움직이면(스크롤) 취소. 끝나면 글자 선택이 따라 잡히지 않게 풀어줌 */
+  function attachLongPress(node, fn) {
+    var timer = 0, sx = 0, sy = 0;
+    function cancel() { clearTimeout(timer); timer = 0; }
+    node.classList.add("lp");
+    node.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      cancel(); sx = e.clientX; sy = e.clientY;
+      timer = setTimeout(function () {
+        timer = 0;
+        try { window.getSelection().removeAllRanges(); } catch (x) {}
+        if (navigator.vibrate) { try { navigator.vibrate(12); } catch (x) {} }
+        fn();
+      }, 500);
+    });
+    node.addEventListener("pointermove", function (e) { if (timer && (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10)) cancel(); });
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (ev) { node.addEventListener(ev, cancel); });
+    node.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+  }
+  function openReviewWriter(id) {
+    var rv = data.filter(function (x) { return x.id === id; })[0];
+    openForm(id);
+    if (layers.indexOf("form") < 0 || layers.indexOf("writer") > -1) return;
+    writerDirect = true; writerHad = !!(rv && rv.text && rv.text.trim());
+    openWriter();
+  }
+  function finishDirectWriter() {
+    var v = $("wtext").value.trim();
+    writerDirect = false;
+    if (!v && !writerHad) { closeAllLayers(); return; }   /* 원래 후기가 없고 아무것도 안 썼으면 저장 없이 닫음(원래 있던 후기를 지운 경우는 저장) */
+    $("text").value = $("wtext").value;
+    save();
+  }
   function hideWriter() {
     restoreExtra();
     $("text").value = $("wtext").value;
@@ -3679,14 +3898,22 @@
   function pushLayer(name) { armGuard(); layers.push(name); history.pushState({ g: 1 + layers.length }, ""); }
   function hideLayer(name) {
     if (name === "clock") hideClock();
-    else if (name === "writer") hideWriter();
+    else if (name === "writer") {
+      hideWriter();
+      if (writerDirect) {   /* 후기 창만 열었다가 뒤로가기로 닫으면 뒤의 기록 창도 같이 닫음 */
+        writerDirect = false;
+        setTimeout(function () {
+          if (layers.indexOf("form") > -1 && layers.indexOf("writer") < 0) { skipConfirm = true; popLayer("form"); }
+        }, 0);
+      }
+    }
     else if (name === "guide") hideGuide();
     else if (name === "howto") hideHowto();
     else if (name === "form") { hideForm(); formSnap = ""; clearDraft(); }
   }
   /* 닫기/취소 버튼: 기록(history)도 한 칸 되돌려서 뒤로가기와 똑같이 동작 */
   function popLayer(name) {
-    if (layers[layers.length - 1] === name) history.back();
+    if (layers[layers.length - 1] === name) { progBack = true; history.back(); }
     else if (layers.indexOf(name) > -1) { layers.splice(layers.indexOf(name), 1); hideLayer(name); }
   }
   function closeClock() { popLayer("clock"); }
@@ -3782,14 +4009,49 @@
     clearTimeout(showToast.h);
     showToast.h = setTimeout(function () { t.classList.remove("show", "act"); }, 6000);
   }
+  /* 모바일 자판이 올라와 있는지: 입력칸에 커서가 있고 화면(visualViewport)이 눈에 띄게 줄어든 상태 */
+  var progBack = false, vvBase = window.visualViewport ? window.visualViewport.height : 0;
+  function editableFocused() {
+    var a = document.activeElement;
+    if (!a) return false;
+    if (a.tagName === "TEXTAREA" || a.isContentEditable) return true;
+    if (a.tagName === "INPUT") return !/^(checkbox|radio|button|submit|reset|range|color|file|image)$/i.test(a.type);
+    return false;
+  }
+  function kbOpen() {
+    var vv = window.visualViewport;
+    if (!vv || !editableFocused()) return false;
+    return Math.max(window.innerHeight, vvBase) - vv.height > 120;
+  }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", function () { if (!editableFocused()) vvBase = window.visualViewport.height; });
+    window.addEventListener("focusout", function () { setTimeout(function () { if (!editableFocused() && window.visualViewport) vvBase = window.visualViewport.height; }, 400); });
+  }
   window.addEventListener("popstate", function (e) {
     if (skipPop > 0) { skipPop--; return; }
+    /* 자판이 올라와 있을 때 폰 뒤로가기: 자판만 내리고 창은 그대로 (닫기 버튼으로 닫는 경우는 제외) */
+    if (progBack) progBack = false;
+    else if (kbOpen()) {
+      try { document.activeElement.blur(); } catch (x) {}
+      history.pushState({ g: 1 + layers.length }, "");
+      return;
+    }
     var g = (e.state && e.state.g != null) ? e.state.g : 0;
     /* 열려 있는 창이 있으면 맨 위 창부터 닫기 */
     if (layers.length && g < 1 + layers.length) {
       var top = layers[layers.length - 1];
       if (top === "form" && !skipConfirm && formDirty()) {
         if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) { history.pushState({ g: 1 + layers.length }, ""); return; }
+      }
+      /* 카드에서 후기 창만 열었을 때(꾹 누르기·「후기 없음」)도 내용을 고쳤다면 같은 확인을 띄움 */
+      if (top === "writer" && !skipConfirm) {
+        var wDirty;
+        if (writerDirect) { $("text").value = $("wtext").value; wDirty = formDirty(); }
+        else wDirty = $("wtext").value !== writerInit;
+        if (wDirty) {
+          if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) { history.pushState({ g: 1 + layers.length }, ""); return; }
+          if (!writerDirect) { $("wtext").value = writerInit; $("wcnt").textContent = writerInit.length + "자"; }   /* 기록 창에서 연 경우: 고친 내용은 버리고 원래대로 */
+        }
       }
       skipConfirm = false;
       layers.pop(); hideLayer(top);
@@ -3839,8 +4101,8 @@
       seat: KIND[form.type].cast ? $("seat").value.trim() : "",
       note: $("note").value.trim(),
       time: KIND[form.type].cast ? form.time : "",
-      status: (form.type === "book" && form.status === "reading") ? "reading" : "done",
-      date: (form.type === "book" && form.status === "reading") ? "" : $("date").value,
+      status: form.type === "book" ? form.status : "done",
+      date: (form.type === "book" && form.status !== "done") ? "" : $("date").value,
       rating: form.rating,
       text: $("text").value.trim(),
       take: $("take").value.trim()
@@ -3848,11 +4110,12 @@
     var prev = editingId ? data.filter(function (x) { return x.id === editingId; })[0] : null;
     rec.quote = prev ? (prev.quote || "") : "";
     rec.later = prev ? (prev.later || []) : [];
+    rec.rlog = prev ? (prev.rlog || []) : [];
     rec.tags = parseTags($("tags").value);
     var evs = [];
     if (editingId) {
       rec.id = editingId;
-      if (prev && prev.status === "reading" && rec.status !== "reading") evs.push({ v: actVerb(rec), w: false });
+      if (prev && stOf(prev) !== rec.status) evs.push({ v: rec.status === "done" ? "완독" : rec.status === "paused" ? "독서 중단" : "다시 읽기", w: false });
       if (prev && !hasReview(prev) && hasReview(rec)) evs.push({ v: "후기 작성", w: false });
       data = data.map(function (x) { return x.id === editingId ? Object.assign({ id: x.id }, rec) : x; });
       openIds[editingId] = true; if (infoOpen[editingId] == null) infoOpen[editingId] = true;
@@ -4007,22 +4270,53 @@
       seat: $("seat").value, cast: $("cast").value, note: $("note").value, tags: $("tags").value,
       take: $("take").value, text: $("text").value } };
   }
-  function clearDraft() { clearTimeout(draftTimer); try { localStorage.removeItem(DKEY); } catch (e) {} }
+  /* 임시저장은 기록별로 따로 보관: 새 기록 1개("new") + 수정 중이던 기록마다 1개.
+     최근 5개까지만, 10일 지난 건 자동 삭제 → 다른 기록을 열어도 서로 덮어쓰지 않음 */
+  var DRAFT_MAX = 5, DRAFT_DAYS = 10;
+  function dkey(id) { return id ? String(id) : "new"; }
+  function loadDrafts() {
+    var m = null, out = {};
+    try { m = JSON.parse(localStorage.getItem(DKEY)); } catch (e) {}
+    if (!m || typeof m !== "object" || Array.isArray(m)) return out;
+    if (m.f) { var one = {}; one[dkey(m.editingId)] = m; m = one; }   /* 예전 형식(하나뿐) → 변환 */
+    return pruneDrafts(m);
+  }
+  function pruneDrafts(m) {   /* 10일 지난 것 삭제 + 최근 5개만 유지 */
+    var now = Date.now(), lim = DRAFT_DAYS * 86400000, out = {};
+    Object.keys(m).filter(function (k) { return m[k] && m[k].f && now - (m[k].at || 0) < lim; })
+      .sort(function (a, b) { return (m[b].at || 0) - (m[a].at || 0); })
+      .slice(0, DRAFT_MAX).forEach(function (k) { out[k] = m[k]; });
+    return out;
+  }
+  function storeDrafts(m) {
+    try {
+      if (Object.keys(m).length) localStorage.setItem(DKEY, JSON.stringify(m));
+      else localStorage.removeItem(DKEY);
+    } catch (e) {}
+  }
+  /* key를 안 주면 지금 열려 있는 기록의 임시저장을 지움 */
+  function clearDraft(key) {
+    clearTimeout(draftTimer);
+    var m = loadDrafts(), k = key || dkey(editingId);
+    if (m[k]) { delete m[k]; }
+    storeDrafts(m);
+  }
   function saveDraft() {
     if (!$("sheet").classList.contains("show")) return;
-    if (!formDirty()) { try { localStorage.removeItem(DKEY); } catch (e) {} return; }
-    try { localStorage.setItem(DKEY, JSON.stringify(draftObj())); } catch (e) {}
+    var m = loadDrafts(), k = dkey(editingId);
+    if (!formDirty()) delete m[k];
+    else m[k] = draftObj();
+    storeDrafts(pruneDrafts(m));
   }
   function scheduleDraft() { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 1200); }
   function restoreDraft(id) {
-    var d = null;
-    try { d = JSON.parse(localStorage.getItem(DKEY)); } catch (e) {}
-    if (!d || !d.f || (d.editingId || null) !== (id || null)) return;
-    if (id && !data.some(function (x) { return x.id === id; })) { clearDraft(); return; }
-    if (!confirm("저장하지 않고 닫힌 작성 내용이 있어요. 이어서 쓸까요?\n(취소하면 지워져요)")) { clearDraft(); return; }
+    var k = dkey(id), d = loadDrafts()[k];
+    if (!d || !d.f) return;
+    if (id && !data.some(function (x) { return x.id === id; })) { clearDraft(k); return; }
+    if (!confirm("저장하지 않고 닫힌 작성 내용이 있어요. 이어서 쓸까요?\n(취소하면 지워져요)")) { clearDraft(k); return; }
     var f = d.f;
     setKind(KIND[f.type] ? f.type : form.type);
-    setStatus(f.status === "reading" ? "reading" : "done");
+    setStatus(f.status === "reading" || f.status === "paused" ? f.status : "done");
     $("title").value = f.title || ""; $("creator").value = f.creator || ""; $("genre").value = f.genre || "";
     $("seat").value = f.seat || ""; $("cast").value = f.cast || ""; $("note").value = f.note || "";
     $("tags").value = f.tags || ""; $("take").value = f.take || ""; $("text").value = f.text || "";
@@ -4047,6 +4341,17 @@
   /* 완독한 책만 센다: 읽는 중인 책은 제외, 완독한 날짜 기준. y는 "2026"(연도) 또는 "2026-01"(월) */
   function readCount(y) {
     return data.filter(function (r) { return r.type === "book" && r.status !== "reading" && r.date && r.date.slice(0, String(y).length) === String(y); }).length;
+  }
+  /* 읽는 중인 책은 완독 바 뒤에 빗금으로 이어 붙여 보여줌(숫자·퍼센트는 완독 기준 그대로) */
+  function readingNow() { return data.filter(function (r) { return r.type === "book" && r.status === "reading"; }).length; }
+  function isCurKey(key) { var nd = new Date(); return String(key) === String(nd.getFullYear()) || String(key) === nd.getFullYear() + "-" + pad(nd.getMonth() + 1); }
+  function addHatch(tr, fi, done, goal, reading) {
+    if (!goal || !reading || done >= goal) return;
+    var rd = Math.min(reading, goal - done);
+    var h = el("s");
+    h.style.width = ((done + rd) * 100 / goal) + "%";
+    h.setAttribute("title", "완독 " + done + "권 + 읽는 중 " + rd + "권");
+    tr.insertBefore(h, fi);
   }
   function goalPane(y) {
     var goals = getGoals(), goal = +goals[y] || 0, done = readCount(y), nowY = new Date().getFullYear();
@@ -4110,14 +4415,19 @@
 
     if (!goal) {
       if (!goalEdit) pane.appendChild(el("div", "gnote", y >= nowY ? "올해 읽을 책 권수를 정해보세요." : y + "년에는 목표를 정하지 않았어요."));
-      if (y === nowY && reading) pane.appendChild(el("div", "gnote", "읽는 중 " + reading + "권"));
-      if (y === nowY) pane.appendChild(pinRow());
+      if (y === nowY && reading) {
+        var rl0 = el("div", "gline");
+        rl0.appendChild(el("div", "gnote", "읽는 중 " + reading + "권"));
+        rl0.appendChild(pinChips());
+        pane.appendChild(rl0);
+      } else if (y === nowY) pane.appendChild(pinRow());
       return pane;
     }
 
     var tr = el("span", "gtrack"), fi = el("i");
     fi.style.width = Math.min(100, done * 100 / goal) + "%";
     tr.appendChild(fi);
+    if (y === nowY) addHatch(tr, fi, done, goal, reading);
     var expected = 0, elapsed = 0, total = 0;
     if (y === nowY) {
       var t0 = new Date(y, 0, 1), t1 = new Date(y + 1, 0, 1);
@@ -4139,14 +4449,19 @@
       var daysLeft = total - elapsed;
       var gl = el("div", "gline");
       gl.appendChild(el("div", "gnote", "남은 " + left + "권" + (daysLeft > 0 ? " · 약 " + Math.max(1, Math.round(daysLeft / left)) + "일에 1권씩" : "")));
-      gl.appendChild(pinChips());
+      if (!reading) gl.appendChild(pinChips());   /* 읽는 중이 있으면 고정 버튼은 「읽는 중」 줄로 */
       pane.appendChild(gl);
     } else if (y < nowY) {
       pane.appendChild(el("div", "gnote", left + "권 부족했어요"));
     } else {
       pane.appendChild(el("div", "gnote", "남은 " + left + "권"));
     }
-    if (y === nowY && reading) pane.appendChild(el("div", "gnote", "읽는 중 " + reading + "권"));
+    if (y === nowY && reading) {
+      var rl = el("div", "gline");
+      rl.appendChild(el("div", "gnote", "읽는 중 " + reading + "권 (빗금)"));
+      if (!pinDone) rl.appendChild(pinChips());
+      pane.appendChild(rl);
+    }
     if (y === nowY && !pinDone) pane.appendChild(pinRow());
     return pane;
   }
@@ -4166,7 +4481,9 @@
       row.appendChild(el("span", "ml", m + "월"));
       var tr = el("span", "gtrack"), fi = el("i");
       fi.style.width = goal ? Math.min(100, done * 100 / goal) + "%" : "0%";
-      tr.appendChild(fi); row.appendChild(tr);
+      tr.appendChild(fi);
+      if (y === nowY && m === nowM) addHatch(tr, fi, done, goal, readingNow());
+      row.appendChild(tr);
       var txt = goal ? (done >= goal ? "\u2713 " : "") + done + " / " + goal + "권" : (done ? done + "권" : "-");
       row.appendChild(el("b", goal ? (done >= goal ? "ok" : "") : "none", txt));
       var btn = el("button", "", mEdit === key ? "닫기" : (goal ? "수정" : "설정")); btn.type = "button";
@@ -4334,6 +4651,7 @@
     var tr = el("span", "gtrack"), fi = el("i");
     fi.style.width = Math.min(100, done * 100 / goal) + "%";
     tr.appendChild(fi);
+    if (P.cur) addHatch(tr, fi, done, goal, readingNow());
     var expected = 0, elapsed = 0, total = Math.round((P.e - P.s) / DAY);
     if (P.cur) {
       elapsed = Math.min(total, Math.floor((P.now - P.s) / DAY) + 1);
@@ -4357,7 +4675,7 @@
     }
     if (P.cur) {
       var reading = data.filter(function (r) { return r.type === "book" && r.status === "reading"; }).length;
-      if (reading) pane.appendChild(el("div", "gnote", "읽는 중 " + reading + "권"));
+      if (reading) pane.appendChild(el("div", "gnote", "읽는 중 " + reading + "권 (빗금)"));
     }
     pane.appendChild(bt);
     return pane;
@@ -4386,7 +4704,9 @@
     box.appendChild(el("span", "", label));
     var tr = el("span", "gtrack"), fi = el("i");
     fi.style.width = goal ? Math.min(100, done * 100 / goal) + "%" : "0%";
-    tr.appendChild(fi); box.appendChild(tr);
+    tr.appendChild(fi);
+    if (isCurKey(key)) addHatch(tr, fi, done, goal, readingNow());
+    box.appendChild(tr);
     box.appendChild(el("b", "", goal ? done + "/" + goal + "권" : "목표 없음"));
     box.onclick = function () { gxOpen[where] = true; gxEdit = false; render(); };
     wrap.appendChild(box);
@@ -4547,7 +4867,7 @@
             creator: type === "movie" || type === "book" ? "" : place,
             genre: "", cast: type === "movie" ? "" : csvCast(get(iA)), seat: get(iS), note: note.slice(0, 100),
             time: type === "movie" ? "" : time, status: "done", date: date, rating: 0,
-            text: text, take: "", quote: "", tags: [], later: []
+            text: text, take: "", quote: "", tags: [], later: [], rlog: []
           });
           n[type]++; added++;
         });
@@ -4611,6 +4931,7 @@
             if (!String(fx.text || "").trim() && String(x.text || "").trim()) { fx.text = String(x.text); fc = true; }
             else if (x.oldText != null && fx.text === String(x.oldText) && String(x.text || "") !== fx.text) { fx.text = String(x.text || ""); fc = true; }
             if (!(fx.later && fx.later.length) && cleanLater(x.later).length) { fx.later = cleanLater(x.later); fc = true; }
+            if (!(fx.rlog && fx.rlog.length) && cleanLater(x.rlog).length) { fx.rlog = cleanLater(x.rlog); fc = true; }
             if (fc) filled++;
           }
           if (x && have[x.id] && x.oldNote != null) {
@@ -4627,11 +4948,11 @@
               id: newId, type: x.type, title: String(x.title),
               creator: String(x.creator || ""), genre: x.type === "book" ? String(x.genre || "").slice(0, 30) : "", cast: String(x.cast || ""), seat: String(x.seat || ""), note: String(x.note || ""),
               time: /^\d{2}:\d{2}$/.test(x.time) ? x.time : "",
-              status: (x.type === "book" && x.status === "reading") ? "reading" : "done",
-              date: (x.type === "book" && x.status === "reading") ? "" : normDate(x.date),
+              status: (x.type === "book" && (x.status === "reading" || x.status === "paused")) ? x.status : "done",
+              date: (x.type === "book" && (x.status === "reading" || x.status === "paused")) ? "" : normDate(x.date),
               rating: Math.max(0, Math.min(5, Math.round((+x.rating || 0) * 2) / 2)),
               text: (String(x.quote || "").trim() ? String(x.quote).trim() + (String(x.text || "").trim() ? "\n\n" : "") : "") + String(x.text || ""),
-              take: String(x.take || ""), quote: "", tags: cleanTags(x.tags), later: cleanLater(x.later)
+              take: String(x.take || ""), quote: "", tags: cleanTags(x.tags), later: cleanLater(x.later), rlog: cleanLater(x.rlog)
             };
             data.push(rec); have[newId] = rec;
             added++;
@@ -4721,13 +5042,22 @@
     if (k === "z") { e.preventDefault(); wGo(e.shiftKey ? 1 : -1); }
     else if (k === "y") { e.preventDefault(); wGo(1); }
   });
-  $("wdone").onclick = closeWriter;
+  $("wdone").onclick = function () {
+    if (writerDirect) finishDirectWriter();
+    else { writerInit = $("wtext").value; closeWriter(); }   /* 완료: 고친 내용을 기록 창에 넘기고 닫음(확인창 없음) */
+  };
+  $("wClose").onclick = closeWriter;                          /* 닫기: 고친 내용이 있으면 확인 후 닫음 */
   if (window.visualViewport) {
     window.visualViewport.addEventListener("resize", fitWriter);
     window.visualViewport.addEventListener("scroll", fitWriter);
   }
   $("views").onclick = function (e) { if (e.target.dataset.v) { retTo = null; view = e.target.dataset.v; render(); } };
-  $("stKinds").onclick = function (e) { if (e.target.dataset.s) setStatus(e.target.dataset.s); };
+  $("stKinds").onclick = function (e) {
+    var st = e.target.dataset.s;
+    if (!st) return;
+    setStatus(st);
+    if (st === "done" && !$("date").value) $("date").value = today();   /* 완독으로 바꾸면 오늘 날짜가 기본 */
+  };
   $("prevM").onclick = function () { moveMonth(-1); };
   $("nextM").onclick = function () { moveMonth(1); };
   $("todayBtn").onclick = function () {
