@@ -296,14 +296,23 @@
   .crow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
   .crow .num { color: var(--sub); }
   .crow .pct { text-align: right; font-weight: 700; }
-  .grow { padding: 9px 0; font-size: 14px; }
-  .grow + .grow { border-top: 1px solid var(--line); }
-  .grow .gl1 { display: flex; align-items: baseline; gap: 10px; }
-  .grow .gl1 b { flex: 1; min-width: 0; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .grow .gl1 .num { color: var(--sub); }
-  .grow .gl1 .pct { min-width: 40px; text-align: right; font-weight: 700; }
-  .grow .gbar { margin-top: 6px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
-  .grow .gbar i { display: block; height: 100%; border-radius: 3px; background: var(--c); }
+  .gdonut { display: block; width: 100%; max-width: 340px; height: auto; margin: 4px auto 8px; }
+  .gdonut .gtrack { fill: none; stroke: var(--line); }
+  .gdonut .gin { fill: #fff; font-size: 9px; text-anchor: middle; pointer-events: none; }
+  .gdonut .gin.dk { fill: #3a3000; }
+  .gdonut .gin.b { font-weight: 700; }
+  .gdonut .gline { fill: none; stroke-width: 1; opacity: .8; }
+  .gdonut .gout { fill: var(--ink); font-size: 9px; }
+  .gdonut .gout.b { font-weight: 700; fill: var(--sub); }
+  .gdonut .gnum { fill: var(--ink); font-size: 24px; font-weight: 700; text-anchor: middle; }
+  .gdonut .gunit { fill: var(--sub); font-size: 11px; text-anchor: middle; }
+  .gwrap { display: grid; grid-template-columns: 10px 1fr max-content max-content; column-gap: 10px; align-items: center; font-size: 14px; }
+  .grow { display: contents; }
+  .grow > * { padding: 7px 0; }
+  .grow .gdot { width: 10px; height: 10px; padding: 0; border-radius: 50%; background: var(--gc); }
+  .grow b { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .grow .num { color: var(--sub); text-align: right; white-space: nowrap; }
+  .grow .pct { min-width: 40px; text-align: right; font-weight: 700; white-space: nowrap; }
   .prow { padding: 11px 16px; }
   .prow + .prow { border-top: 1px solid var(--line); }
   .pl1 { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; }
@@ -3374,18 +3383,82 @@
     h.appendChild(el("b", "", "책 장르"));
     h.appendChild(el("span", "tot", "총 " + books.length + "권"));
     pane.appendChild(h);
-    keys.forEach(function (g) {
-      var row = el("div", "grow");
-      var l1 = el("div", "gl1");
-      l1.appendChild(el("b", "", g));
-      l1.appendChild(el("span", "num", cnt[g] + "권"));
-      l1.appendChild(el("span", "pct", pct(cnt[g], books.length)));
-      row.appendChild(l1);
-      var bar = el("div", "gbar"), fill = el("i");
-      fill.style.width = Math.round(cnt[g] / books.length * 100) + "%";
-      bar.appendChild(fill); row.appendChild(bar);
-      pane.appendChild(row);
+    /* 장르별 색 (「기타」는 회색) */
+    var GPAL = ["#e8b400", "#d9822b", "#c4553a", "#9b4f96", "#5b6fc4", "#3a8fb7", "#4aa28a", "#8aa64b"], GGRAY = "#9aa0b0";
+    function gcol(g, i) { return g === "기타" ? GGRAY : GPAL[i % GPAL.length]; }
+    var NS = "http://www.w3.org/2000/svg";
+    function sv(tag, at, txt) {
+      var n = document.createElementNS(NS, tag);
+      for (var k in at) n.setAttribute(k, at[k]);
+      if (txt != null) n.textContent = txt;
+      return n;
+    }
+    var W = 340, H = 240, CX = 170, CY = 120, R = 56, TH = 26, RO = R + TH / 2, CIR = 2 * Math.PI * R;
+    var svg = sv("svg", { viewBox: "0 0 " + W + " " + H, "class": "gdonut", role: "img", "aria-label": "책 장르 비율" });
+    svg.appendChild(sv("circle", { cx: CX, cy: CY, r: R, "class": "gtrack", "stroke-width": TH }));
+    var RI = R - TH / 2, TOL = 3;
+    /* 이름·비율 두 줄의 네 모서리가 조각(고리 안쪽·바깥쪽 반지름, 시작·끝 각도) 안에 모두 들어가는지 확인 */
+    function fitsInside(it) {
+      var px = CX + R * Math.cos(it.ang), py = CY + R * Math.sin(it.ang), span = it.a1 - it.a0, TWO = 2 * Math.PI;
+      var lines = [[it.g.length * 9, py - 9, py + 1], [it.t.length * 6, py + 1, py + 12]];
+      for (var li = 0; li < lines.length; li++) {
+        var hw = lines[li][0] / 2;
+        for (var cx = -1; cx <= 1; cx += 2) for (var cy = 1; cy <= 2; cy++) {
+          var x = px + cx * hw, y = lines[li][cy], d = Math.sqrt((x - CX) * (x - CX) + (y - CY) * (y - CY));
+          if (d < RI - TOL || d > RO + TOL) return false;
+          var rel = (Math.atan2(y - CY, x - CX) - it.a0) % TWO; if (rel < 0) rel += TWO;
+          if (span < TWO - 0.001 && rel > span + 0.01 && rel < TWO - 0.01) return false;
+        }
+      }
+      return true;
+    }
+    var acc = 0, ins = [], outs = [];
+    keys.forEach(function (g, i) {
+      var len = cnt[g] / books.length * CIR, gap = keys.length > 1 ? 1.6 : 0, vis = Math.max(0.1, len - gap), col = gcol(g, i);
+      svg.appendChild(sv("circle", { cx: CX, cy: CY, r: R, fill: "none", stroke: col, "stroke-width": TH,
+        "stroke-dasharray": vis + " " + (CIR - vis), "stroke-dashoffset": -acc, transform: "rotate(-90 " + CX + " " + CY + ")" }));
+      var a0 = acc / CIR * 2 * Math.PI - Math.PI / 2, a1 = (acc + len) / CIR * 2 * Math.PI - Math.PI / 2;
+      var it = { g: g, col: col, a0: a0, a1: a1, ang: (a0 + a1) / 2, t: pct(cnt[g], books.length) };
+      (fitsInside(it) ? ins : outs).push(it);   /* 글자가 조각 안에 들어가면 안에, 안 들어가면 지시선으로 밖에 */
+      acc += len;
     });
+    ins.forEach(function (it) {
+      var rr = parseInt(it.col.slice(1, 3), 16), gg = parseInt(it.col.slice(3, 5), 16), bb = parseInt(it.col.slice(5, 7), 16);
+      var cls = "gin" + ((rr * 299 + gg * 587 + bb * 114) / 1000 > 150 ? " dk" : "");
+      var px = CX + R * Math.cos(it.ang), py = CY + R * Math.sin(it.ang);
+      svg.appendChild(sv("text", { x: px.toFixed(1), y: (py - 1).toFixed(1), "class": cls }, it.g));
+      svg.appendChild(sv("text", { x: px.toFixed(1), y: (py + 10).toFixed(1), "class": cls + " b" }, it.t));
+    });
+    /* 지시선: 오른쪽·왼쪽으로 나눠 위에서 아래로 놓고, 글자끼리 겹치면 아래로 밀어 간격을 맞춤 */
+    [1, -1].forEach(function (side) {
+      var grp = outs.filter(function (it) { return (Math.cos(it.ang) >= 0 ? 1 : -1) === side; })
+        .sort(function (a, b) { return Math.sin(a.ang) - Math.sin(b.ang); });
+      var GAPY = 25, ys = grp.map(function (it) { return Math.max(14, CY + (RO + 4) * Math.sin(it.ang)); });
+      for (var k = 1; k < ys.length; k++) ys[k] = Math.max(ys[k], ys[k - 1] + GAPY);
+      for (var k2 = ys.length - 2; k2 >= 0; k2--) if (ys[k2 + 1] > H - 14) ys[k2] = Math.min(ys[k2], ys[k2 + 1] - GAPY);
+      grp.forEach(function (it, k3) {
+        var y = Math.min(ys[k3], H - 14), x0 = CX + (RO + 1) * Math.cos(it.ang), y0 = CY + (RO + 1) * Math.sin(it.ang);
+        var xm = CX + side * (RO + 12), xe = xm + side * 8;
+        svg.appendChild(sv("polyline", { points: x0.toFixed(1) + "," + y0.toFixed(1) + " " + xm.toFixed(1) + "," + y.toFixed(1) + " " + xe.toFixed(1) + "," + y.toFixed(1), "class": "gline", stroke: it.col }));
+        var anc = side > 0 ? "start" : "end";
+        svg.appendChild(sv("text", { x: (xe + side * 4).toFixed(1), y: (y - 1).toFixed(1), "class": "gout", "text-anchor": anc }, it.g));
+        svg.appendChild(sv("text", { x: (xe + side * 4).toFixed(1), y: (y + 10).toFixed(1), "class": "gout b", "text-anchor": anc }, it.t));
+      });
+    });
+    svg.appendChild(sv("text", { x: CX, y: CY + 2, "class": "gnum" }, String(books.length)));
+    svg.appendChild(sv("text", { x: CX, y: CY + 18, "class": "gunit" }, "권"));
+    pane.appendChild(svg);
+    var wrap = el("div", "gwrap");
+    keys.forEach(function (g, i) {
+      var row = el("div", "grow");
+      var dot = el("i", "gdot"); dot.style.setProperty("--gc", gcol(g, i));
+      row.appendChild(dot);
+      row.appendChild(el("b", "", g));
+      row.appendChild(el("span", "num", cnt[g] + "권"));
+      row.appendChild(el("span", "pct", pct(cnt[g], books.length)));
+      wrap.appendChild(row);
+    });
+    pane.appendChild(wrap);
     return pane;
   }
   function periodRow(label, items) {
@@ -3656,6 +3729,7 @@
     ] },
     /* 업데이트 내역: 코드를 수정할 때마다 맨 위(최신순)에 한 줄씩 추가 */
     { t: "업데이트 내역", log: true, items: [
+      {"d": "2026-10-03 21:10", "h": "통계 책 장르 그래프", "p": "통계의 책 장르 비율이 원형(도넛) 그래프로 바뀌었어요. 조각에 장르 이름과 비율이 보이고, 글자가 조각 안에 안 들어갈 만큼 작은 조각은 지시선으로 바깥에 표시돼요. 가운데에는 읽은 책 권수가, 아래에는 장르별 색, 이름, 권수, 비율이 한 줄씩 나와요."},
       {"d": "2026-10-03 19:02", "h": "후기 있음·없음 표시", "p": "목록 카드의 제목 줄 오른쪽에 말풍선 아이콘이 생겼어요. 후기를 쓴 기록은 카테고리 색으로 꽉 찬 말풍선, 아직 안 쓴 기록은 흐린 빈 말풍선이에요. 빈 말풍선을 누르면 후기만 적는 창이 바로 열리고, 후기를 쓰면 꽉 찬 말풍선으로 바뀌어요. 읽는 중·중단 책에는 나오지 않아요."},
       {"d": "2026-10-03 16:52", "h": "읽는 중 감상(독서 기록) 정리", "p": "읽는 중·중단 책에도 완독한 책처럼 후기 칸이 생겨서, 후기가 없으면 「후기 쓰기」로 바로 적을 수 있어요. 예전 「독서 기록」은 카드에서 「읽는 중 감상」이라는 이름으로 메인 후기 위에 보이고, 「읽는 중 감상 쓰기」 버튼으로 남겨요. 읽는 중 감상은 제목 줄을 눌러 접고 펼 수 있고(다시 열면 펼쳐져요), 입력한 시각이 날짜 옆에 보여요. 이제 고칠 수도 있어요. 고치면 날짜 뒤에 (수정됨)이 붙고, 누르면 최종 수정 시각으로 바뀌어요. 달력에서는 「그날의 생각」에서 빠지는 대신, 감상을 쓴 날에 「독서함」 카드와 노란 빈 동그라미가 보여요(완독한 날은 「완독」 카드, 달력에서만 보이고 목록에는 안 나와요). 후기·별점 필터에는 완독한 책만 보이고, 책의 완독일은 오늘 이후로 정할 수 없어요."},
       {"d": "2026-10-03 10:50", "h": "임시저장 개선", "p": "작성 중 임시저장이 기록별로 따로 보관돼요. 후기를 쓰다 꺼져도, 다른 기록을 열었다 닫아도 먼저 쓰던 내용이 지워지거나 덮어써지지 않아요. 해당 기록의 후기·수정 창을 다시 열면 「이어서 쓸까요?」라고 물어봐요. 최근 5개까지만 남기고, 10일이 지난 임시저장은 자동으로 지워져요."},
