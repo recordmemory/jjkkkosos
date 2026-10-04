@@ -117,6 +117,7 @@
   }
   .card:active { background: #f7f8fb; }
   .card .bar { position: absolute; left: 9px; top: 11px; bottom: 11px; width: 3px; border-radius: 2px; background: var(--c); z-index: 3; }   /* 층 순서(아래→위): 버튼 줄 1 < 제목 줄 2 < 색 띠 3 < PDF 선택 바 4 < 상단 도구 5 */
+  .card .bar.soft { opacity: .35; }
   .l1 { display: flex; align-items: baseline; gap: 8px; }
   .card h2 {
     flex: 1; min-width: 0; margin: 0; font-family: var(--serif); font-size: 15.5px; font-weight: 600;
@@ -685,6 +686,29 @@
   .gmini.none b { color: var(--mute); font-weight: 400; }
   .gx .gxbox { margin: 0 0 8px; }
   #list > .gx:first-child { margin-top: 10px; }   /* 달력(#calWrap 위 여백 12px)과 맞춤 */
+  .gx .gxbox .phead { align-items: center; min-height: 30px; }   /* 버튼을 줄여도 제목 줄 높이는 그대로 */
+  /* 알약 54×24. 동그라미(24×18)와 글자 칸 두 개가 "같은 상자"(24×18)라서 글자가 동그라미 정중앙에 올 수밖에 없는 구조.
+     바깥 여백은 위·아래·좌·우 모두 3px. 버튼 안을 grid/flex로 짜면 기기에 따라 틀어져서 좌표로 직접 배치 */
+  .gmode { position: relative; flex: none; display: block; box-sizing: border-box; width: 54px; height: 24px; padding: 0; border: 0; border-radius: 999px; background: var(--paper); box-shadow: 0 0 0 1px var(--line); font: inherit; font-size: 12px; line-height: 1; letter-spacing: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .gmode .gthumb { position: absolute; top: 3px; left: 3px; width: 24px; height: 18px; border-radius: 999px; background: var(--ink); transition: left .18s ease; }
+  .gmode.m .gthumb { left: 27px; }
+  .gmode span { position: absolute; top: 3px; z-index: 1; width: 24px; height: 18px; display: flex; align-items: center; justify-content: center; line-height: 1; white-space: nowrap; color: var(--sub); transition: color .18s; }
+  .gmode span:nth-of-type(1) { left: 3px; }
+  .gmode span:nth-of-type(2) { left: 27px; }
+  .gmode span.on { color: #fff; font-weight: 700; }
+  .rlist .phead { align-items: center; }
+  .rlg { display: inline-flex; gap: 8px; font-size: 11.5px; color: var(--sub); }
+  .rlg span { display: inline-flex; align-items: center; gap: 3px; }
+  .rlg i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
+  .rrow { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+  .rrow b { font-weight: 700; }
+  .rrow span { text-align: right; color: var(--sub); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  .rrow .stack { height: 8px; }
+  .rrow.zero b, .rrow.zero span { color: var(--mute); font-weight: 400; }
+  #statWrap .rows { margin-bottom: 12px; }
+  .gprows .prow { padding-left: 0; padding-right: 0; }
+  .gprows .phead + .prow { padding-top: 0; }
+  .gprows .prow:last-child { padding-bottom: 0; }   /* 아래도 카드 안쪽 여백(14px)만 남김 */   /* 제목 아래 간격은 .phead의 10px만 (다른 카드와 동일) */   /* 통계 카드 사이 간격을 .pane과 같게 */
   .gxhid { text-align: right; margin: 0 0 6px; }
   .gxhid button { border: 0; background: none; color: var(--mute); font: inherit; font-size: 12px; padding: 2px 4px; cursor: pointer; text-decoration: underline; }
   .gbtns, .recall .actions { display: flex; gap: 6px; }
@@ -2471,7 +2495,7 @@
     var card = el("div", "card" + (isOpen ? " open" : ""));
     card.dataset.type = r.type;
     card.dataset.id = r.id;
-    card.appendChild(el("i", "bar"));
+    card.appendChild(el("i", "bar" + (isUpcoming(r) ? " soft" : "")));   /* 아직 안 본(미래) 기록은 띠를 연하게 */
 
     if (!isOpen) {
       var l1 = el("div", "l1");
@@ -3493,7 +3517,9 @@
     $("calTitle").textContent = calY + "년 " + (calM + 1) + "월";
     var tcnt = 0;
     Object.keys(tdBy).forEach(function (k) { if (k.indexOf(prefix) === 0) tcnt += tdBy[k].length; });
-    $("calSum").textContent = (cnt ? "이 달 " + cnt + "편" : "이 달 기록 없음") + (tcnt ? " · 생각 " + tcnt : "");
+    /* 읽는 중인 책은 날짜가 없어서 달과 상관없이 지금 읽고 있는 권수를 보여줌(책·전체 탭, 후기·별점 필터 없을 때만) */
+    var rdCnt = ((filter === "all" || filter === "book") && rfilter === "all" && sfilter === "all") ? readingNow() : 0;
+    $("calSum").textContent = (cnt ? "이달 " + cnt + "편" : "이달 기록 없음") + (rdCnt ? " · 읽는 중 " + rdCnt + "편" : "") + (tcnt ? " · 생각 " + tcnt : "");
 
     var first = (new Date(calY, calM, 1).getDay() + 6) % 7; /* 월요일 시작 */
     var days = new Date(calY, calM + 1, 0).getDate();
@@ -3654,7 +3680,7 @@
     });
     return pane;
   }
-  function genrePane(items) {
+  function genrePane(items, title) {
     var books = items.filter(function (r) { return r.type === "book"; });
     if (!books.length) return null;
     var cnt = {};
@@ -3670,7 +3696,7 @@
     });
     var pane = el("div", "pane"); pane.dataset.t = "book";
     var h = el("div", "phead");
-    h.appendChild(el("b", "", "책 장르"));
+    h.appendChild(el("b", "", title || "책 장르"));
     h.appendChild(el("span", "tot", "총 " + books.length + "권"));
     pane.appendChild(h);
     /* 장르별 색 (「기타」는 회색) */
@@ -3750,6 +3776,47 @@
     });
     pane.appendChild(wrap);
     return pane;
+  }
+  /* 책 장르 비율을 달·연도별로 한 줄씩 쭉 나열(카테고리 비율 막대와 같은 모양). 장르 색은 어느 줄에서나 같음 */
+  function genreColor(g) {
+    var PAL = ["#e8b400", "#d9822b", "#c4553a", "#9b4f96", "#5b6fc4", "#3a8fb7", "#4aa28a", "#8aa64b"];
+    var i = GENRES.indexOf(g);
+    return i < 0 ? "#9aa0b0" : PAL[i % PAL.length];
+  }
+  function genreRatioListPane(title, rowDefs) {
+    var any = rowDefs.some(function (rd) { return rd.items.some(function (r) { return r.type === "book"; }); });
+    if (!any) return null;
+    function gname(r) { var g = (r.genre || "").trim(); return GENRES.indexOf(g) < 0 ? "기타" : g; }
+    var order = GENRES.concat(["기타"]);
+    var box = el("div", "pane gprows"); box.dataset.t = "book";
+    var hd = el("div", "phead"); hd.appendChild(el("b", "", title));   /* 제목은 다른 통계 카드(카테고리 편수·전체)와 같은 .phead */
+    var tb = 0; rowDefs.forEach(function (rd) { rd.items.forEach(function (r) { if (r.type === "book") tb++; }); });
+    hd.appendChild(el("span", "tot", "총 " + tb + "권")); box.appendChild(hd);
+    rowDefs.forEach(function (rd) {
+      var books = rd.items.filter(function (r) { return r.type === "book"; }), total = books.length;
+      var row = el("div", "prow" + (total ? "" : " zero"));
+      var l1 = el("div", "pl1");
+      l1.appendChild(el("b", "", rd.label));
+      l1.appendChild(el("span", "", total ? total + "권" : "기록 없음"));
+      row.appendChild(l1);
+      if (total) {
+        var c = {}; books.forEach(function (r) { c[gname(r)] = (c[gname(r)] || 0) + 1; });
+        var st = el("div", "stack"), ch = el("div", "chips");
+        order.forEach(function (g) {
+          if (!c[g]) return;
+          var col = genreColor(g);
+          var i = el("i"); i.style.background = col; i.style.flex = c[g] + " 1 0%"; st.appendChild(i);
+          var sp = el("span", "chip"); sp.style.setProperty("--c", col);
+          sp.appendChild(el("i"));
+          sp.appendChild(document.createTextNode(g + " " + c[g] + "권 "));
+          sp.appendChild(el("em", "", pct(c[g], total)));
+          ch.appendChild(sp);
+        });
+        row.appendChild(st); row.appendChild(ch);
+      }
+      box.appendChild(row);
+    });
+    return box;
   }
   function periodRow(label, items) {
     var total = items.length, c = tally(items);
@@ -3850,7 +3917,6 @@
         return (!stat.from || r.date >= stat.from) && (!stat.to || r.date <= stat.to);
       });
       w.appendChild(summaryPane(inR, "선택한 기간"));
-      var gpR = genrePane(inR); if (gpR) w.appendChild(gpR);
       var mk = {};
       inR.forEach(function (r) { mk[r.date.slice(0, 7)] = 1; });
       var mkeys = Object.keys(mk).sort();
@@ -3859,6 +3925,7 @@
           return { label: k.slice(0, 4) + "." + k.slice(5, 7), items: inR.filter(function (r) { return r.date.indexOf(k) === 0; }) };
         })));
       }
+      var gpR = genrePane(inR); if (gpR) w.appendChild(gpR);   /* 장르 그래프는 맨 아래 */
     }
 
     else if (stat.mode === "month") {
@@ -3872,7 +3939,6 @@
 
       var inY = dated.filter(function (r) { return r.date.indexOf(yp) === 0; });
       w.appendChild(summaryPane(inY, y + "년 전체"));
-      var gpY = genrePane(inY); if (gpY) w.appendChild(gpY);
       var mdefs = [];
       for (var mm = 1; mm <= 12; mm++) {
         (function (mm) {
@@ -3889,11 +3955,11 @@
         })(m);
       }
       w.appendChild(rows);
+      var gpM = genreRatioListPane(y + "년 달별 책 장르", mdefs); if (gpM) w.appendChild(gpM);   /* 맨 아래 */
     }
 
     else {
       w.appendChild(summaryPane(dated, "전체"));
-      var gpA = genrePane(dated); if (gpA) w.appendChild(gpA);
       var years = {};
       dated.forEach(function (r) { years[r.date.slice(0, 4)] = 1; });
       var ys = Object.keys(years).sort().reverse();
@@ -3907,6 +3973,10 @@
         });
         w.appendChild(yr);
       }
+      var gpY = genreRatioListPane("연도별 책 장르", ys.map(function (yy) {
+        return { label: yy + "년", items: dated.filter(function (r) { return r.date.slice(0, 4) === yy; }) };
+      }));
+      if (gpY) w.appendChild(gpY);   /* 맨 아래 */
     }
 
     var undated = data.length - dated.length;
@@ -5506,6 +5576,35 @@
     try { localStorage.setItem(GHKEY, JSON.stringify(h)); } catch (e) {}
   }
   /* 고정(통계 목표 카드에서 설정, 목록·달력 일괄): 꺼 두면 바도 「목표 보기」 글자도 아예 안 보임 */
+  var GMKEY = "reviews-goalmode-v1";   /* 목록 독서 목표 기준: "year" | "month" (없으면 기본값 연간) */
+  function getGoalMode() {
+    try { var m = localStorage.getItem(GMKEY); return (m === "year" || m === "month") ? m : null; } catch (e) { return null; }
+  }
+  function setGoalMode(m) {
+    try { localStorage.setItem(GMKEY, m); } catch (e) {}
+  }
+  /* 연·월 전환 스위치(목록의 펼친 목표 카드 전용). 알약 어디를 눌러도 전환되고, 까만 동그라미가 옆으로 미끄러짐 */
+  function goalModeSwitch(mode) {
+    var b = el("button", "gmode" + (mode === "month" ? " m" : "")); b.type = "button";
+    b.setAttribute("role", "switch"); b.setAttribute("aria-checked", mode === "month" ? "true" : "false");
+    b.setAttribute("aria-label", "목록 독서 목표 기준 전환, 지금은 " + (mode === "month" ? "월간" : "연간"));
+    b.appendChild(el("i", "gthumb"));
+    b.appendChild(el("span", mode === "year" ? "on" : "", "연"));
+    b.appendChild(el("span", mode === "month" ? "on" : "", "월"));
+    var busy = false;
+    b.onclick = function (e) {
+      e.stopPropagation();
+      if (busy) return; busy = true;
+      var next = mode === "year" ? "month" : "year";
+      b.classList.toggle("m", next === "month");   /* 먼저 동그라미를 옮기고 */
+      var sp = b.querySelectorAll("span");
+      sp[0].className = next === "year" ? "on" : ""; sp[1].className = next === "month" ? "on" : "";
+      b.setAttribute("aria-checked", next === "month" ? "true" : "false");
+      setGoalMode(next); gxEdit = false;
+      setTimeout(render, 190);                      /* 움직임이 끝나면 목표 내용을 바꿔 그림 */
+    };
+    return b;
+  }
   var GPKEY = "reviews-goalpin-v1";
   function goalPinned() {
     try { return localStorage.getItem(GPKEY) !== "off"; } catch (e) { return true; }
@@ -5520,10 +5619,11 @@
     return { y: y, m: m, s: s0, e: e0, now: now, cur: now >= s0 && now < e0, past: now >= e0,
       label: m ? y + "년 " + m + "월" : y + "년", unit: m ? "이번 달" : "올해" };
   }
-  function goalBox(key, where) {
+  function goalBox(key, where, modeSel) {
     var goals = getGoals(), goal = +goals[key] || 0, done = readCount(key), P = goalPeriod(key);
     var pane = el("div", "pane gpane gxbox"); pane.dataset.t = "book";
     var h = el("div", "phead"); h.appendChild(el("b", "", P.label + " 독서 목표"));
+    if (modeSel) h.appendChild(goalModeSwitch(modeSel));   /* 목록에서만: 연/월 전환 */
     var bt = el("div", "gbtns");
     var eb = el("button", "", gxEdit ? "닫기" : (goal ? "수정" : "목표 설정")); eb.type = "button";
     eb.onclick = function () { gxEdit = !gxEdit; render(); };
@@ -5605,7 +5705,7 @@
     return pane;
   }
   /* where: "list" | "cal". allowEmpty: 목표가 없어도 줄을 보여줌(달력에서 바로 설정하도록) */
-  function buildGoalMini(where, key, label, allowEmpty) {
+  function buildGoalMini(where, key, label, allowEmpty, modeSel) {
     var goal = +getGoals()[key] || 0;
     if (!goal && !allowEmpty) return null;
     if (!goalPinned()) return null;   /* 통계 목표 카드에서 고정을 꺼 두면 아예 안 보임(다시 보기 글자도 없음) */
@@ -5620,7 +5720,7 @@
     var wrap = el("div", "gx");
     /* 펼치면 한 줄 진행바가 그 자리에서 넓어지며 목표 상자로 바뀜(따로 카드가 생기지 않음) */
     if (open) {
-      wrap.appendChild(goalBox(key, where));
+      wrap.appendChild(goalBox(key, where, modeSel));
       return wrap;
     }
     var box = el("button", "gmini" + (goal ? "" : " none")); box.type = "button"; box.dataset.t = "book";
@@ -5637,13 +5737,13 @@
     return wrap;
   }
   function buildListGoal() {
-    var nd = new Date(), y = nd.getFullYear(), gl = getGoals(), key = String(y), label = y + " 독서 목표";
-    if (!(+gl[key])) {
-      var mk = y + "-" + pad(nd.getMonth() + 1);
-      /* 올해 목표가 없고 이번 달 목표만 있으면 월 목표, 둘 다 없으면 올해 목표 칸(목표 없음)을 보여줌 */
-      if (+gl[mk]) { key = mk; label = (nd.getMonth() + 1) + "월 독서 목표"; }
-    }
-    return buildGoalMini("list", key, label, true);
+    var nd = new Date(), y = nd.getFullYear(), gl = getGoals(), mk = y + "-" + pad(nd.getMonth() + 1);
+    var mode = getGoalMode();
+    /* 직접 고른 적이 없으면 기본은 연간. 올해 목표가 없고 이번 달 목표만 있을 때만 월 목표를 보여줌(예전 동작) */
+    if (!mode) mode = (!(+gl[String(y)]) && +gl[mk]) ? "month" : "year";
+    var key = mode === "month" ? mk : String(y);
+    var label = mode === "month" ? (nd.getMonth() + 1) + "월 독서 목표" : y + " 독서 목표";
+    return buildGoalMini("list", key, label, true, mode);
   }
 
   /* ---------- 백업 알림 ---------- */
