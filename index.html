@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#f3f4f8">
 <title>나의 후기</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,6 +93,7 @@
   input[type=search] { padding: 6px 12px; line-height: 1.2; border-radius: 10px; -webkit-appearance: none; appearance: none; }
   textarea { min-height: 150px; resize: vertical; line-height: 1.6; }
   :focus-visible { outline: 3px solid #7d8bff; outline-offset: 1px; }
+  input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; }
 
   /* 목록 */
   #list { padding: 2px 16px; }
@@ -141,6 +142,7 @@
     padding: 0 5px; font-size: 10.5px; font-weight: 500; line-height: 16px;
   }
   .badge.paused { background: rgba(120,126,150,.14); color: #6b7088; }
+  .badge.stale { background: rgba(207,80,72,.10); color: #b0453d; }
   .badge.read { background: transparent; box-shadow: inset 0 0 0 1px rgba(232,180,0,.6); color: #8a6a00; }
   .lastlog { margin-top: 5px; font-size: 13px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .lastlog b { font-weight: 600; color: var(--mute); margin-right: 6px; font-size: 12px; }
@@ -368,19 +370,35 @@
   #clock.show { display: flex; }
   .cbox { background: var(--paper); border-radius: 18px; padding: 18px 18px 16px; width: min(330px, 94vw); max-height: 96vh; overflow-y: auto; }
   #cDate { margin-bottom: 12px; text-align: center; }
+  .ctabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  .ctabs button { flex: 1; height: 38px; border: 1px solid var(--line); background: var(--paper); color: var(--sub); border-radius: 999px; font: inherit; font-size: 14px; cursor: pointer; }
+  .ctabs button.on { background: #6b7086; border-color: #6b7086; color: #fff; font-weight: 700; }
+  .ccnav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .ccnav b { font-size: 15px; }
+  .ccnav button { width: 36px; height: 36px; border: 0; background: var(--bg); border-radius: 50%; font-size: 18px; color: var(--ink); cursor: pointer; font-family: inherit; }
+  .ccdow, .ccgrid { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .ccdow span { text-align: center; font-size: 12px; color: var(--sub); padding: 4px 0; }
+  .ccgrid { gap: 2px 0; }
+  .ccd { height: 40px; border: 0; background: transparent; border-radius: 50%; font: inherit; font-size: 15px; color: var(--ink); cursor: pointer; }
+  .ccd.td { box-shadow: inset 0 0 0 1.5px var(--line2); }
+  .ccd.on { background: #6b7086; color: #fff; font-weight: 700; box-shadow: none; }
+  .cqhint { text-align: center; color: var(--sub); font-size: 12.5px; margin-bottom: 6px; }
+  .cquick { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 10px; }
+  .cq { min-width: 54px; height: 42px; padding: 0 12px; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; font: inherit; font-size: 15px; color: var(--sub); cursor: pointer; }
+  .cq.main { background: #eceef4; border-color: var(--line2); color: var(--ink); }
   .cdisp { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; }
   .cdisp .seg {
     font-size: 44px; font-weight: 700; border: 0; background: var(--bg); color: var(--sub);
     border-radius: 10px; padding: 0 12px; font-family: inherit; cursor: pointer; line-height: 1.25;
   }
-  .cdisp .seg.on { background: var(--ink); color: #fff; }
+  .cdisp .seg.on { background: #6b7086; color: #fff; }
   .cdisp .colon { font-size: 40px; font-weight: 700; }
   .ampm { display: flex; flex-direction: column; margin-left: 8px; }
   .ampm button {
     border: 1px solid var(--line); background: var(--paper); border-radius: 8px;
     font-family: inherit; cursor: pointer; color: var(--ink);
   }
-  .ampm button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .ampm button.on { background: #6b7086; color: #fff; border-color: #6b7086; }
   #dial { display: block; margin: 6px auto 4px; width: 250px; height: 250px; touch-action: none; user-select: none; -webkit-user-select: none; }
   .chint { text-align: center; color: var(--sub); font-size: 13px; margin-bottom: 6px; }
   .cbtns { display: flex; margin-top: 10px; }
@@ -389,7 +407,7 @@
     border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer;
   }
   #cClear { flex: 1.3; }
-  .cbtns .ok { background: var(--ink); color: #fff; border-color: var(--ink); font-weight: 700; flex: 1.5; }
+  .cbtns .ok { background: #6b7086; color: #fff; border-color: #6b7086; font-weight: 700; flex: 1.5; }
   .rate { display: flex; gap: 4px; }
   .rate button {
     background: none; border: 0; font-size: 34px; line-height: 1; padding: 2px 4px;
@@ -418,7 +436,7 @@
     padding: 20px 18px 40px; font-size: 17px; line-height: 1.85; resize: none; overflow: hidden;
     box-shadow: 0 1px 0 var(--line);
   }
-  #text:focus, #pre:focus { outline: none; box-shadow: 0 0 0 2px #7d8bff; }
+  #text:focus, #pre:focus { outline: none; box-shadow: 0 0 0 1px var(--line2); }
   .cnt { position: absolute; right: 16px; bottom: 12px; font-size: 12.5px; color: var(--sub); pointer-events: none; }
   .row2 { display: flex; }
   .row2 > div { flex: 1; min-width: 0; }
@@ -476,16 +494,20 @@
   .ld .rmedit { padding: 0; text-align: left; font: inherit; }
   .lx { font-size: 14px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
   .compose { margin-top: 8px; }
+  /* 후기 읽던 화면 그대로, 아래에 뜨는 입력창. 투명 틀이 보이는 화면(자판 위)을 따라다니고 입력창은 그 맨 아래에 붙음 */
+  .tdockwrap { position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 40; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; }
   .tdock {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; margin: 0 auto; max-width: 640px;
-    background: var(--paper); border-top: 1px solid var(--line2); box-shadow: 0 -6px 18px rgba(0,0,0,.10);
-    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    pointer-events: auto; width: 100%; max-width: 640px;
+    background: var(--paper); border-radius: 18px 18px 0 0;
+    box-shadow: 0 -6px 24px rgba(25,28,43,.13), 0 0 0 1px var(--line);
+    padding: 11px 14px calc(10px + env(safe-area-inset-bottom));
   }
+  .tdock.kb { padding-bottom: 10px; }
   .tdock .tdh { display: flex; gap: 8px; align-items: baseline; font-size: 12.5px; color: var(--sub); white-space: nowrap; overflow: hidden; }
-  .tdock .tdh b { flex: none; color: var(--ink); }
+  .tdock .tdh b { flex: none; color: var(--ct, var(--ink)); }
   .tdock .tdh span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-  .tdock .compose { margin-top: 6px; }
-  .tdock .compose textarea { min-height: 72px; max-height: 32vh; }
+  .tdock .compose { margin-top: 7px; }
+  .tdock .compose textarea { min-height: 52px; max-height: 30vh; }
   .compose textarea { min-height: 88px; font-size: 15px; padding: 10px 12px; }
   .cb { display: flex; margin-top: 6px; justify-content: flex-end; }
   .cb button {
@@ -493,6 +515,21 @@
     padding: 6px 14px; font-size: 13px; cursor: pointer; color: var(--ink);
   }
   .cb .primary { background: var(--ink); color: #fff; border-color: var(--ink); font-weight: 700; }
+
+  /* 댓글 입력칸: 카드 안에 자연스럽게 녹아드는 연한 회색 칸. 누르면 하얗게 바뀌며 카테고리 색 테두리가 생김 */
+  .compose { margin-top: 8px; padding: 9px 12px 7px; background: #f4f5f9; border-radius: 14px; box-shadow: inset 0 0 0 1.5px transparent; transition: background .15s, box-shadow .15s; }
+  .compose:focus-within { background: #fff; box-shadow: inset 0 0 0 1.5px var(--c, var(--line2)); }
+  .compose textarea { display: block; width: 100%; min-height: 48px; max-height: 240px; padding: 0; border: 0; border-radius: 0; background: transparent; font-size: 16px; line-height: 1.6; resize: none; overflow-y: auto; }
+  .compose textarea::placeholder { color: var(--mute); }
+  .compose textarea:focus, .compose textarea:focus-visible { outline: none; }
+  .compose .cb { margin-top: 4px; gap: 4px; align-items: center; }
+  .compose .cb button { height: 28px; padding: 0 12px; border-radius: 999px; font-size: 13px; }
+  .compose .cb button:not(.primary) { border-color: transparent; background: transparent; color: var(--sub); font-weight: 500; }
+  .compose .cb .primary { padding: 0 16px; transition: opacity .15s; }
+  .compose.empty .cb .primary { opacity: .3; }
+  /* 목록 안에서 감상·생각을 고치는 동안(자판이 올라온 동안): 아래 여백을 늘려 입력칸을 자판 위로 올릴 수 있게 하고, 하단 버튼 줄은 잠깐 숨김 */
+  body.kbup { padding-bottom: calc(55vh + env(safe-area-inset-bottom)); }
+  body.kbup #dock { display: none; }
 
   .recall { margin-top: 12px; }
   .recall .rh { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-size: 13px; }
@@ -638,6 +675,7 @@
   .gpin button.on::before { background: var(--ink); box-shadow: none; }
   .gedit { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
   .gedit input { width: 84px; padding: 8px 10px; text-align: center; }
+  .gedit input:focus, .gedit input:focus-visible { outline: none; border-color: var(--line2); }
   .gedit button { border: 1px solid var(--line2); background: var(--paper); border-radius: 999px; font-size: 13px; padding: 7px 14px; color: var(--ink); cursor: pointer; font-family: inherit; }
   .gedit button.primary { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
   .gedit button.dim { border-color: transparent; color: var(--sub); }
@@ -903,7 +941,7 @@
   .fcard .timeBtn.empty { color: #8b90a5; }
   .fcard input::placeholder, .fcard textarea::placeholder { color: #a9adbf; }
   .fcard input:focus, .fcard textarea:focus, .fcard .timeBtn:focus-visible {
-    outline: none; background: #fff; border-color: #7d8bff; box-shadow: 0 0 0 3px rgba(125,139,255,.2);
+    outline: none; background: #fff; border-color: var(--line2); box-shadow: none;
   }
   #cast { min-height: 60px; resize: none; }
 
@@ -935,7 +973,7 @@
     min-height: max(190px, 28vh); font-size: 16px; line-height: 1.8;
     background: #f5f6fa; border: 1px solid transparent; box-shadow: none;
   }
-  .fcard #text:focus, .fcard #pre:focus { box-shadow: 0 0 0 3px rgba(125,139,255,.2); border-color: #7d8bff; background: #fff; }
+  .fcard #text:focus, .fcard #pre:focus { box-shadow: none; border-color: var(--line2); background: #fff; }
   .fcard .cnt { right: 12px; bottom: 10px; }
   .panel { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
 
@@ -1042,7 +1080,7 @@
     border-radius: 10px; transition: transform .2s, color .15s;
   }
   .gnwrap.open .gnchev { transform: rotate(180deg); color: var(--ink); }
-  .gnwrap.open #genre { background: #fff; border-color: #7d8bff; box-shadow: 0 0 0 3px rgba(125,139,255,.2); }
+  .gnwrap.open #genre { background: #fff; border-color: var(--line2); box-shadow: none; }
   .gnpop {
     position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 40; background: #fff; border-radius: 16px; padding: 12px;
     box-shadow: 0 14px 36px rgba(20,24,50,.18), 0 0 0 1px var(--line); animation: gnIn .16s ease-out; transform-origin: top center;
@@ -1090,6 +1128,19 @@
   #rtabs .fsel { height: var(--ctl); font-size: 13px; }
   #rtabs button.tgl { height: var(--ctl); font-size: 13px; }
   #qbox input[type=search] { height: var(--ctl); padding: 0 12px; border-radius: 999px; }
+  /* 검색창: 테두리 없는 연회색 알약 + 돋보기. 누르면 하얗게 바뀌고 얇은 회색 선만 생김(색 테두리 없음) */
+  #qbox input[type=search] {
+    padding: 0 12px 0 34px; border: 0; background: #e9ebf2 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0a4b6' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px center / 14px;
+    color: var(--ink); transition: background-color .15s, box-shadow .15s;
+  }
+  #qbox input[type=search]::placeholder { color: var(--mute); }
+  #qbox input[type=search]:focus, #qbox input[type=search]:focus-visible {
+    outline: none; background-color: #fff; box-shadow: 0 0 0 1px var(--line2), 0 2px 10px rgba(25,28,43,.06);
+  }
+  #qbox input[type=search]::-webkit-search-cancel-button {
+    -webkit-appearance: none; appearance: none; width: 16px; height: 16px; margin: 0 -2px 0 6px; cursor: pointer;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23c4c7d6'/%3E%3Cpath d='M8.5 8.5l7 7M15.5 8.5l-7 7' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
 
   /* 목록 · 펼친 카드 */
   .abar { gap: var(--gap); }
@@ -1700,7 +1751,23 @@
 
 <div id="clock">
   <div class="cbox" role="dialog" aria-modal="true" aria-label="시간 선택">
-    <input type="date" id="cDate" aria-label="관람 날짜">
+    <input type="date" id="cDate" hidden aria-label="관람 날짜">
+    <div class="ctabs">
+      <button type="button" id="ctDate" class="on">날짜</button>
+      <button type="button" id="ctTime">시간</button>
+    </div>
+    <div id="cpDate">
+      <div class="ccnav">
+        <button type="button" id="ccPrev" aria-label="이전 달">‹</button>
+        <b id="ccTitle"></b>
+        <button type="button" id="ccNext" aria-label="다음 달">›</button>
+      </div>
+      <div class="ccdow"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div>
+      <div class="ccgrid" id="ccGrid"></div>
+    </div>
+    <div id="cpTime" hidden>
+    <div class="cqhint" id="cqHint"></div>
+    <div class="cquick" id="cQuick"></div>
     <div class="cdisp">
       <button type="button" class="seg on" id="segH">7</button>
       <span class="colon">:</span>
@@ -1712,6 +1779,7 @@
     </div>
     <svg id="dial" viewBox="0 0 240 240"></svg>
     <div class="chint" id="chint">시를 누르세요</div>
+    </div>
     <div class="cbtns">
       <button type="button" id="cClear">시간 지우기</button>
       <button type="button" id="cCancel">취소</button>
@@ -1769,6 +1837,22 @@
     var best = null;
     (r.rlog || []).forEach(function (x) { if (!best || (x.d + (x.tm || "")) >= (best.d + (best.tm || ""))) best = x; });
     return best;
+  }
+  /* 읽는 중인 책이 한동안 손이 안 간 정도를 알려줌. 마지막 활동일 = 독서 기록·상태 변경(읽는 중 등록/다시 읽기) 중 가장 늦은 날(없으면 등록일).
+     STALE_DAYS일 이상 지났을 때만 문구를 돌려줌(중단한 책·다 읽은 책은 대상 아님) */
+  var STALE_DAYS = 14;
+  function staleLabel(r) {
+    if (r.type !== "book" || r.status !== "reading") return "";
+    var last = "";
+    (r.rlog || []).forEach(function (x) { if (x.d > last) last = x.d; });
+    acts.forEach(function (a) { if (a.rid === r.id && a.ty !== "sys" && !a.w && a.d > last) last = a.d; });
+    if (!last) { var it = idTime(r.id); if (it) last = it.d; }
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(last);
+    if (!m) return "";
+    var n = new Date(), a0 = new Date(n.getFullYear(), n.getMonth(), n.getDate()).getTime();
+    var days = Math.round((a0 - new Date(+m[1], +m[2] - 1, +m[3]).getTime()) / 864e5);
+    if (days < STALE_DAYS) return "";
+    return days < 60 ? Math.floor(days / 7) + "주째 안 읽음" : Math.floor(days / 30) + "개월째 안 읽음";
   }
   var view = "list";
   var calY = new Date().getFullYear(), calM = new Date().getMonth(), selDate = today();
@@ -2379,6 +2463,7 @@
       l2.appendChild(el("span", "kind", KIND[r.type].name));
       if (mark) l2.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
       if (r.status === "reading") l2.appendChild(el("span", "badge", "읽는 중"));
+      if (!inDay && !mark) { var sl = staleLabel(r); if (sl) l2.appendChild(el("span", "badge stale", sl)); }
       if (r.status === "paused") l2.appendChild(el("span", "badge paused", "중단"));
       if (r.creator) l2.appendChild(el("span", "m", r.creator));
       var when = inDay
@@ -2572,17 +2657,49 @@
   var rlogFold = {}, editLog = null;   /* editLog: 고치는 중인 읽는 중 감상·덧붙인 생각 {rid, idx, key} */
   /* 하단 고정 입력창: 후기를 읽던 자리에서 스크롤 이동 없이 바로 쓰기 */
   var dockEl = null, dockRid = null, dockNeed = null, dockPad = "", dockVV = null;
-  function dockPlace() {
-    if (!dockEl) return;
+  /* 입력창을 감싸는 투명 틀(.tdockwrap)을 항상 "지금 눈에 보이는 화면"(visualViewport) 크기·위치에 맞춰 두고,
+     입력창은 그 틀의 맨 아래에 붙임 → 자판이 올라와서 보이는 화면이 줄어도 입력창은 자판 바로 위에 있음.
+     자판이 올라오는 애니메이션 중에는 이벤트가 늦거나 빠지므로, 입력창을 다루는 동안엔 매 프레임 확인함 */
+  var dockWrap = null, dockUntil = 0, dockRaf = 0, dockLockY = null, dockTouched = false;
+  /* 손으로 화면을 직접 움직이기 시작하면(입력창 바깥) 읽던 위치 고정은 풀림 */
+  function dockUserMove(e) { if (!(dockEl && e && e.target && dockEl.contains(e.target))) dockTouched = true; }
+  function dockTA() { return dockEl ? dockEl.querySelector("textarea") : null; }
+  function dockTrack() {
+    if (!dockWrap) return;
     var vv = window.visualViewport;
-    dockEl.style.bottom = vv ? Math.max(0, window.innerHeight - vv.height - vv.offsetTop) + "px" : "0px";
+    var v = vv ? [vv.offsetLeft, vv.offsetTop, vv.width, vv.height] : [0, 0, window.innerWidth, window.innerHeight];
+    var st = dockWrap.style;
+    var l = v[0] + "px", t = v[1] + "px", w = v[2] + "px", h = v[3] + "px";
+    if (st.left !== l) st.left = l;
+    if (st.top !== t) st.top = t;
+    if (st.width !== w) st.width = w;
+    if (st.height !== h) st.height = h;
+    var ta = dockTA();
+    dockEl.classList.toggle("kb", !!ta && document.activeElement === ta);   /* 자판이 올라와 있으면 아래 안전영역 여백 불필요 */
+  }
+  function dockLoop() {
+    dockRaf = 0;
+    if (!dockWrap) return;
+    dockTrack();
+    /* 입력창을 연 직후 브라우저가 화면을 스크롤해서(주소창이 내려오며 내용이 밀림) 읽던 곳이 달라졌으면 원래 위치로 */
+    if (dockLockY !== null && !dockTouched && Math.abs((window.pageYOffset || 0) - dockLockY) > 1) window.scrollTo(0, dockLockY);
+    var ta = dockTA();
+    if (Date.now() < dockUntil || (ta && document.activeElement === ta)) dockRaf = requestAnimationFrame(dockLoop);
+  }
+  function dockKick() {
+    dockUntil = Date.now() + 1500;
+    if (!dockRaf && dockWrap) dockRaf = requestAnimationFrame(dockLoop);
   }
   function hideDock() {
     if (!dockEl) return;
-    if (dockVV) { dockVV.removeEventListener("resize", dockPlace); dockVV.removeEventListener("scroll", dockPlace); dockVV = null; }
-    if (dockEl.parentNode) dockEl.parentNode.removeChild(dockEl);
+    if (dockVV) { dockVV.removeEventListener("resize", dockKick); dockVV.removeEventListener("scroll", dockKick); dockVV = null; }
+    window.removeEventListener("resize", dockKick); window.removeEventListener("scroll", dockKick); window.removeEventListener("orientationchange", dockKick);
+    if (dockRaf) { cancelAnimationFrame(dockRaf); dockRaf = 0; }
+    window.removeEventListener("touchstart", dockUserMove, true); window.removeEventListener("wheel", dockUserMove, true);
+    dockLockY = null; dockTouched = false;
+    if (dockWrap && dockWrap.parentNode) dockWrap.parentNode.removeChild(dockWrap);
     document.body.style.paddingBottom = dockPad;
-    dockEl = null; dockRid = null;
+    dockWrap = null; dockEl = null; dockRid = null;
   }
   function syncDock() {
     var r = dockNeed; dockNeed = null;
@@ -2590,24 +2707,59 @@
     if (dockEl && dockRid === r.id) return;   /* 쓰던 글이 있으면 그대로 둠 */
     hideDock();
     var key = r.status === "done" ? "later" : "rlog";
+    dockWrap = el("div", "tdockwrap");
     dockEl = el("div", "tdock"); dockRid = r.id;
+    dockEl.dataset.type = r.type;   /* 입력칸 테두리·제목이 그 기록의 대표 색을 따름 */
     var hd = el("div", "tdh");
     hd.appendChild(el("b", "", key === "later" ? "생각 덧붙이기" : "읽는 중 감상"));
     hd.appendChild(el("span", "", "\u300C" + r.title + "\u300D"));
     dockEl.appendChild(hd);
     dockEl.appendChild(makeCompose(r, key, key === "later" ? "지금 다시 생각해 보니…" : "읽다가 든 생각…"));
-    document.body.appendChild(dockEl);
+    dockWrap.appendChild(dockEl);
+    document.body.appendChild(dockWrap);
     dockPad = document.body.style.paddingBottom;
     var base = parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
-    document.body.style.paddingBottom = (base + dockEl.offsetHeight) + "px";
-    if (window.visualViewport) { dockVV = window.visualViewport; dockVV.addEventListener("resize", dockPlace); dockVV.addEventListener("scroll", dockPlace); }
-    dockPlace();
+    document.body.style.paddingBottom = (base + dockEl.offsetHeight) + "px";   /* 맨 아래 내용이 입력창에 가려지지 않게 */
+    if (window.visualViewport) { dockVV = window.visualViewport; dockVV.addEventListener("resize", dockKick); dockVV.addEventListener("scroll", dockKick); }
+    window.addEventListener("resize", dockKick); window.addEventListener("scroll", dockKick, { passive: true }); window.addEventListener("orientationchange", dockKick);
+    dockEl.addEventListener("focusin", dockKick); dockEl.addEventListener("focusout", dockKick);
+    dockLockY = window.pageYOffset || 0; dockTouched = false;
+    window.addEventListener("touchstart", dockUserMove, { capture: true, passive: true });
+    window.addEventListener("wheel", dockUserMove, { capture: true, passive: true });
+    dockTrack(); dockKick();
+  }
+  /* 목록 안에서 고치는 입력칸이 자판에 가려지면 보이는 화면 아래쪽 끝에 맞춰 스크롤해 올림 */
+  function composeKeep(ta, cp) {
+    var vv = window.visualViewport, timers = [];
+    function fix() {
+      if (!cp.isConnected) return;
+      var bottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+      var dy = cp.getBoundingClientRect().bottom + 12 - bottom;
+      if (dy > 0) window.scrollBy(0, dy);
+    }
+    function soon() { timers.forEach(clearTimeout); timers = [0, 120, 300, 600].map(function (ms) { return setTimeout(fix, ms); }); }
+    ta.addEventListener("focus", function () {
+      document.body.classList.add("kbup"); soon();
+      if (vv) vv.addEventListener("resize", soon);
+    });
+    ta.addEventListener("blur", function () {
+      if (vv) vv.removeEventListener("resize", soon);
+      setTimeout(function () { if (document.activeElement !== ta) document.body.classList.remove("kbup"); }, 400);
+    });
+    ta.addEventListener("input", fix);
+  }
+  /* 입력칸 높이를 글 길이에 맞춰 늘리고, 비어 있으면 저장 버튼을 흐리게 */
+  function composeFit(ta, cp) {
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 240) + "px";
+    cp.classList.toggle("empty", !ta.value.trim());
   }
   /* 글 쓰는 입력칸(저장/취소 포함). 포커스할 때 화면이 밀려 내려가지 않도록 preventScroll */
   function makeCompose(r, key, ph) {
     var cp = el("div", "compose");
     cp.onclick = function (e) { e.stopPropagation(); };
-    var ta = el("textarea"); ta.rows = 3; ta.placeholder = ph;
+    var ta = el("textarea"); ta.rows = 2; ta.placeholder = ph;
+    cp.classList.add("empty"); ta.oninput = function () { composeFit(ta, cp); };
     var cb = el("div", "cb");
     var cn = el("button", "", "취소"); cn.type = "button";
     cn.onclick = function (e) { e.stopPropagation(); addingId = null; render(); };
@@ -2678,7 +2830,9 @@
       if (editingLog) {   /* 읽는 중 감상·덧붙인 생각 고치기 */
         var cp2 = el("div", "compose");
         cp2.onclick = function (e) { e.stopPropagation(); };
-        var ta2 = el("textarea"); ta2.rows = 3; ta2.value = x.t; ta2.placeholder = ph;
+        var ta2 = el("textarea"); ta2.rows = 2; ta2.value = x.t; ta2.placeholder = ph;
+        ta2.oninput = function () { composeFit(ta2, cp2); };
+        composeKeep(ta2, cp2);
         var cb2 = el("div", "cb");
         var cn2 = el("button", "", "취소"); cn2.type = "button";
         cn2.onclick = function (e) { e.stopPropagation(); editLog = null; render(); };
@@ -2693,7 +2847,7 @@
         cb2.appendChild(cn2); cb2.appendChild(sv2);
         cp2.appendChild(ta2); cp2.appendChild(cb2);
         it.appendChild(cp2);
-        setTimeout(function () { ta2.focus(); ta2.setSelectionRange(ta2.value.length, ta2.value.length); }, 0);
+        setTimeout(function () { composeFit(ta2, cp2); ta2.focus(); ta2.setSelectionRange(ta2.value.length, ta2.value.length); }, 0);
       } else it.appendChild(el("div", "lx", x.t));
       lw.appendChild(it);
     });
@@ -4772,6 +4926,7 @@
     $("am").classList.toggle("on", !tp.pm);
     $("pm").classList.toggle("on", tp.pm);
     $("chint").textContent = tp.mode === "h" ? "시를 누르세요" : "분을 누르세요 (5분 단위)";
+    if (cPane === "time") updateCTabs();
 
     var d = $("dial");
     d.textContent = "";
@@ -4783,13 +4938,13 @@
     var sp = pos(selIdx, 92), hp = pos(selIdx, 70);
 
     var hand = svgEl("line", { x1: 120, y1: 120, x2: hp.x, y2: hp.y, "stroke-width": 2.5, "stroke-linecap": "round" });
-    hand.style.stroke = "#191c2b";
+    hand.style.stroke = "#6b7086";
     d.appendChild(hand);
     var dot = svgEl("circle", { cx: 120, cy: 120, r: 5 });
-    dot.style.fill = "#191c2b";
+    dot.style.fill = "#6b7086";
     d.appendChild(dot);
     var sel = svgEl("circle", { cx: sp.x, cy: sp.y, r: 21 });
-    sel.style.fill = "#191c2b";
+    sel.style.fill = "#6b7086";
     d.appendChild(sel);
 
     for (var i = 0; i < 12; i++) {
@@ -4811,8 +4966,61 @@
     else tp.m = idx * 5;
     renderClock();
   }
+  /* 시간 선택창: 날짜(달력) 먼저 → 날짜를 누르면 시간(요일별 빠른 시간)으로 넘어감 */
+  var cPane = "date", cc = { y: 0, m: 0 };
+  function quickFor(d) {
+    var w = new Date(d + "T00:00:00").getDay();
+    return w === 0 ? [1, 2, 3, 6] : w === 6 ? [3, 7] : [4, 8];   /* 일 1·2·3·6시, 토 3·7시, 평일 4·8시 */
+  }
+  function dayLabel(d) { var dt = new Date(d + "T00:00:00"); return (dt.getMonth() + 1) + "월 " + dt.getDate() + "일 (" + DOW[dt.getDay()] + ")"; }
+  function updateCTabs() {
+    var d = $("cDate").value;
+    $("ctDate").textContent = d ? dayLabel(d) : "날짜";
+    $("ctTime").textContent = (cPane === "time" || form.time) ? (cPane === "time" ? (tp.pm ? "오후 " : "오전 ") + tp.h + ":" + pad(tp.m) : fmtTime(form.time)) : "시간";
+  }
+  function renderPickCal() {
+    var g = $("ccGrid"); g.textContent = "";
+    $("ccTitle").textContent = cc.y + "년 " + (cc.m + 1) + "월";
+    var lead = (new Date(cc.y, cc.m, 1).getDay() + 6) % 7, dim = new Date(cc.y, cc.m + 1, 0).getDate();
+    var sel = $("cDate").value, td = today();
+    for (var i = 0; i < lead; i++) g.appendChild(document.createElement("span"));
+    for (var d = 1; d <= dim; d++) {
+      (function (d) {
+        var key = cc.y + "-" + pad(cc.m + 1) + "-" + pad(d);
+        var b = document.createElement("button"); b.type = "button"; b.textContent = d;
+        b.className = "ccd" + (key === sel ? " on" : "") + (key === td ? " td" : "");
+        b.onclick = function () { $("cDate").value = key; setPane("time"); };
+        g.appendChild(b);
+      })(d);
+    }
+  }
+  function renderQuick() {
+    var q = $("cQuick"); q.textContent = "";
+    var d = $("cDate").value || today(), main = quickFor(d);
+    $("cqHint").textContent = DOW[new Date(d + "T00:00:00").getDay()] + "요일에 많이 가는 시간 · 누르면 바로 저장돼요";
+    [1, 2, 3, 4, 5, 6, 7, 8].forEach(function (h) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = h + "시";
+      b.className = "cq" + (main.indexOf(h) > -1 ? " main" : "");
+      b.onclick = function () { tp.h = h; tp.m = 0; tp.pm = true; confirmClock(true); };
+      q.appendChild(b);
+    });
+  }
+  function setPane(p) {
+    cPane = p;
+    $("cpDate").hidden = p !== "date"; $("cpTime").hidden = p !== "time";
+    $("ctDate").classList.toggle("on", p === "date"); $("ctTime").classList.toggle("on", p === "time");
+    if (p === "date") renderPickCal(); else { renderQuick(); renderClock(); }
+    updateCTabs();
+  }
+  function confirmClock(forceTime) {
+    if (!$("cDate").value) $("cDate").value = today();
+    if (forceTime || cPane === "time") form.time = pad((tp.h % 12) + (tp.pm ? 12 : 0)) + ":" + pad(tp.m);
+    $("date").value = $("cDate").value;
+    updateTimeBtn(); closeClock();
+  }
   function openClock() {
-    $("cDate").value = $("date").value;
+    $("cDate").value = $("date").value || today();
+    var bd = new Date($("cDate").value + "T00:00:00"); cc.y = bd.getFullYear(); cc.m = bd.getMonth();
     if (form.time) {
       var h = +form.time.slice(0, 2);
       tp.pm = h >= 12; tp.h = h % 12 || 12; tp.m = Math.round(+form.time.slice(3, 5) / 5) % 12 * 5;
@@ -4821,6 +5029,7 @@
     renderClock();
     $("clock").classList.add("show");
     pushLayer("clock");
+    setPane("date");
   }
   function hideClock() { $("clock").classList.remove("show"); }
 
@@ -4849,12 +5058,11 @@
   $("pm").onclick = function () { tp.pm = true; renderClock(); };
   $("cCancel").onclick = closeClock;
   $("cClear").onclick = function () { form.time = ""; updateTimeBtn(); closeClock(); };
-  $("cOk").onclick = function () {
-    var h24 = (tp.h % 12) + (tp.pm ? 12 : 0);
-    form.time = pad(h24) + ":" + pad(tp.m);
-    $("date").value = $("cDate").value;
-    updateTimeBtn(); closeClock();
-  };
+  $("cOk").onclick = function () { confirmClock(false); };
+  $("ctDate").onclick = function () { setPane("date"); };
+  $("ctTime").onclick = function () { setPane("time"); };
+  $("ccPrev").onclick = function () { cc.m--; if (cc.m < 0) { cc.m = 11; cc.y--; } renderPickCal(); };
+  $("ccNext").onclick = function () { cc.m++; if (cc.m > 11) { cc.m = 0; cc.y++; } renderPickCal(); };
   $("clock").onclick = function (e) { if (e.target === this) closeClock(); };
 
   /* ---------- 태그 ---------- */
