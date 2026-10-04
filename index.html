@@ -5862,6 +5862,7 @@
               if (fx.te == null && isFinite(+x.te) && +x.te > 0) fx.te = +x.te;
               fc = true;
             }
+            else if (String(fx.text || "").trim() && fx.ta == null && fx.te == null && isFinite(+x.te) && +x.te > 0) { fx.te = +x.te; fc = true; }   /* 처음 쓴 시각은 모르지만 고친 시각만 있는 경우 */
             if (fc) filled++;
           }
           if (x && have[x.id] && x.oldNote != null) {
