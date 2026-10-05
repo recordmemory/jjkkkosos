@@ -253,18 +253,45 @@
   }
   .calhead .navb { width: 38px; }
   .calhead button:disabled { opacity: .3; cursor: default; }
-  .dlg { position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-end; justify-content: center; background: rgba(25,28,43,.45); opacity: 0; transition: opacity .18s; }
+  /* 확인창: 앱 전체와 같은 Pretendard + 남색 잉크 톤, 제목은 헤더처럼 명조. 기록 카드·아이콘만 카테고리 색을 입음. 위험한 동작만 붉은색 */
+  .dlg { --dg: #d8453b; --dg-d: #b3332a; --dg-s: #fdeceb; position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-end; justify-content: center; background: rgba(25,28,43,.46); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); opacity: 0; transition: opacity .22s; font-family: var(--sans); }
   .dlg.show { opacity: 1; }
-  .dlg .dsheet { width: 100%; max-width: 480px; background: var(--paper); border-radius: 20px 20px 0 0; padding: 22px 20px calc(16px + env(safe-area-inset-bottom)); transform: translateY(24px); transition: transform .2s ease-out; box-shadow: 0 -8px 30px rgba(25,28,43,.18); }
+  .dlg .dsheet { position: relative; width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; background: var(--paper); border-radius: 30px 30px 0 0; padding: 30px 22px calc(16px + env(safe-area-inset-bottom)); transform: translateY(44px); transition: transform .34s cubic-bezier(.2,.9,.25,1); box-shadow: 0 -12px 44px rgba(25,28,43,.2); }
+  .dlg .dsheet::before { content: ""; position: absolute; top: 9px; left: 50%; width: 38px; height: 4px; margin-left: -19px; border-radius: 4px; background: var(--line2); }
   .dlg.show .dsheet { transform: none; }
-  .dlg .dt { font-family: var(--serif); font-size: 17px; font-weight: 700; line-height: 1.45; word-break: keep-all; }
-  .dlg .dm { margin-top: 8px; font-size: 14px; line-height: 1.65; color: var(--sub); white-space: pre-line; word-break: keep-all; }
-  .dlg .dbtn { display: flex; gap: 8px; margin-top: 20px; }
-  .dlg .dbtn button { flex: 1; height: 46px; border-radius: 12px; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; border: 1px solid var(--line2); background: var(--paper); color: var(--ink); }
-  .dlg .dbtn button.ok { border-color: var(--ink); background: var(--ink); color: #fff; }
-  .dlg .dbtn button.ok.danger { border-color: var(--movie); background: var(--movie); }
-  .dlg .dbtn button:active { opacity: .8; }
-  @media (min-width: 560px) { .dlg { align-items: center; } .dlg .dsheet { border-radius: 20px; } }
+  .dlg .dic { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #eceef6; color: var(--ink); margin-bottom: 14px; }
+  .dlg .dic svg { width: 22px; height: 22px; }
+  .dlg .dsheet[data-t] .dic { background: color-mix(in srgb, var(--c) 15%, #fff); color: var(--ct); }
+  .dlg.danger .dic { background: var(--dg-s); color: var(--dg); }
+  .dlg .dt { font-family: var(--serif); font-size: 20px; font-weight: 700; line-height: 1.42; letter-spacing: -.035em; word-break: keep-all; overflow-wrap: anywhere; }
+  .dlg .dtarget { margin-top: 16px; padding: 13px 15px 13px 18px; border-radius: 16px; background: var(--bg); box-shadow: inset 4px 0 0 var(--c, var(--line2)); font-size: 16px; font-weight: 650; line-height: 1.5; letter-spacing: -.025em; word-break: keep-all; overflow-wrap: anywhere; }
+  .dlg .dtx { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .dlg .dcat { display: inline-block; margin-right: 6px; padding: 0 8px; border-radius: 999px; background: color-mix(in srgb, var(--c) 15%, #fff); color: var(--ct, var(--ink)); font-size: 13px; font-weight: 700; line-height: 22px; letter-spacing: -.02em; vertical-align: 1px; }
+  .dlg .dm { margin-top: 12px; font-size: 15px; line-height: 1.65; letter-spacing: -.02em; color: var(--sub); white-space: pre-line; word-break: keep-all; overflow-wrap: anywhere; }
+  .dlg .dtarget + .dm { margin-top: 14px; }
+  .dlg .dmeta { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .dlg .dmeta > span { display: inline-flex; align-items: center; gap: 4px; min-height: 26px; padding: 3px 10px; border-radius: 999px; background: var(--bg); color: var(--sub); font-size: 12.5px; font-weight: 500; line-height: 1.35; letter-spacing: -.02em; }
+  .dlg .dmeta svg { flex: none; width: 13px; height: 13px; }
+  .dlg .dwarn { margin-top: 16px; padding: 13px 14px; border-radius: 16px; background: var(--dg-s); box-shadow: inset 0 0 0 1px rgba(216,69,59,.14); color: var(--dg-d); font-size: 14px; font-weight: 500; line-height: 1.6; letter-spacing: -.02em; display: flex; gap: 9px; word-break: keep-all; overflow-wrap: anywhere; }
+  .dlg .dwarn svg { flex: none; width: 18px; height: 18px; margin-top: 2px; }
+  .dlg .dnote { margin-top: 14px; display: flex; align-items: center; gap: 6px; font-size: 13px; line-height: 1.5; letter-spacing: -.02em; color: var(--sub); }
+  .dlg .dnote svg { flex: none; width: 15px; height: 15px; }
+  .dlg .dbtn { display: flex; gap: 10px; margin-top: 26px; }
+  .dlg .dbtn button { flex: 1; height: 54px; border: 0; border-radius: 17px; background: #eceef6; color: var(--ink); font-family: inherit; font-size: 16px; font-weight: 600; letter-spacing: -.02em; cursor: pointer; transition: transform .12s, background .15s; }
+  .dlg .dbtn button.ok { flex: 1.5; background: var(--ink); color: #fff; box-shadow: 0 6px 16px rgba(25,28,43,.22); }
+  .dlg .dbtn button.ok.danger { background: var(--dg); box-shadow: 0 6px 16px rgba(216,69,59,.28); }
+  .dlg .dbtn.col3 { flex-direction: column; gap: 8px; }
+  .dlg .dbtn.col3 button { flex: none; width: 100%; min-width: 0; height: 54px; padding: 0 4px; font-size: 16px; white-space: nowrap; }
+  .dlg .dbtn.col3 .drow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dlg .dbtn.col3 .drow button, .dlg .dbtn.col3 .drow button.ok, .dlg .dbtn.col3 .drow button.alt { flex: none; width: 100%; min-width: 0; height: 54px; }
+  .dlg .dbtn.col3 button.ok { flex: none; }
+  .dlg .dbtn.col3 button.alt { flex: none; background: var(--dg-s); color: var(--dg-d); }
+  .dlg .dbtn.col3 button.cx { height: 42px; background: transparent; color: var(--sub); font-size: 15px; font-weight: 500; }
+  .dlg .dbtn button:active { transform: scale(.97); }
+  .dlg .dbtn button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .dlg.danger .dbtn button:focus-visible { outline-color: var(--dg); }
+  @media (min-width: 560px) { .dlg { align-items: center; } .dlg .dsheet { border-radius: 28px; padding-top: 28px; transform: translateY(14px) scale(.97); } .dlg .dsheet::before { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .dlg, .dlg .dsheet, .dlg .dbtn button { transition: none; } }
   .calhead .todayb { padding: 0 12px; }
   .caltitle { flex: 1; text-align: center; font-size: 18px; font-weight: 700; line-height: 1.25; font-family: var(--serif); }
   .caltitle small { display: block; font-size: 12px; font-weight: 400; color: var(--sub); font-family: var(--sans); }
@@ -514,7 +541,7 @@
   .wbar .wundo:not(:disabled):active { background: rgba(25,28,43,.08); }
   #wtext {
     flex: 1; min-height: 0; width: 100%; border: 0; border-radius: 0; background: transparent;
-    padding: 18px 18px calc(24px + env(safe-area-inset-bottom)); font-size: 18px; line-height: 1.9;
+    padding: 18px 18px calc(64px + env(safe-area-inset-bottom)); font-size: 18px; line-height: 1.9;
     resize: none; overflow-y: auto; outline: none;
   }
 
@@ -813,8 +840,10 @@
   .bkbar span { flex: 1; min-width: 0; }
   .bkbar button { border: 0; background: transparent; font: inherit; font-weight: 700; color: var(--ink); padding: 6px 8px; cursor: pointer; white-space: nowrap; }
   .bkbar button.dim { font-weight: 500; color: var(--sub); }
-  #toast.act { pointer-events: auto; display: flex; align-items: center; gap: 14px; padding-right: 10px; }
-  #toast.act button { border: 0; background: transparent; color: #ffd45a; font-size: 13.5px; font-weight: 700; padding: 6px 8px; cursor: pointer; }
+  #toast.act { pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 16px; font-weight: 500; letter-spacing: -.02em; }
+  #toast.act button { border: 0; background: rgba(255,255,255,.14); color: #ffd45a; font-size: 13.5px; font-weight: 700; letter-spacing: -.02em; padding: 8px 12px; border-radius: 11px; cursor: pointer; transition: background .15s; }
+  #toast.act button:active { background: rgba(255,255,255,.24); }
+  #toast.act button:focus-visible { outline: 2px solid #ffd45a; outline-offset: 2px; }
   .card[role="button"]:focus-visible, .chead:focus-visible { outline-offset: -3px; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
   .tagchip { border: 0; background: #eceef6; color: #5b6076; font-size: 12.5px; padding: 3px 10px; border-radius: 999px; cursor: pointer; font-family: inherit; }
@@ -897,7 +926,7 @@
   #rtabs button.tgl::before {
     content: ""; width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor;
   }
-  #rtabs button.tgl.on { color: #5b6dd6; font-weight: 700; }   /* 켜지면 생각 색(남보라) */
+  #rtabs button.tgl.on { color: var(--ink); font-weight: 700; }   /* 켜지면 생각 색(남보라) */
   #rtabs button.tgl.on::before { background: #5b6dd6; box-shadow: none; }
   #rtabs button.tgl::after { display: none; }
   /* PDF 저장: 생각 포함 오른쪽, 모서리가 작게 둥근 사각형 */
@@ -3147,16 +3176,11 @@
     var kind = actChip(gone.t);
     var rec = gone.ty !== "sys" && gone.rid ? data.filter(function (x) { return x.id === gone.rid; })[0] : null;
     if (!rec || (kind !== "관람" && kind !== "완독")) {
-      /* 후기·읽는 중·백업·가져오기·목표 기록: 타임라인 기록만 지움 */
-      var note = gone.tid ? "\n생각 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요."
-        : gone.ty === "sys" ? "\n타임라인의 기록만 지워지고, 저장한 백업 파일과 가져온 기록은 그대로 남아요."
-        : (kind === "후기" && rec) ? (/ 관람 전 기대 작성$/.test(gone.t) ? "\n관람 전 기대 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요." : "\n후기 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요.") : "";
-      askConfirm("이 활동 기록을 정말 삭제할까요?" + note + "\n\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.", DELQ, function () {
-        acts.splice(pos, 1); persistActs(); render();
-        showUndoToast("기록을 삭제했어요", function () {
-          if (acts.indexOf(gone) > -1) return;
-          acts.splice(Math.min(pos, acts.length), 0, gone); persistActs(); render();
-        });
+      /* 후기·읽는 중·백업·가져오기·목표 기록: 타임라인 기록만 지우므로 확인창 없이 바로 삭제하고, 되돌리기만 띄움 */
+      acts.splice(pos, 1); persistActs(); render();
+      showUndoToast("기록을 삭제했어요", function () {
+        if (acts.indexOf(gone) > -1) return;
+        acts.splice(Math.min(pos, acts.length), 0, gone); persistActs(); render();
       });
       return;
     }
@@ -4200,9 +4224,11 @@
     renderGuide();
     $("gBody").scrollTop = 0;
   }
+  var gGenresFresh = false;
   function renderGuideGenres() {
     var box = $("gGenres");
     var show = gTarget !== "pre" && form.type === "book";
+    var keepX = box.scrollLeft;   /* 질문을 고를 때마다 다시 그려도 가로 스크롤은 그대로 */
     box.hidden = !show;
     box.textContent = "";
     if (!show) return;
@@ -4216,7 +4242,11 @@
       box.appendChild(b);
     });
     var cur = box.querySelector("button.on");
-    if (cur && cur.scrollIntoView) { try { cur.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) {} }
+    if (gGenresFresh && cur) {   /* 가이드를 처음 열 때만 현재 장르가 보이도록 가운데로 */
+      gGenresFresh = false;
+      var br = box.getBoundingClientRect(), cr = cur.getBoundingClientRect();
+      box.scrollLeft = keepX + (cr.left + cr.width / 2) - (br.left + br.width / 2);
+    } else box.scrollLeft = keepX;
   }
   function guideKey() { return gTarget === "pre" ? "pre" : form.type === "book" ? genreKey($("genre").value) : form.type === "movie" ? "movie" : "perf"; }
   function gst(ti, qi) {
@@ -4245,6 +4275,7 @@
     $("gTitle").textContent = guideSet(gKey).name + " 가이드 질문";
     $("guide").hidden = false;
     pushLayer("guide");
+    gGenresFresh = true;
     renderGuide();
     $("gBody").scrollTop = 0;
   }
@@ -4281,7 +4312,7 @@
       {"h": "막막할 땐 「가이드 질문」", "lines": ["별점 아래, 후기 위의 「가이드 질문」을 눌러요. 책은 장르에 따라 질문이 달라져요.", "위쪽 탭에서 주제를 고르고, 마음이 가는 질문을 눌러 선택해요.", "질문마다 딸림 질문이 있어요. 「딸림 질문 모두 선택」으로 한 번에 고를 수도 있어요.", "뭘 쓸지 감이 안 오면 「랜덤 선택」으로 주제마다 질문을 하나씩 뽑아봐요.", "「N개 넣기」를 누르면 고른 질문이 후기 칸에 들어가요. 그 아래에 내 생각을 이어서 쓰면 돼요.", "잘못 골랐다면 「비우기」로 선택을 초기화해요."]},
       {"h": "비고와 태그", "lines": ["비고는 같이 본 사람, 앉았던 자리, 재관람 여부 같은 짧은 메모예요. 100자까지 쓸 수 있어요.", "태그는 #재관람 #가족처럼 적어요.", "비고와 태그는 검색에도 잡혀요."]},
       {"h": "쓰다가 잠깐 내려두기", "lines": ["작성 화면 위쪽의 「내리기」 버튼을 누르거나, 위쪽 바를 아래로 쓸어내려요.", "작성 화면이 아래 「이어 쓰기」 막대로 내려가요.", "그동안 목록·달력 등 다른 화면을 볼 수 있어요.", "막대나 「+ 후기 추가」를 누르면 쓰던 내용 그대로 이어서 쓸 수 있어요."]},
-      {"h": "작성 중 갑자기 꺼져도 괜찮아요", "lines": ["작성 중인 내용(후기 포함)은 입력하는 동안 자동으로 임시저장돼요.", "앱이 꺼지거나 새로고침해도 남아 있고, 다시 열면 「이어서 쓸까요?」라고 물어봐요.", "기록별로 따로 보관돼서 다른 기록을 열어도 덮어쓰지 않아요. 최근 5개까지, 10일이 지나면 자동으로 지워져요.", "「저장」하거나 「닫기」로 닫으면 임시저장은 남지 않아요."]},
+      {"h": "작성 중 갑자기 꺼져도 괜찮아요", "lines": ["작성 중인 내용(후기 포함)은 입력하는 동안 자동으로 임시저장돼요.", "새로고침하면 쓰던 기록 창·후기 창이 그대로 다시 열리고, 쓴 내용과 「수정된 사항」 여부도 그대로 남아 있어요.", "앱이 꺼졌다가 다시 켜지면 어떤 걸 쓰던 중이었는지 알려 주고 「불러오기」「취소」를 물어봐요. 「취소」를 눌러도 임시저장은 지워지지 않아요. 다음에 같은 기록이나 새 후기 창을 열 때 「불러오기」「버리기」로 한 번 더 물어보고, 「버리기」를 누르면 임시저장이 지워져요.\n· 새 후기 → 「후기 등록하던 내용을 불러올까요?」\n· 기록 수정 → 「○○ 수정하던 기록을 불러올까요?」 (기록 창에서 후기 창을 열어 쓰던 중이었다면 「불러오기」 때 후기 창도 다시 열려요. 닫거나 저장하면 기록 창으로 돌아와요)\n· 후기 수정 → 「○○ 후기 수정하던 내용을 불러올까요?」", "기록별로 따로 보관돼요. 새로 추가하던 기록도 하나씩 따로 남고, 최근 5개까지 10일 동안 보관해요. 기록 수정과 후기 수정은 같은 기록이면 같은 임시저장을 이어 써요.", "닫을 때 내용이 바뀌었으면 「네」「아니오」「취소」를 물어봐요. 저장하거나 저장하지 않고 닫으면 임시저장은 지워져요."]},
 
       {"h": "수정·삭제", "lines": ["카드를 펼치면 「수정」「삭제」 버튼이 있어요.", "관람 직후 못 쓴 내용을 나중에 채우거나, 마음이 바뀌면 고칠 수 있어요.", "후기만 추가·수정하려면 「수정」 대신 카드 안의 「후기 쓰기」·「후기 수정」을 눌러요.", "「삭제」를 누르면 정말 삭제할지 한 번 더 물어봐요.", "삭제한 직후 몇 초 동안은 아래에 뜨는 「실행취소」로 취소할 수 있어요.", "그 시간이 지나면 되돌릴 수 없으니, 백업을 해두면 안심이에요."]}
     ] },
@@ -4316,6 +4347,8 @@
       {"d": "2026-10-05 05:40", "h": "예정 기록 표시 진하게", "p": "목록의 예정(아직 안 본) 기록에서 띠와 종류 글자가 조금 더 진해졌고, D-day 마크도 같은 진하기로 맞췄어요."},
       {"d": "2026-10-05 05:20", "h": "목표 초과 문구", "p": "독서 목표를 넘겨 달성하면 「목표를 달성했어요!」 옆의 (+n권) 대신, 「남은 n권」이 있던 줄에 「목표보다 n권 더 읽었어요.」가 나와요. 딱 맞게 읽었으면 그 줄은 비어 있어요."},
       {"d": "2026-10-05 05:00", "h": "목록·달력 독서 목표 카드 높이 고정", "p": "목록·달력의 독서 목표 카드가 목표를 달성했을 때도, 연↔월을 바꿀 때도 높이와 오른쪽 아래 버튼 위치가 그대로예요. 줄 구성을 같게 맞춰서 글자만 바뀌어 보여요."},
+      {"d": "2026-10-05 13:10", "h": "닫기 버튼·불러오기 문구 변경", "p": "닫기 확인창의 버튼이 「네 / 아니오 / 취소」로 바뀌었어요. 앱을 다시 켰을 때 뜨는 확인창은 「불러오기 / 취소」이고, 「취소」를 눌러도 임시저장은 남아요. 다음에 기록·후기 창을 열 때는 「불러오기 / 버리기」로 한 번 더 물어보고, 「버리기」를 누르면 임시저장이 지워져요."},
+      {"d": "2026-10-05 12:10", "h": "닫기 확인·임시저장 정리", "p": "기록·후기 창을 닫을 때 「저장하기 / 저장하지 않기 / 취소」를 묻도록 바꿨어요. 임시저장은 앱이 예기치 않게 꺼졌을 때만 남고, 다시 켜면 새 후기 등록·기록 수정·후기 수정 중 무엇을 쓰던 중이었는지 알려 주며 불러올지 물어봐요. 새로고침하면 작성창이 쓰던 내용 그대로 다시 열려요."},
       {"d": "2026-10-05 04:40", "h": "독서 목표 카드 높이 고정", "p": "통계 「목표」 탭에서 목표가 있는 해끼리 이동해도 독서 목표 카드 높이가 바뀌지 않아요. 줄 구성을 같게 맞췄고, 「목록·달력 고정」 버튼은 항상 같은 줄에 있어요."},
       {"d": "2026-10-05 04:20", "h": "통계 카드 여백 통일", "p": "통계 탭의 모든 카드(종류별 요약, 카테고리 편수, 달별·연도별 줄, 장르 도넛·장르 막대, 목표 카드와 그래프)의 여백을 맞췄어요. 카드 위, 제목과 첫 항목 사이, 맨 아래가 모두 14px이에요. 제목 없는 카드는 위아래만 14px이에요."},
       {"d": "2026-10-05 03:50", "h": "통계 맨 위 막대 굵게", "p": "통계 각 탭 맨 위의 종류별 막대가 조금 더 굵어지고, 조각 안에 이름과 비율이 한 줄로 들어가요. 조각이 좁으면 비율만, 그것도 안 되면 글자는 숨기고 아래 범례에서 확인해요. 막대와 아래 범례 사이 간격도 넓혔어요."},
@@ -4468,7 +4501,7 @@
   function closeHowto() { popLayer("howto"); }
   function renderGuide() {
     var set = guideSet(gKey), th = set.themes[gTab];
-    var tabs = $("gTabs");
+    var tabs = $("gTabs"), tabsX = tabs.scrollLeft;
     tabs.textContent = "";
     set.themes.forEach(function (t, ti) {
       var cnt = 0;
@@ -4479,6 +4512,7 @@
       b.onclick = function () { gTab = ti; renderGuide(); $("gBody").scrollTop = 0; };
       tabs.appendChild(b);
     });
+    tabs.scrollLeft = tabsX;
     var body = $("gBody"), keep = body.scrollTop;
     body.textContent = "";
     th.qs.forEach(function (q, qi) {
@@ -4729,13 +4763,35 @@
     if (form.type === "movie") return v("creator") || v("note") || v("tags");
     return v("creator") || v("seat") || v("cast") || v("note") || v("tags") ;
   }
-  function openForm(id) {
+  /* 「불러올까요?」 창이 닫힌 직후 제목 칸에 커서(자판) 올리기. 후기 창이 열려 있으면 건드리지 않음 */
+  function focusTitleAfterDlg() {
+    var go = function () {
+      try {
+        if (dlgEl || !$("sheet").classList.contains("show") || !$("writer").hidden) return;
+        var t = $("title"); if (document.activeElement === t) return;
+        t.focus(); var n = t.value.length; t.setSelectionRange(n, n);
+      } catch (e) {}
+    };
+    go();                         /* 누른 직후 바로(폰 자판이 확실히 올라오게) */
+    setTimeout(go, 120);          /* 창이 사라지며 포커스를 뺏겼다면 한 번 더 */
+    setTimeout(go, 300);
+  }
+  var heldDraft = null;   /* 「취소」로 불러오지 않은 임시저장(같은 기록 수정용): 닫을 때 지우지 않고 그대로 남겨 둠 */
+  var draftKey = "", draftMode = "new", draftHad = false;   /* 지금 열린 기록 창의 임시저장 칸 / 종류(새 후기·기록 수정·후기 수정) */
+  function newDraftKey() { return "new:" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function isNewKey(k) { return k === "new" || String(k).indexOf("new:") === 0; }
+  function openForm(id, opts) {
+    opts = opts || {};
     if (miniState) {
       if ((id || null) === (miniState.eid || null)) { restoreWriting(); return; }
-      askConfirm("내려둔 후기가 있어요.\n버리고 새로 열까요?", { ok: "버리고 열기", danger: true }, function () { discardMinimized(); openForm(id); });
+      askConfirm("내려둔 후기를 버리고 새로 열까요?\n내려둔 내용은 사라져요.", { ok: "버리고 열기", danger: true }, function () { discardMinimized(); openForm(id); });
       return;
     }
     editingId = id || null;
+    draftKey = opts.key || (id ? String(id) : newDraftKey());
+    draftMode = opts.mode || (id ? "edit" : "new");
+    draftHad = !!opts.had;
+    heldDraft = null;
     var r = id ? data.filter(function (x) { return x.id === id; })[0] : null;
     $("sheetTitle").textContent = r ? "후기 수정" : "새 후기";
     form.rating = r ? r.rating : 0;
@@ -4765,10 +4821,12 @@
     growText(); growCast();
     setVTab(form.type !== "book" && $("date").value > today() ? "pre" : "post");   /* 아직 안 본(관람일이 오늘 이후) 기록은 「관람 전」부터 */
     formSnap = snapForm();
-    restoreDraft(id);
-    setMore(hasExtra());
+    if (opts.fields) { applyFields(opts.fields); syncAfterRestore(); }   /* 새로고침·앱 재시작 복원: 물어보지 않고 바로 채움 */
+    else restoreDraft(id);
+    if (opts.snap) formSnap = opts.snap;
+    setMore(hasExtra() || !!opts.more);
     pushLayer("form");
-    if (!r) $("title").focus();
+    if (!r && !opts.fields && !(pendingDlg && dlgEl === pendingDlg)) $("title").focus();   /* 「불러올까요?」 창이 떠 있으면 창이 닫힌 뒤에 커서를 둠(자판이 먼저 올라오지 않게) */
   }
   /* 기록 창의 「관람 전」·「관람 후」 탭 (책은 탭 없이 지금처럼) */
   var vTab = "post";
@@ -4842,6 +4900,30 @@
     t.style.height = t.scrollHeight + "px";
     $("cnt").textContent = t.value.length + "자";
   }
+  /* 후기 쓰기 창: 커서가 있는 줄 아래로 한 줄 정도 여백이 항상 보이게 스크롤(자판에 마지막 줄이 걸리지 않도록) */
+  var wMirror = null;
+  function wKeepCaretRoom() {
+    var t = $("wtext");
+    if (!t || document.activeElement !== t || $("writer").hidden) return;
+    if (t.selectionStart !== t.selectionEnd) return;   /* 글자를 드래그해 고르는 중에는 건드리지 않음 */
+    var cs = getComputedStyle(t), lh = parseFloat(cs.lineHeight) || 34;
+    if (!wMirror) {
+      wMirror = document.createElement("div");
+      wMirror.setAttribute("aria-hidden", "true");
+      wMirror.style.cssText = "position:absolute;left:-9999px;top:0;visibility:hidden;pointer-events:none;white-space:pre-wrap;overflow-wrap:break-word;box-sizing:border-box;";
+      document.body.appendChild(wMirror);
+    }
+    ["fontFamily", "fontSize", "fontWeight", "fontStyle", "letterSpacing", "lineHeight", "wordSpacing", "wordBreak", "textIndent", "tabSize",
+     "paddingTop", "paddingRight", "paddingBottom", "paddingLeft"].forEach(function (k) { wMirror.style[k] = cs[k]; });
+    wMirror.style.width = t.clientWidth + "px";
+    wMirror.textContent = t.value.substring(0, t.selectionEnd);
+    var mark = document.createElement("span"); mark.textContent = "\u200b"; wMirror.appendChild(mark);
+    var want = mark.offsetTop + lh * 2 - t.clientHeight;   /* 커서 줄 + 아래 한 줄이 보이는 위치 */
+    wMirror.textContent = "";
+    if (t.scrollTop < want) t.scrollTop = want;
+  }
+  var wRoomRaf = 0;
+  function wKeepCaretRoomSoon() { cancelAnimationFrame(wRoomRaf); wRoomRaf = requestAnimationFrame(wKeepCaretRoom); }
   function fitWriter() {
     var w = $("writer"), vv = window.visualViewport;
     if (w.hidden || !vv) return;
@@ -4893,6 +4975,7 @@
     wApplyTab();
     t.scrollTop = 0;
     try { t.focus({ preventScroll: true }); t.setSelectionRange(t.value.length, t.value.length); } catch (e) {}
+    scheduleDraft();
   }
   function wGo(d) {
     wSnap();
@@ -4927,14 +5010,18 @@
   function restoreExtra() { $("rateAnchor").before($("rateBox")); $("rateBox").style.display = ""; }
   /* 카드의 「후기 쓰기」를 누르면 후기 입력창만 바로 열림(완료하면 바로 저장) */
   var writerDirect = false, writerHad = false, writerInitPost = "", writerInitPre = "";
-  function openReviewWriter(id, tab) {
-    var rv = data.filter(function (x) { return x.id === id; })[0];
-    openForm(id);
-    if (layers.indexOf("form") < 0 || layers.indexOf("writer") > -1) return;
+  function enterDirectWriter(tab, had) {
     var pre = tab === "pre" && form.type !== "book";
-    writerDirect = true; writerHad = !!(rv && ((rv.text && rv.text.trim()) || (rv.pre && rv.pre.trim())));
+    writerDirect = true; writerHad = !!had;
     setVTab(pre ? "pre" : "post");
     openWriter(pre ? "pre" : "post");
+  }
+  function openReviewWriter(id, tab) {
+    var rv = data.filter(function (x) { return x.id === id; })[0];
+    var had = !!(rv && ((rv.text && rv.text.trim()) || (rv.pre && rv.pre.trim())));
+    openForm(id, { mode: "review", had: had });
+    if (layers.indexOf("form") < 0 || layers.indexOf("writer") > -1) return;
+    enterDirectWriter(tab, had);
   }
   function finishDirectWriter() {
     wField().value = $("wtext").value;
@@ -4957,6 +5044,7 @@
     if (!$("writer").hidden) { $("writer").hidden = true; restoreExtra(); }
     $("sheet").classList.remove("show");
     document.body.style.overflow = "";
+    clearLive();
   }
 
   /* ---------- 폰 뒤로가기 = 맨 위 창 닫기 ---------- */
@@ -4967,7 +5055,12 @@
       $("seat").value, $("cast").value, $("note").value, $("tags").value, $("take").value, $("text").value, $("pre").value]);
   }
   function formDirty() { return !!formSnap && snapForm() !== formSnap; }
-  function pushLayer(name) { armGuard(); layers.push(name); history.pushState({ g: 1 + layers.length }, ""); }
+  var quietPush = false;   /* 새로고침 복원 중엔 이미 있는 뒤로가기 기록을 그대로 씀 */
+  function pushLayer(name) {
+    if (quietPush) { layers.push(name); return; }
+    armGuard(); layers.push(name); history.pushState({ g: 1 + layers.length }, "");
+    saveLive();
+  }
   function hideLayer(name) {
     if (name === "clock") hideClock();
     else if (name === "writer") {
@@ -4981,7 +5074,15 @@
     }
     else if (name === "guide") hideGuide();
     else if (name === "howto") hideHowto();
-    else if (name === "form") { hideForm(); formSnap = ""; clearDraft(); }
+    else if (name === "form") {
+      hideForm(); formSnap = "";
+      if (heldDraft && heldDraft.key === draftKey) {   /* 불러오기를 취소했던 임시저장은 그대로 다시 보관 */
+        clearTimeout(draftTimer);
+        var hm = loadDrafts(); hm[heldDraft.key] = heldDraft.d; storeDrafts(pruneDrafts(hm));
+        heldDraft = null;
+      } else clearDraft();
+    }
+    saveLive();
   }
   /* 닫기/취소 버튼: 기록(history)도 한 칸 되돌려서 뒤로가기와 똑같이 동작 */
   function popLayer(name) {
@@ -4993,7 +5094,7 @@
   function closeForm() {
     if (layers.indexOf("form") < 0) { hideForm(); return; }
     if (layers[layers.length - 1] === "form" && formDirty()) {
-      askConfirm(CLOSE_Q, CLOSE_OPT, function () { skipConfirm = true; popLayer("form"); });
+      askSaveClose(function () { save(); }, function () { skipConfirm = true; popLayer("form"); });
       return;
     }
     popLayer("form");
@@ -5012,10 +5113,11 @@
     var top = layers[layers.length - 1];
     if ((top !== "form" && top !== "writer") || !$("sheet").classList.contains("show")) return;
     if (layers.indexOf("writer") > -1) { wField().value = $("wtext").value; growText(); growPre(); updateVTabDots(); }
-    miniState = { layers: layers.slice(), eid: editingId };
+    miniState = { layers: layers.slice(), eid: editingId, key: draftKey };
     try { document.activeElement && document.activeElement.blur(); } catch (e) {}
     saveDraft();
     $("sheet").classList.add("mini"); $("writer").classList.add("mini");
+    clearLive();
     document.body.style.overflow = "";
     var n = layers.length; layers.length = 0;
     if (n) { skipPop++; history.go(-n); }
@@ -5033,11 +5135,11 @@
     if (m.layers.indexOf("writer") > -1) { try { $("wtext").focus(); } catch (e) {} }
   }
   function discardMinimized() {
+    if (miniState && miniState.key) clearDraft(miniState.key);
     miniState = null;
     $("miniBar").hidden = true;
     $("sheet").classList.remove("mini"); $("writer").classList.remove("mini");
     if (!$("writer").hidden) { $("writer").hidden = true; restoreExtra(); }
-    clearDraft();
   }
   $("minBtn").onclick = minimizeWriting;
   $("wMin").onclick = minimizeWriting;
@@ -5073,8 +5175,10 @@
   /* ---------- 앱 안 확인창: 폰 기본 팝업(confirm·alert) 대신 아래에서 올라오는 창 ---------- */
   var dlgEl = null, dlgModal = false, dlgNo = null;
   var DELQ = { ok: "삭제", danger: true };
-  var CLOSE_Q = "저장하지 않고 닫을까요?\n작성 중인 내용이 사라져요.";
-  var CLOSE_OPT = { ok: "닫기", cancel: "계속 작성", danger: true };
+  /* 닫을 때 저장 확인: 네 / 아니오 / 취소 (위에서 아래로) */
+  function askSaveClose(onSave, onDiscard, onCancel) {
+    askConfirm(editingId ? "닫기 전 수정한 사항을 저장할까요?" : "닫기 전 작성한 내용을 저장할까요?", { ok: "네", alt: "아니오", cancel: "취소" }, onSave, onCancel, onDiscard);
+  }
   function dlgKey(e) {
     if (e.key === "Escape" && dlgEl && !dlgModal) { e.preventDefault(); e.stopPropagation(); dlgCancelNow(); }
   }
@@ -5086,27 +5190,76 @@
     setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 200);
   }
   function dlgCancelNow() { var no = dlgNo; dlgClose(); if (no) no(); }
-  /* msg 첫 줄은 제목, 나머지는 설명. opt: ok·cancel 글자, danger(빨간 버튼), modal(바깥을 눌러도 안 닫힘), single(확인 버튼만) */
-  function askConfirm(msg, opt, yes, no) {
+  var DLG_ICON = {
+    trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.8c0-.4.4-.8.8-.8h4.4c.4 0 .8.4.8.8V7M6.5 7l.8 12c0 .6.5 1 1.1 1h7.2c.6 0 1.1-.4 1.1-1l.8-12M10 11v5M14 11v5"/></svg>',
+    warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.8 19.5c-.2.3 0 .5.3.5h17.8c.3 0 .5-.2.3-.5L12 4zM12 10v4.5M12 17.3v.1"/></svg>',
+    info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.8v.1"/></svg>',
+    draft: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1L3.5 8.5"/><path d="M3.5 3.8v4.7h4.7"/><path d="M12 7.8V12l2.8 1.8"/></svg>',
+    save: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4.2L19.4 8.8a2.1 2.1 0 0 0 0-3l-1.2-1.2a2.1 2.1 0 0 0-3 0L4 15.8V20zM13.4 6l4.6 4.6"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>'
+  };
+  function dlgIcon(kind, cls) { var s = el("span", cls || ""); s.innerHTML = DLG_ICON[kind]; return s; }
+  /* msg 첫 줄은 제목, 나머지는 설명. 「이름」으로 시작하면 이름 칸을 따로 보여 주고, ⚠ 줄은 경고 상자, '되돌릴 수 있어요' 줄은 작은 안내로 보여 줌.
+     opt: ok·cancel 글자, danger(빨간 버튼), modal(바깥을 눌러도 안 닫힘), single(확인 버튼만) */
+  function askConfirm(msg, opt, yes, no, alt) {
     opt = opt || {};
     if (dlgEl) dlgClose();
     var lines = String(msg).split("\n"), title = lines[0], body = lines.slice(1).join("\n").trim();
-    var ov = el("div", "dlg"); ov.setAttribute("role", "alertdialog"); ov.setAttribute("aria-modal", "true"); ov.dataset.n = String(msg);
+    var target = "", tm = /^「(.+?)」\s*(.+)$/.exec(title);
+    if (tm) { target = tm[1]; title = tm[2]; }
+    var ov = el("div", "dlg" + (opt.danger ? " danger" : "")); ov.setAttribute("role", "alertdialog"); ov.setAttribute("aria-modal", "true"); ov.dataset.n = String(msg);
     var sh = el("div", "dsheet");
-    sh.appendChild(el("div", "dt", title));
-    if (body) sh.appendChild(el("div", "dm", body));
-    var bt = el("div", "dbtn");
+    var kind = opt.danger ? ((opt.ok === "삭제" || /삭제/.test(title)) ? "trash" : "warn") : (opt.ok === "불러오기" ? "draft" : (opt.alt && opt.ok === "네" ? "save" : "info"));
+    var ic = dlgIcon(kind, "dic"); ic.setAttribute("aria-hidden", "true"); sh.appendChild(ic);
+    var dt = el("div", "dt", title); dt.id = "dlgT"; ov.setAttribute("aria-labelledby", "dlgT"); sh.appendChild(dt);
+    if (target) {
+      var tg = el("div", "dtarget"), tx = el("div", "dtx"), tin = el("span", "dtin"), cm = /^\[(.+?)\]\s*(.*)$/.exec(target), ck = "";
+      if (cm) Object.keys(KIND).forEach(function (k) { if (KIND[k].name === cm[1]) ck = k; });
+      if (ck) {   /* [뮤지컬] 제목: 머리말은 카테고리 색 알약, 카드·아이콘도 같은 색 */
+        tin.appendChild(el("span", "dcat", "[" + cm[1] + "]")); tin.appendChild(document.createTextNode(cm[2]));
+        tg.dataset.t = ck; sh.dataset.t = ck;
+      } else tin.textContent = target;
+      tx.appendChild(tin); tg.appendChild(tx); sh.appendChild(tg);
+    }
+    if (body) body.split(/\n\s*\n/).forEach(function (blk) {
+      blk = blk.trim(); if (!blk) return;
+      if (/^⚠/.test(blk)) {
+        var w = el("div", "dwarn"); w.appendChild(dlgIcon("warn")); w.appendChild(el("span", "", blk.replace(/^⚠\s*(주의\s*:?\s*)?/, ""))); sh.appendChild(w);
+      } else if (/되돌릴 수 있어요/.test(blk) && blk.length < 40) {
+        var n = el("div", "dnote"); n.appendChild(dlgIcon("undo")); n.appendChild(el("span", "", blk)); sh.appendChild(n);
+      } else if (/마지막 작성 /.test(blk) && blk.indexOf("\n") < 0) {   /* 임시저장 정보 줄: 작은 알약들로 */
+        var mt = el("div", "dmeta");
+        blk.split(" · ").forEach(function (part) {
+          var chip = el("span", "", part);
+          if (/^마지막 작성 /.test(part)) chip.insertBefore(dlgIcon("clock"), chip.firstChild);
+          mt.appendChild(chip);
+        });
+        sh.appendChild(mt);
+      } else sh.appendChild(el("div", "dm", blk));
+    });
+    var stack = !!opt.alt;   /* 버튼 3개(네 / 아니오 / 취소)는 위에서 아래로 쌓아서 보여 줌 */
+    var bt = el("div", "dbtn" + (stack ? " col3" : ""));
     var cb = null;
-    if (!opt.single) { cb = el("button", "", opt.cancel || "취소"); cb.type = "button"; cb.onclick = dlgCancelNow; bt.appendChild(cb); }
+    if (!opt.single) { cb = el("button", stack ? "cx" : "", opt.cancel || "취소"); cb.type = "button"; cb.onclick = dlgCancelNow; if (!stack) bt.appendChild(cb); }
     var ob = el("button", "ok" + (opt.danger ? " danger" : ""), opt.ok || "확인"); ob.type = "button";
     ob.onclick = function () { buzz(opt.danger ? 25 : 12); dlgNo = null; dlgClose(); if (yes) yes(); };
-    bt.appendChild(ob); sh.appendChild(bt); ov.appendChild(sh);
+    if (stack) {
+      var row = el("div", "drow");   /* 네 / 아니오는 나란히, 취소는 그 아래 */
+      row.appendChild(ob);
+      var ab = el("button", "alt", opt.alt); ab.type = "button";
+      ab.onclick = function () { buzz(12); dlgNo = null; dlgClose(); if (alt) alt(); };
+      row.appendChild(ab);
+      bt.appendChild(row);
+      if (cb) bt.appendChild(cb);
+    } else bt.appendChild(ob);
+    sh.appendChild(bt); ov.appendChild(sh);
     ov.onclick = function (e) { if (e.target === ov && !opt.modal) dlgCancelNow(); };
     document.body.appendChild(ov);
     dlgEl = ov; dlgModal = !!opt.modal; dlgNo = no || null;
     document.addEventListener("keydown", dlgKey, true);
     requestAnimationFrame(function () { ov.classList.add("show"); });
-    try { (opt.danger && cb ? cb : ob).focus(); } catch (x) {}
+    try { (opt.danger && cb && !stack ? cb : ob).focus(); } catch (x) {}
   }
   /* 안내만 하는 창(확인 버튼 하나). 같은 안내가 이미 떠 있으면 또 띄우지 않음 */
   function askNotice(msg) {
@@ -5164,7 +5317,7 @@
       };
       var restorePos = function () { history.pushState({ g: 1 + layers.length }, ""); };
       if (top === "form" && !skipConfirm && formDirty()) {
-        askConfirm(CLOSE_Q, CLOSE_OPT, function () { finishTop(false); }, restorePos);
+        askSaveClose(function () { restorePos(); save(); }, function () { finishTop(false); }, restorePos);
         return;
       }
       /* 카드에서 후기 창만 열었을 때(꾹 누르기·「후기 쓰기」)도 내용을 고쳤다면 같은 확인을 띄움 */
@@ -5174,7 +5327,11 @@
         if (writerDirect) wDirty = formDirty();
         else wDirty = $("text").value !== writerInitPost || $("pre").value !== writerInitPre;
         if (wDirty) {
-          askConfirm(CLOSE_Q, CLOSE_OPT, function () { finishTop(!writerDirect); }, restorePos);
+          if (writerDirect) askSaveClose(function () { restorePos(); finishDirectWriter(); }, function () { finishTop(false); }, restorePos);   /* 목록에서 바로 연 후기 창 */
+          else askConfirm("닫기 전 수정한 사항을 저장할까요?", { ok: "네", alt: "아니오", cancel: "취소" },
+            function () { writerInitPost = $("text").value; writerInitPre = $("pre").value; finishTop(false); },   /* 네: 고친 내용을 반영하고 후기 창 닫기 */
+            restorePos,                                                                                          /* 취소: 확인창만 닫고 후기 창은 그대로 */
+            function () { finishTop(true); });                                                                   /* 아니오: 고친 내용은 버리고 후기 창 닫기 */
           return;
         }
       }
@@ -5290,7 +5447,7 @@
     if (rec.type !== "book" && rec.pre) markPreSynced(editingId || rec.id);
     evs.forEach(function (ev) { logAct("\u300C" + rec.title + "\u300D " + ev.v, rec, ev.w); });
     if (rec.date) { calY = +rec.date.slice(0, 4); calM = +rec.date.slice(5, 7) - 1; selDate = rec.date; }
-    persist(); clearDraft(); closeAllLayers(); render();
+    persist(); heldDraft = null; clearDraft(); closeAllLayers(); render();
     if (newCardId) { var nid = newCardId; newCardId = null; setTimeout(function () { revealNewCard(nid); }, 250); }
   }
   /* 새로 추가한 카드로 화면을 옮기고(이미 잘 보이면 그대로) 잠깐 반짝이게 함 */
@@ -5494,17 +5651,22 @@
     render(); window.scrollTo(0, 0);
   }
 
-  /* ---------- 작성 중 임시저장 ---------- */
+  /* ---------- 작성 중 임시저장 ----------
+     · 임시저장은 「예기치 않게 꺼졌을 때」를 위한 것: 「네」「아니오」로 닫으면 지워짐
+     · 기록마다 따로(수정 중인 기록 = 그 기록의 id, 새로 추가하는 기록 = 열 때마다 새 칸) 보관
+     · 새로고침: 열려 있던 기록 창·후기 창을 그대로 다시 열어 줌(sessionStorage)
+     · 앱 종료 후 재실행: 무엇을 쓰던 중이었는지 알려 주고 불러올지 물어봄 */
   var draftTimer = 0;
+  var LIVEKEY = "reviews-live-v1";
   function draftObj() {
-    return { at: Date.now(), editingId: editingId, f: {
+    var wOpen = !$("writer").hidden;
+    return { at: Date.now(), key: draftKey, mode: draftMode, had: draftHad, tab: wOpen ? wTab : vTab, editingId: editingId,
+      w: wOpen ? { direct: !!writerDirect, tab: wTab, iPost: writerInitPost, iPre: writerInitPre } : null, f: {
       type: form.type, status: form.status, rating: form.rating, time: form.time,
       title: $("title").value, creator: $("creator").value, genre: $("genre").value, date: $("date").value,
       seat: $("seat").value, cast: $("cast").value, note: $("note").value, tags: $("tags").value,
       take: $("take").value, text: $("text").value, pre: $("pre").value } };
   }
-  /* 임시저장은 기록별로 따로 보관: 새 기록 1개("new") + 수정 중이던 기록마다 1개.
-     최근 5개까지만, 10일 지난 건 자동 삭제 → 다른 기록을 열어도 서로 덮어쓰지 않음 */
   var DRAFT_MAX = 5, DRAFT_DAYS = 10;
   function dkey(id) { return id ? String(id) : "new"; }
   function loadDrafts() {
@@ -5530,24 +5692,111 @@
   /* key를 안 주면 지금 열려 있는 기록의 임시저장을 지움 */
   function clearDraft(key) {
     clearTimeout(draftTimer);
-    var m = loadDrafts(), k = key || dkey(editingId);
+    var m = loadDrafts(), k = key || draftKey || dkey(editingId);
     if (m[k]) { delete m[k]; }
     storeDrafts(m);
   }
+  var pendingDlg = null;   /* 「불러올까요?」 확인창이 떠 있는 동안엔 저장된 임시저장을 지우거나 덮지 않음 */
   function saveDraft() {
     if (!$("sheet").classList.contains("show")) return;
-    var m = loadDrafts(), k = dkey(editingId);
-    if (!formDirty()) delete m[k];
+    if (pendingDlg && dlgEl === pendingDlg) return;
+    if (!$("writer").hidden) wField().value = $("wtext").value;
+    var m = loadDrafts(), k = draftKey || dkey(editingId);
+    if (!formDirty()) { if (!(heldDraft && heldDraft.key === k)) delete m[k]; }   /* 불러오기를 취소한 임시저장은 안 고쳤다고 지우지 않음 */
     else m[k] = draftObj();
     storeDrafts(pruneDrafts(m));
+    saveLive();
   }
   function scheduleDraft() { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 1200); }
-  function restoreDraft(id) {
-    var k = dkey(id), d = loadDrafts()[k];
-    if (!d || !d.f) return;
-    if (id && !data.some(function (x) { return x.id === id; })) { clearDraft(k); return; }
-    askConfirm("저장하지 않고 닫힌 작성 내용이 있어요.\n이어서 쓸까요?", { ok: "이어서 쓰기", cancel: "지우기", modal: true }, function () {
-    var f = d.f;
+
+  /* 새로고침해도 보던 작성창을 그대로: 창 상태를 이 탭(sessionStorage)에 계속 적어 둠 */
+  function clearLive() { try { sessionStorage.removeItem(LIVEKEY); } catch (e) {} }
+  function saveLive() {
+    try {
+      var sh = $("sheet");
+      if (!sh.classList.contains("show") || sh.classList.contains("mini") || layers.indexOf("form") < 0) { if (!quietPush) sessionStorage.removeItem(LIVEKEY); return; }
+      if (pendingDlg && dlgEl === pendingDlg) return;
+      var wOpen = !$("writer").hidden;
+      if (wOpen) wField().value = $("wtext").value;
+      var o = draftObj();
+      sessionStorage.setItem(LIVEKEY, JSON.stringify({
+        key: draftKey, mode: draftMode, had: draftHad, editingId: editingId, f: o.f, snap: formSnap,
+        vTab: vTab, more: !$("moreBox").hidden, writer: wOpen, wTab: wTab, direct: writerDirect, wHad: writerHad,
+        iPost: writerInitPost, iPre: writerInitPre, ps: sh.querySelector(".panel").scrollTop, at: Date.now()
+      }));
+    } catch (e) {}
+  }
+  /* 복원 뒤 뒤로가기 기록(g)을 열린 창 수에 맞춤 */
+  function fixHistory() {
+    guarded = true;
+    var need = 1 + layers.length, cur = (history.state && history.state.g != null) ? +history.state.g : -1;
+    if (cur === need) return;
+    if (cur < 0) { history.replaceState({ g: 0 }, ""); cur = 0; }
+    if (cur > need) { history.replaceState({ g: need }, ""); return; }
+    for (var g = cur + 1; g <= need; g++) history.pushState({ g: g }, "");
+  }
+  function restoreLive() {
+    var L = null;
+    try { L = JSON.parse(sessionStorage.getItem(LIVEKEY)); } catch (e) {}
+    if (!L || !L.f) return false;
+    var id = L.editingId || null;
+    if (id && !data.some(function (x) { return x.id === id; })) { clearLive(); return false; }
+    quietPush = true;
+    try {
+      openForm(id, { key: L.key, mode: L.mode, had: L.had, fields: L.f, snap: L.snap, more: L.more });
+      setVTab(L.vTab);
+      if (L.writer) {
+        writerDirect = !!L.direct; writerHad = !!L.wHad;
+        openWriter(L.wTab);
+        writerInitPost = L.iPost || ""; writerInitPre = L.iPre || "";
+      } else $("sheet").querySelector(".panel").scrollTop = +L.ps || 0;
+    } finally { quietPush = false; }
+    fixHistory();
+    saveLive();
+    return true;
+  }
+
+  /* 어떤 걸 쓰던 중이었는지 알려 주는 문구 */
+  function agoText(ms) {
+    var s = Math.max(0, (Date.now() - (ms || 0)) / 1000);
+    if (s < 60) return "방금 전";
+    if (s < 3600) return Math.floor(s / 60) + "분 전";
+    if (s < 86400) return Math.floor(s / 3600) + "시간 전";
+    return Math.floor(s / 86400) + "일 전";
+  }
+  function draftMsg(d) {
+    var f = d.f || {}, t = String(f.title || "").trim(), kn = KIND[f.type] ? KIND[f.type].name : "";
+    var tt = t ? "「" + (kn ? "[" + kn + "] " : "") + t + "」 " : "";   /* 제목이 있으면 「[뮤지컬] 제목」 */
+    var head;
+    if (d.mode === "review") head = tt + ((d.tab === "pre" ? "관람 전 기대 " : "후기 ") + (d.had ? "수정" : "작성")) + "하던 내용을 불러올까요?";
+    else if (d.mode === "edit") head = tt + "수정하던 기록을 불러올까요?";
+    else head = tt + "후기 등록하던 내용을 불러올까요?";
+    var info = [];
+    if (kn && !t) info.push(kn);   /* 제목이 없을 때만 작은 줄에 카테고리 표시 */
+    if (!t) { var sn = String(f.text || f.pre || "").trim().replace(/\s+/g, " "); if (sn) info.push("「" + sn.slice(0, 16) + (sn.length > 16 ? "…" : "") + "」로 시작하는 글"); else info.push("제목 미입력"); }
+    if (inFormWriter(d)) info.push(d.w.tab === "pre" ? "관람 전 기대 쓰는 중" : "후기 쓰는 중");
+    info.push("마지막 작성 " + agoText(d.at));
+    return head + "\n앱이 예기치 않게 꺼져서 저장하지 못한 내용이에요.\n\n" + info.join(" · ");
+  }
+
+  /* 이어 쓰기를 눌러 값이 바뀐 뒤: 기록 창·후기 창·접이식 칸이 모두 같은 내용을 보이게 맞춤 */
+  function syncAfterRestore() {
+    growText(); growCast(); growPre(); setVTab(vTab);
+    if (hasExtra()) setMore(true);
+    var w = $("writer");
+    if (w.hidden) return;
+    var t = $("wtext"), isBook = form.type === "book";
+    if (isBook) wTab = "post";
+    wStore = {};
+    t.value = wField().value;
+    wReset();
+    $("wtitle").textContent = $("title").value.trim() || "후기";
+    $("wtabs").hidden = isBook;
+    wApplyTab();
+    writerInitPost = $("text").value; writerInitPre = $("pre").value;
+    try { t.focus(); var n = t.value.length; t.setSelectionRange(n, n); t.scrollTop = t.scrollHeight; } catch (e) {}
+  }
+  function applyFields(f) {
     setKind(KIND[f.type] ? f.type : form.type);
     setStatus(f.status === "reading" || f.status === "paused" ? f.status : "done");
     $("title").value = f.title || ""; $("creator").value = f.creator || ""; $("genre").value = f.genre || "";
@@ -5556,8 +5805,63 @@
     form.rating = +f.rating || 0; buildRate();
     form.time = /^\d{2}:\d{2}$/.test(f.time) ? f.time : "";
     $("date").value = f.date || ""; updateTimeBtn();
-    growText(); growCast(); setVTab(vTab);
-    }, function () { clearDraft(k); });
+  }
+  /* 기록 창 안에서 후기 창을 열어 쓰던 중이었다면 후기 창을 다시 열어 줌(닫거나 저장하면 기록 창으로 돌아옴) */
+  function inFormWriter(d) { return !!(d && d.w && !d.w.direct && d.mode !== "review"); }
+  function reopenDraftWriter(d) {
+    if (!inFormWriter(d) || layers.indexOf("form") < 0 || layers.indexOf("writer") > -1) return;
+    writerDirect = false; writerHad = false;
+    openWriter(d.w.tab);
+    writerInitPost = d.w.iPost || ""; writerInitPre = d.w.iPre || "";
+  }
+  /* 이 기록(없으면 새 후기 중 가장 최근 것)에 남은 임시저장 찾기 */
+  function pickDraft(id) {
+    var m = loadDrafts();
+    if (id) return m[String(id)] ? { key: String(id), d: m[String(id)] } : null;
+    var best = null;
+    Object.keys(m).forEach(function (k) { if (isNewKey(k) && (!best || (m[k].at || 0) > (best.d.at || 0))) best = { key: k, d: m[k] }; });
+    return best;
+  }
+  /* 기록 창을 열 때 그 기록의 임시저장이 있으면(= 예전에 예기치 않게 꺼진 것) 물어봄 */
+  function restoreDraft(id) {
+    var p = pickDraft(id);
+    if (!p) return;
+    if (id && !data.some(function (x) { return x.id === id; })) { clearDraft(p.key); return; }
+    askConfirm(draftMsg(p.d), { ok: "불러오기", cancel: "버리기", modal: true }, function () {
+      pendingDlg = null;
+      draftKey = p.key;
+      applyFields(p.d.f);
+      syncAfterRestore();
+      reopenDraftWriter(p.d);
+      saveDraft();
+      focusTitleAfterDlg();
+    }, function () {
+      /* 버리기: 임시저장을 지움 */
+      pendingDlg = null; clearDraft(p.key);
+      focusTitleAfterDlg();
+    });
+    pendingDlg = dlgEl;
+  }
+  /* 앱을 다시 켰을 때: 예기치 않게 꺼진 작성 중 기록이 있으면 무엇이었는지 알려 주고 물어봄 */
+  function startupDraftPrompt() {
+    var m = loadDrafts(), changed = false;
+    Object.keys(m).forEach(function (k) {
+      if (!isNewKey(k) && !data.some(function (x) { return String(x.id) === k; })) { delete m[k]; changed = true; }
+    });
+    if (changed) storeDrafts(m);
+    var best = null;
+    Object.keys(m).forEach(function (k) { if (!best || (m[k].at || 0) > (best.d.at || 0)) best = { key: k, d: m[k] }; });
+    if (!best) return;
+    var d = best.d, k = best.key;
+    askConfirm(draftMsg(d), { ok: "불러오기", cancel: "취소", modal: true }, function () {
+      var rec = isNewKey(k) ? null : data.filter(function (x) { return String(x.id) === k; })[0];
+      var id = rec ? rec.id : null;
+      openForm(id, { key: k, mode: d.mode, had: d.had, fields: d.f });
+      if (d.mode === "review" && rec && layers.indexOf("form") > -1 && layers.indexOf("writer") < 0) enterDirectWriter(d.tab, d.had);
+      else reopenDraftWriter(d);
+      saveDraft();
+      focusTitleAfterDlg();
+    }, function () { pendingDlg = null; /* 취소: 임시저장은 그대로 남겨 둠 */ });
   }
 
   /* ---------- 올해 독서 목표 ---------- */
@@ -5786,7 +6090,7 @@
       tr.appendChild(fi);
       if (y === nowY && m === nowM) addHatch(tr, fi, done, goal, readingNow());
       row.appendChild(tr);
-      var txt = goal ? (done >= goal ? "\u2713 " : "") + done + " / " + goal + "권" : (done ? done + "권" : "-");
+      var txt = goal ? (done >= goal ? "\u2713 " : "") + done + " / " + goal + "개" : (done ? done + "개" : "-");
       row.appendChild(el("b", goal ? (done >= goal ? "ok" : "") : "none", txt));
       var btn = el("button", "", mEdit === key ? "닫기" : (goal ? "수정" : "설정")); btn.type = "button";
       btn.setAttribute("aria-label", m + "월 목표 " + (goal ? "수정" : "설정"));
@@ -6436,6 +6740,9 @@
   $("cast").addEventListener("input", growCast);
   $("vtPre").addEventListener("click", function () { setVTab("pre"); });
   $("vtPost").addEventListener("click", function () { setVTab("post"); });
+  $("wtext").addEventListener("input", wKeepCaretRoomSoon);
+  $("wtext").addEventListener("focus", function () { setTimeout(wKeepCaretRoom, 350); });
+  document.addEventListener("selectionchange", wKeepCaretRoomSoon);
   $("wtext").addEventListener("input", function () {
     wField().value = this.value;
     updateWTabDots();
@@ -6469,6 +6776,7 @@
   $("gOpenPre2").onclick = function () { openGuide("pre"); };
   $("wClose").onclick = closeWriter;                          /* 닫기: 고친 내용이 있으면 확인 후 닫음 */
   if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", function () { setTimeout(wKeepCaretRoom, 120); });
     window.visualViewport.addEventListener("resize", fitWriter);
     window.visualViewport.addEventListener("scroll", fitWriter);
   }
@@ -6612,6 +6920,8 @@
     requestAnimationFrame(function () { window.scrollTo(0, restoredY); });
     window.addEventListener("load", function () { window.scrollTo(0, restoredY); });
   }
+  /* 새로고침: 작성창을 그대로 / 앱을 다시 켠 경우: 예기치 않게 꺼진 작성 중 기록을 물어봄 */
+  if (!restoreLive()) setTimeout(startupDraftPrompt, 300);
   /* 처음 들어온 사람(기록·생각·백업·목표·작성 중 글이 하나도 없음)에게만 시작 전 안내 */
   var WELKEY = "reviews-welcome-off-v1";
   (function welcome() {
