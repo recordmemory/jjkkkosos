@@ -118,6 +118,7 @@
   .card:active { background: #f7f8fb; }
   .card .bar { position: absolute; left: 9px; top: 11px; bottom: 11px; width: 3px; border-radius: 2px; background: var(--c); z-index: 3; }   /* 층 순서(아래→위): 버튼 줄 1 < 제목 줄 2 < 색 띠 3 < PDF 선택 바 4 < 상단 도구 5 */
   .card .bar.soft { opacity: .35; }
+  .l2 .kind.soft { opacity: .35; }
   .l1 { display: flex; align-items: baseline; gap: 8px; }
   .card h2 {
     flex: 1; min-width: 0; margin: 0; font-family: var(--serif); font-size: 15.5px; font-weight: 600;
@@ -142,6 +143,7 @@
     flex: none; margin-left: 6px; background: rgba(232,180,0,.15); color: #8a6a00; border-radius: 4px;
     padding: 0 5px; font-size: 10.5px; font-weight: 500; line-height: 16px;
   }
+  .badge.dday { background: transparent; box-shadow: inset 0 0 0 1px currentColor; color: var(--ct, #8a6a00); font-weight: 600; }
   .badge.paused { background: rgba(120,126,150,.14); color: #6b7088; }
   .badge.stale { background: rgba(207,80,72,.10); color: #b0453d; }
   .badge.read { background: transparent; box-shadow: inset 0 0 0 1px rgba(232,180,0,.6); color: #8a6a00; }
@@ -178,6 +180,7 @@
     border-bottom: 1px solid var(--line); cursor: pointer;
   }
   .hl { display: flex; align-items: center; gap: 8px; height: 40px; }
+  .hl .kind.soft { opacity: .35; }
   .hl .kind { flex: none; color: var(--ct, var(--c)); font-weight: 700; font-size: 12.5px; }
   .hl .ht {
     flex: 1; min-width: 0; font-family: var(--serif); font-size: 14.5px; font-weight: 600;
@@ -246,6 +249,19 @@
     font-size: 14px; color: var(--ink); cursor: pointer;
   }
   .calhead .navb { width: 38px; }
+  .calhead button:disabled { opacity: .3; cursor: default; }
+  .dlg { position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-end; justify-content: center; background: rgba(25,28,43,.45); opacity: 0; transition: opacity .18s; }
+  .dlg.show { opacity: 1; }
+  .dlg .dsheet { width: 100%; max-width: 480px; background: var(--paper); border-radius: 20px 20px 0 0; padding: 22px 20px calc(16px + env(safe-area-inset-bottom)); transform: translateY(24px); transition: transform .2s ease-out; box-shadow: 0 -8px 30px rgba(25,28,43,.18); }
+  .dlg.show .dsheet { transform: none; }
+  .dlg .dt { font-family: var(--serif); font-size: 17px; font-weight: 700; line-height: 1.45; word-break: keep-all; }
+  .dlg .dm { margin-top: 8px; font-size: 14px; line-height: 1.65; color: var(--sub); white-space: pre-line; word-break: keep-all; }
+  .dlg .dbtn { display: flex; gap: 8px; margin-top: 20px; }
+  .dlg .dbtn button { flex: 1; height: 46px; border-radius: 12px; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; border: 1px solid var(--line2); background: var(--paper); color: var(--ink); }
+  .dlg .dbtn button.ok { border-color: var(--ink); background: var(--ink); color: #fff; }
+  .dlg .dbtn button.ok.danger { border-color: var(--movie); background: var(--movie); }
+  .dlg .dbtn button:active { opacity: .8; }
+  @media (min-width: 560px) { .dlg { align-items: center; } .dlg .dsheet { border-radius: 20px; } }
   .calhead .todayb { padding: 0 12px; }
   .caltitle { flex: 1; text-align: center; font-size: 18px; font-weight: 700; line-height: 1.25; font-family: var(--serif); }
   .caltitle small { display: block; font-size: 12px; font-weight: 400; color: var(--sub); font-family: var(--sans); }
@@ -298,6 +314,9 @@
   .crow .pct { text-align: right; font-weight: 700; }
   .gdonut { display: block; width: 100%; max-width: 340px; height: auto; margin: 4px auto 8px; }
   .gdonut .gtrack { fill: none; stroke: var(--line); }
+  .gdonut .gseg, .gdonut .gin, .gdonut .gout, .gdonut .gline { transition: opacity .15s; }
+  .gdonut .gseg { cursor: pointer; outline: none; }
+  .gdonut .gdim { opacity: .2; }
   .gdonut .gin { fill: #fff; font-size: 9px; text-anchor: middle; pointer-events: none; }
   .gdonut .gin.dk { fill: #3a3000; }
   .gdonut .gin.b { font-weight: 700; }
@@ -309,6 +328,9 @@
   .gwrap { display: grid; grid-template-columns: 10px 1fr max-content max-content; column-gap: 10px; align-items: center; font-size: 14px; }
   .grow { display: contents; }
   .grow > * { padding: 7px 0; }
+  .grow > * { cursor: pointer; transition: opacity .15s; }
+  .grow > .gdim { opacity: .35; }
+  .grow > .gsel { color: var(--ink); font-weight: 700; }
   .grow .gdot { width: 10px; height: 10px; padding: 0; border-radius: 50%; background: var(--gc); }
   .grow b { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .grow .num { color: var(--sub); text-align: right; white-space: nowrap; }
@@ -646,9 +668,6 @@
   }
   #topHint.show { opacity: 1; transform: translate(-50%, 0); }
   .gpane .phead { align-items: center; }
-  .gpane .gnav { display: flex; align-items: center; gap: 2px; }
-  .gpane .gnav button { border: 0; background: transparent; color: var(--sub); font-size: 22px; line-height: 1; padding: 0 7px 2px; cursor: pointer; font-family: inherit; }
-  .gpane .gnav button:disabled { opacity: .25; cursor: default; }
   .gpane .phead > button { border: 1px solid var(--line2); background: var(--paper); border-radius: 999px; font-size: 12.5px; padding: 4px 12px; color: var(--ink); cursor: pointer; font-family: inherit; }
   .gnums { display: flex; align-items: baseline; gap: 6px; }
   .gnums b { font-family: var(--serif); font-size: 30px; letter-spacing: -.02em; line-height: 1.2; }
@@ -674,6 +693,10 @@
   .gpin button::before { content: ""; width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px currentColor; }
   .gpin button.on { color: var(--ink); font-weight: 700; }
   .gpin button.on::before { background: var(--ink); box-shadow: none; }
+  .mright { display: flex; align-items: center; gap: 8px; }
+  .mbulk { border: 1px solid var(--line2); background: var(--paper); border-radius: 999px; font-size: 12px; padding: 2px 10px; color: var(--sub); cursor: pointer; font-family: inherit; }
+  .mbulk.flat { border-width: 0; padding: 2px 0; background: transparent; cursor: default; pointer-events: none; -webkit-tap-highlight-color: transparent; }
+  .mbulk.on { color: var(--ink); border-color: var(--ink); }
   .gedit { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
   .gedit input { width: 84px; padding: 8px 10px; text-align: center; }
   .gedit input:focus, .gedit input:focus-visible { outline: none; border-color: var(--line2); }
@@ -747,7 +770,9 @@
   .gcol .gl { margin-top: 5px; font-size: 11px; color: var(--sub); white-space: nowrap; }
   .gcol.now .gl { color: var(--ink); font-weight: 700; }
   .bklast { margin-top: 3px; font-size: 12px; color: var(--mute); }
-  .bklast.warn { color: var(--sun); }
+  .bklast.warn { color: var(--sun); font-weight: 600; }
+  .bklast.tap { cursor: pointer; }
+  .bklast.tap:active { opacity: .6; }
   .bkbar { display: flex; align-items: center; gap: 4px; margin: 0 16px 6px; padding: 8px 8px 8px 12px; background: #fff7df; border: 1px solid #f0dfa8; border-radius: 12px; font-size: 13px; color: #6a5200; }
   .bkbar span { flex: 1; min-width: 0; }
   .bkbar button { border: 0; background: transparent; font: inherit; font-weight: 700; color: var(--ink); padding: 6px 8px; cursor: pointer; white-space: nowrap; }
@@ -2129,11 +2154,11 @@
   }
   function persistThoughts() {
     try { localStorage.setItem(TLKEY, JSON.stringify(thoughts)); localStorage.setItem(LCKEY, String(Date.now())); }
-    catch (e) { alert("저장에 실패했어요. 브라우저 저장 공간을 확인해 주세요."); }
+    catch (e) { askNotice("저장에 실패했어요. 브라우저 저장 공간을 확인해 주세요."); }
   }
   function persist(silent) {
     try { localStorage.setItem(KEY, JSON.stringify(data)); localStorage.setItem(SKEY, String(SCHEMA)); if (!silent) localStorage.setItem(LCKEY, String(Date.now())); }
-    catch (e) { alert("저장에 실패했어요. 브라우저 저장 공간을 확인해 주세요."); }
+    catch (e) { askNotice("저장에 실패했어요. 브라우저 저장 공간을 확인해 주세요."); }
   }
   function today() {
     var d = new Date();
@@ -2150,6 +2175,15 @@
 
   /* ---------- 목록 ---------- */
   function isUpcoming(r) { return r.type !== "book" && !!r.date && r.date >= today(); }   /* 아직 안 본(관람일이 오늘 이후) 영화·연극·뮤지컬 */
+  /* 예정 기록 D-day: 오늘이면 D-Day, 아니면 D-남은일수 (아직 안 본 영화·연극·뮤지컬만) */
+  function ddayLabel(r) {
+    if (!isUpcoming(r)) return "";
+    var a = new Date(r.date + "T00:00:00"), b = new Date(); b.setHours(0, 0, 0, 0);
+    var n = Math.round((a - b) / 86400000);
+    return n <= 0 ? "D-Day" : "D-" + n;
+  }
+  /* 아주 짧은 진동(지원하는 기기에서만 — 아이폰 사파리는 진동이 없어서 그냥 넘어감) */
+  function buzz(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
   function hasReview(r) { return !!(r.text && r.text.trim()); }
   var SOPT = [["all", "별점 전체", "별점 전체"], ["5", "별점 5", "★5"], ["4.5", "별점 4.5 이상", "★4.5↑"], ["4", "별점 4 이상", "★4↑"],
               ["3", "별점 3 이상", "★3↑"], ["lt3", "별점 3 미만", "★3 미만"], ["none", "별점 없음", "별점 없음"]];
@@ -2263,7 +2297,8 @@
   function buildHead(r, when, mark) {
     var head = el("div", "chead");
     var hl = el("div", "hl");
-    hl.appendChild(el("span", "kind", KIND[r.type].name));
+    hl.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), KIND[r.type].name));
+    if (isUpcoming(r)) hl.appendChild(el("span", "badge dday", ddayLabel(r)));
     if (mark) hl.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
     hl.appendChild(el("span", "ht", r.title));
     var w = r.status === "reading" ? "읽는 중" : r.status === "paused" ? "중단" : when;
@@ -2437,7 +2472,7 @@
     eb.onclick = function (e) { e.stopPropagation(); openForm(r.id); };
     db.onclick = function (e) {
       e.stopPropagation();
-      if (!confirm("「" + (r.title || "제목 없음") + "」 기록을 정말 삭제할까요?\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.")) return;
+      askConfirm("「" + (r.title || "제목 없음") + "」 기록을 정말 삭제할까요?\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.", DELQ, function () {
       var pos = data.indexOf(r), gone = r, removedActs = [];
       acts.forEach(function (a, i) { if (a.ty !== "sys" && a.rid === gone.id) removedActs.push({ a: a, i: i }); });
       closeCard(r.id);
@@ -2449,6 +2484,7 @@
         data.splice(Math.min(Math.max(pos, 0), data.length), 0, gone);
         removedActs.forEach(function (o) { acts.splice(Math.min(o.i, acts.length), 0, o.a); });
         persist(); persistActs(); render();
+      });
       });
     };
     bar.appendChild(tg); bar.appendChild(eb);
@@ -2462,6 +2498,7 @@
     var old = { status: r.status, date: r.date };
     if (st === "done") r.date = today(); else r.date = "";
     r.status = st;
+    if (st === "done") buzz([12, 50, 18]);   /* 완독: 톡-톡 */
     var verb = st === "done" ? "완독" : st === "paused" ? "독서 중단" : "다시 읽기";
     logAct("\u300C" + r.title + "\u300D " + verb, r, false);
     if (st === "done") { calY = +r.date.slice(0, 4); calM = +r.date.slice(5, 7) - 1; selDate = r.date; }
@@ -2505,7 +2542,8 @@
       card.appendChild(l1);
 
       var l2 = el("div", "l2");
-      l2.appendChild(el("span", "kind", KIND[r.type].name));
+      l2.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), KIND[r.type].name));   /* 예정 기록은 종류 글자도 띠처럼 연하게 */
+      if (isUpcoming(r)) l2.appendChild(el("span", "badge dday", ddayLabel(r)));
       if (mark) l2.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
       if (r.status === "reading") l2.appendChild(el("span", "badge", "읽는 중"));
       if (!inDay && !mark) { var sl = staleLabel(r); if (sl) l2.appendChild(el("span", "badge stale", sl)); }
@@ -2853,7 +2891,7 @@
       var del = el("button", "", "삭제"); del.type = "button";
       del.onclick = function (e) {
         e.stopPropagation(); editLog = null;
-        if (!confirm("이 " + delMsg + "을(를) 정말 삭제할까요?\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.")) return;
+        askConfirm("이 " + delMsg + "을(를) 정말 삭제할까요?\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.", DELQ, function () {
         var item = r[key].splice(idx, 1)[0], rid = r.id;
         persist(); render();
         showUndoToast(delMsg + "을(를) 삭제했어요", function () {
@@ -2862,6 +2900,7 @@
           cur[key] = cur[key] || [];
           cur[key].splice(Math.min(idx, cur[key].length), 0, item);
           persist(); render();
+        });
         });
       };
       if (!editingLog) {
@@ -2944,7 +2983,7 @@
     var msg = plain
       ? (e.k === "t" ? "이 생각을 정말 삭제할까요?" : "「" + e.r.title + "」 후기에 덧붙인 생각을 정말 삭제할까요?") + "\n삭제 직후 몇 초 동안은 되돌릴 수 있어요."
       : "이 생각을 정말 삭제할까요?" + warn + "\n\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.";
-    if (!confirm(msg)) return;
+    askConfirm(msg, DELQ, function () {
     if (e.k === "t") {
       var tpos = thoughts.indexOf(e.th), tgone = e.th;
       thoughts = thoughts.filter(function (x) { return x !== tgone; }); persistThoughts(); render();
@@ -2963,7 +3002,7 @@
         persist(); render();
       });
     }
-
+    });
   }
   /* 타임라인 전용: 시간 · 점(레일) · 내용 세 칸으로 모든 종류를 같은 줄에 맞춤 */
   var TL_CHIP = { t: "생각", l: "덧붙임", a: "기록" };
@@ -3058,16 +3097,17 @@
       var note = gone.tid ? "\n생각 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요."
         : gone.ty === "sys" ? "\n타임라인의 기록만 지워지고, 저장한 백업 파일과 가져온 기록은 그대로 남아요."
         : (kind === "후기" && rec) ? (/ 관람 전 기대 작성$/.test(gone.t) ? "\n관람 전 기대 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요." : "\n후기 원본은 지워지지 않고, 타임라인의 기록만 삭제돼요.") : "";
-      if (!confirm("이 활동 기록을 정말 삭제할까요?" + note + "\n\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.")) return;
-      acts.splice(pos, 1); persistActs(); render();
-      showUndoToast("기록을 삭제했어요", function () {
-        if (acts.indexOf(gone) > -1) return;
-        acts.splice(Math.min(pos, acts.length), 0, gone); persistActs(); render();
+      askConfirm("이 활동 기록을 정말 삭제할까요?" + note + "\n\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.", DELQ, function () {
+        acts.splice(pos, 1); persistActs(); render();
+        showUndoToast("기록을 삭제했어요", function () {
+          if (acts.indexOf(gone) > -1) return;
+          acts.splice(Math.min(pos, acts.length), 0, gone); persistActs(); render();
+        });
       });
       return;
     }
     /* 관람·완독 기록: 후기 기록 자체와 그 후기의 다른 활동 기록도 함께 삭제 */
-    if (!confirm("이 기록을 정말 삭제할까요?\n\n⚠ 주의: 타임라인 기록만 지우는 게 아니라, 「" + rec.title + "」 후기 기록 자체(후기와 덧붙인 생각 포함)가 완전히 삭제돼요.\n\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.")) return;
+    askConfirm("이 기록을 정말 삭제할까요?\n\n⚠ 주의: 타임라인 기록만 지우는 게 아니라, 「" + rec.title + "」 후기 기록 자체(후기와 덧붙인 생각 포함)가 완전히 삭제돼요.\n\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.", DELQ, function () {
     var rpos = data.indexOf(rec), removed = [];
     acts.forEach(function (a, i) { if (a.ty !== "sys" && a.rid === rec.id) removed.push({ a: a, i: i }); });
     closeCard(rec.id);
@@ -3079,6 +3119,7 @@
       data.splice(Math.min(Math.max(rpos, 0), data.length), 0, rec);
       removed.forEach(function (o) { acts.splice(Math.min(o.i, acts.length), 0, o.a); });
       persist(); persistActs(); render();
+    });
     });
   }
   function buildActEntry(e) {
@@ -3517,9 +3558,10 @@
     $("calTitle").textContent = calY + "년 " + (calM + 1) + "월";
     var tcnt = 0;
     Object.keys(tdBy).forEach(function (k) { if (k.indexOf(prefix) === 0) tcnt += tdBy[k].length; });
-    /* 읽는 중인 책은 날짜가 없어서 달과 상관없이 지금 읽고 있는 권수를 보여줌(책·전체 탭, 후기·별점 필터 없을 때만) */
-    var rdCnt = ((filter === "all" || filter === "book") && rfilter === "all" && sfilter === "all") ? readingNow() : 0;
-    $("calSum").textContent = (cnt ? "이달 " + cnt + "편" : "이달 기록 없음") + (rdCnt ? " · 읽는 중 " + rdCnt + "편" : "") + (tcnt ? " · 생각 " + tcnt : "");
+    /* 읽는 중인 책은 날짜가 없어서 이번 달을 볼 때만 지금 읽고 있는 권수를 보여줌(책·전체 탭, 후기·별점 필터 없을 때만) */
+    var nowD = new Date(), isCurMonth = calY === nowD.getFullYear() && calM === nowD.getMonth();
+    var rdCnt = (isCurMonth && (filter === "all" || filter === "book") && rfilter === "all" && sfilter === "all") ? readingNow() : 0;
+    $("calSum").textContent = (cnt ? "이달 " + cnt + "편" : "이달 기록 없음") + (rdCnt ? " · 읽는 중 " + rdCnt + "권" : "") + (tcnt ? " · 생각 " + tcnt : "");
 
     var first = (new Date(calY, calM, 1).getDay() + 6) % 7; /* 월요일 시작 */
     var days = new Date(calY, calM + 1, 0).getDate();
@@ -3635,7 +3677,7 @@
 
   /* ---------- 통계 ---------- */
   var ORDER = ["book", "movie", "play", "musical"];
-  var stat = { mode: "range", preset: "year", from: "", to: "", year: new Date().getFullYear() };
+  var stat = { mode: "year", preset: "year", from: "", to: "", year: new Date().getFullYear() };
 
   function ymd(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
   function presetRange(p) {
@@ -3700,8 +3742,7 @@
     h.appendChild(el("span", "tot", "총 " + books.length + "권"));
     pane.appendChild(h);
     /* 장르별 색 (「기타」는 회색) */
-    var GPAL = ["#e8b400", "#d9822b", "#c4553a", "#9b4f96", "#5b6fc4", "#3a8fb7", "#4aa28a", "#8aa64b"], GGRAY = "#9aa0b0";
-    function gcol(g, i) { return g === "기타" ? GGRAY : GPAL[i % GPAL.length]; }
+    function gcol(g, i) { return genreColor(g); }   /* 막대 그래프와 같은 장르별 고정 색 */
     var NS = "http://www.w3.org/2000/svg";
     function sv(tag, at, txt) {
       var n = document.createElementNS(NS, tag);
@@ -3729,10 +3770,17 @@
       return true;
     }
     var acc = 0, ins = [], outs = [];
+    var sel = null, segs = {}, parts = {}, rowEls = {}, numEl = null, unitEl = null, apply = function () {};
+    function part(g, node) { (parts[g] = parts[g] || []).push(node); svg.appendChild(node); return node; }
+    function pick(g) { sel = (sel === g) ? null : g; apply(); }   /* 같은 걸 다시 누르면 해제 */
     keys.forEach(function (g, i) {
       var len = cnt[g] / books.length * CIR, gap = keys.length > 1 ? 1.6 : 0, vis = Math.max(0.1, len - gap), col = gcol(g, i);
-      svg.appendChild(sv("circle", { cx: CX, cy: CY, r: R, fill: "none", stroke: col, "stroke-width": TH,
-        "stroke-dasharray": vis + " " + (CIR - vis), "stroke-dashoffset": -acc, transform: "rotate(-90 " + CX + " " + CY + ")" }));
+      var seg = sv("circle", { cx: CX, cy: CY, r: R, fill: "none", stroke: col, "stroke-width": TH, "class": "gseg",
+        "stroke-dasharray": vis + " " + (CIR - vis), "stroke-dashoffset": -acc, transform: "rotate(-90 " + CX + " " + CY + ")",
+        role: "button", tabindex: "0", "aria-label": g + " " + cnt[g] + "권 " + pct(cnt[g], books.length) });
+      seg.addEventListener("click", function (e) { e.stopPropagation(); pick(g); });
+      seg.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(g); } });
+      segs[g] = seg; svg.appendChild(seg);
       var a0 = acc / CIR * 2 * Math.PI - Math.PI / 2, a1 = (acc + len) / CIR * 2 * Math.PI - Math.PI / 2;
       var it = { g: g, col: col, a0: a0, a1: a1, ang: (a0 + a1) / 2, t: pct(cnt[g], books.length) };
       (fitsInside(it) ? ins : outs).push(it);   /* 글자가 조각 안에 들어가면 안에, 안 들어가면 지시선으로 밖에 */
@@ -3742,8 +3790,8 @@
       var rr = parseInt(it.col.slice(1, 3), 16), gg = parseInt(it.col.slice(3, 5), 16), bb = parseInt(it.col.slice(5, 7), 16);
       var cls = "gin" + ((rr * 299 + gg * 587 + bb * 114) / 1000 > 150 ? " dk" : "");
       var px = CX + R * Math.cos(it.ang), py = CY + R * Math.sin(it.ang);
-      svg.appendChild(sv("text", { x: px.toFixed(1), y: (py - 1).toFixed(1), "class": cls }, it.g));
-      svg.appendChild(sv("text", { x: px.toFixed(1), y: (py + 10).toFixed(1), "class": cls + " b" }, it.t));
+      part(it.g, sv("text", { x: px.toFixed(1), y: (py - 1).toFixed(1), "class": cls }, it.g));
+      part(it.g, sv("text", { x: px.toFixed(1), y: (py + 10).toFixed(1), "class": cls + " b" }, it.t));
     });
     /* 지시선: 오른쪽·왼쪽으로 나눠 위에서 아래로 놓고, 글자끼리 겹치면 아래로 밀어 간격을 맞춤 */
     [1, -1].forEach(function (side) {
@@ -3755,14 +3803,15 @@
       grp.forEach(function (it, k3) {
         var y = Math.min(ys[k3], H - 14), x0 = CX + (RO + 1) * Math.cos(it.ang), y0 = CY + (RO + 1) * Math.sin(it.ang);
         var xm = CX + side * (RO + 12), xe = xm + side * 8;
-        svg.appendChild(sv("polyline", { points: x0.toFixed(1) + "," + y0.toFixed(1) + " " + xm.toFixed(1) + "," + y.toFixed(1) + " " + xe.toFixed(1) + "," + y.toFixed(1), "class": "gline", stroke: it.col }));
+        part(it.g, sv("polyline", { points: x0.toFixed(1) + "," + y0.toFixed(1) + " " + xm.toFixed(1) + "," + y.toFixed(1) + " " + xe.toFixed(1) + "," + y.toFixed(1), "class": "gline", stroke: it.col }));
         var anc = side > 0 ? "start" : "end";
-        svg.appendChild(sv("text", { x: (xe + side * 4).toFixed(1), y: (y - 1).toFixed(1), "class": "gout", "text-anchor": anc }, it.g));
-        svg.appendChild(sv("text", { x: (xe + side * 4).toFixed(1), y: (y + 10).toFixed(1), "class": "gout b", "text-anchor": anc }, it.t));
+        part(it.g, sv("text", { x: (xe + side * 4).toFixed(1), y: (y - 1).toFixed(1), "class": "gout", "text-anchor": anc }, it.g));
+        part(it.g, sv("text", { x: (xe + side * 4).toFixed(1), y: (y + 10).toFixed(1), "class": "gout b", "text-anchor": anc }, it.t));
       });
     });
-    svg.appendChild(sv("text", { x: CX, y: CY + 2, "class": "gnum" }, String(books.length)));
-    svg.appendChild(sv("text", { x: CX, y: CY + 18, "class": "gunit" }, "권"));
+    numEl = sv("text", { x: CX, y: CY + 2, "class": "gnum" }, String(books.length)); svg.appendChild(numEl);
+    unitEl = sv("text", { x: CX, y: CY + 18, "class": "gunit" }, "권"); svg.appendChild(unitEl);
+    svg.addEventListener("click", function () { if (sel) pick(sel); });   /* 빈 곳을 누르면 해제 */
     pane.appendChild(svg);
     var wrap = el("div", "gwrap");
     keys.forEach(function (g, i) {
@@ -3772,14 +3821,29 @@
       row.appendChild(el("b", "", g));
       row.appendChild(el("span", "num", cnt[g] + "권"));
       row.appendChild(el("span", "pct", pct(cnt[g], books.length)));
+      rowEls[g] = [].slice.call(row.children);
+      rowEls[g].forEach(function (c) { c.onclick = function () { pick(g); }; });   /* 아래 목록을 눌러도 같은 효과 */
       wrap.appendChild(row);
     });
     pane.appendChild(wrap);
+    /* 고른 장르만 또렷하게, 나머지는 흐리게. 가운데에는 그 장르의 권수와 이름 */
+    apply = function () {
+      keys.forEach(function (g) {
+        var dim = !!sel && sel !== g, on = sel === g;
+        segs[g].classList.toggle("gdim", dim);
+        (parts[g] || []).forEach(function (n) { n.classList.toggle("gdim", dim); });
+        (rowEls[g] || []).forEach(function (n) { n.classList.toggle("gdim", dim); n.classList.toggle("gsel", on); });
+      });
+      numEl.textContent = sel ? String(cnt[sel]) : String(books.length);
+      unitEl.textContent = sel ? sel : "권";
+      unitEl.setAttribute("font-size", sel && sel.length > 5 ? "9" : "11");
+    };
     return pane;
   }
   /* 책 장르 비율을 달·연도별로 한 줄씩 쭉 나열(카테고리 비율 막대와 같은 모양). 장르 색은 어느 줄에서나 같음 */
   function genreColor(g) {
-    var PAL = ["#e8b400", "#d9822b", "#c4553a", "#9b4f96", "#5b6fc4", "#3a8fb7", "#4aa28a", "#8aa64b"];
+    /* 책 고유색(노란색) 기반 팔레트. 도넛·막대 어디서나 장르마다 같은 색. 이웃한 장르끼리 밝기가 달라 구분되게 */
+    var PAL = ["#e8b400", "#f6d96b", "#b98300", "#f2a33a", "#7d5a12", "#c8bb55", "#d9733a", "#a39060"];
     var i = GENRES.indexOf(g);
     return i < 0 ? "#9aa0b0" : PAL[i % PAL.length];
   }
@@ -3869,6 +3933,8 @@
     pane.appendChild(tb);
     return pane;
   }
+  /* 연도 화살표로 넘길 수 있는 마지막 해: 월별 통계는 올해+2년, 목표 탭은 올해+5년 */
+  function maxNavYear(goalTab) { return new Date().getFullYear() + (goalTab ? 5 : 2); }
   function navBtn(txt, label, fn) {
     var b = el("button", "navb", txt); b.type = "button";
     b.setAttribute("aria-label", label); b.onclick = fn; return b;
@@ -3877,10 +3943,10 @@
   function renderStats() {
     var w = $("statWrap");
     w.textContent = "";
-    var dated = data.filter(function (r) { return r.date; });
+    var dated = data.filter(function (r) { return r.date && !isUpcoming(r); });   /* 아직 안 본 예정 기록은 통계(목표 제외)에서 뺌 */
 
     var modes = el("div", "sub");
-    [["range", "기간별"], ["month", "월별"], ["year", "연도별"], ["goal", "목표"]].forEach(function (m) {
+    [["year", "연도별"], ["month", "월별"], ["range", "기간별"], ["goal", "목표"]].forEach(function (m) {
       var b = el("button", stat.mode === m[0] ? "on" : "", m[1]); b.type = "button";
       b.onclick = function () { stat.mode = m[0]; goalEdit = false; mEdit = null; renderStats(); };
       modes.appendChild(b);
@@ -3934,7 +4000,9 @@
       head.appendChild(navBtn("<", "이전 해", function () { stat.year--; renderStats(); }));
       var ct = el("div", "caltitle"); ct.appendChild(el("span", "", y + "년"));
       head.appendChild(ct);
-      head.appendChild(navBtn(">", "다음 해", function () { stat.year++; renderStats(); }));
+      var nxM = navBtn(">", "다음 해", function () { stat.year++; renderStats(); });
+      nxM.disabled = y >= maxNavYear();
+      head.appendChild(nxM);
       w.appendChild(head);
 
       var inY = dated.filter(function (r) { return r.date.indexOf(yp) === 0; });
@@ -3979,8 +4047,9 @@
       if (gpY) w.appendChild(gpY);   /* 맨 아래 */
     }
 
-    var undated = data.length - dated.length;
+    var undated = data.filter(function (r) { return !r.date; }).length, upc = data.filter(isUpcoming).length;
     if (undated) w.appendChild(el("div", "hint2", "날짜가 없는 기록 " + undated + "개(읽는 중인 책 등)는 통계에 포함되지 않아요."));
+    if (upc) w.appendChild(el("div", "hint2", "아직 안 본 예정 기록 " + upc + "개는 통계에 포함되지 않아요."));
   }
 
   /* ---------- 가이드 질문 ---------- */
@@ -4113,9 +4182,9 @@
     { t: "둘러보기", items: [
       {"h": "목록", "lines": ["저장한 기록이 최근 순으로 보여요.", "위쪽 탭(전체, 책, 영화, 연극, 뮤지컬)으로 종류별로 모아 볼 수 있어요.", "「전체」 탭에는 완독한 책과 다른 기록만 보여요.\n「책」 탭에서는 읽는 중(항상 펼침) · 중단(기본 접힘, 제목 줄을 누르면 펼침) · 완독(날짜별) 순으로 나뉘어요.\n검색할 때는 읽는 중·중단인 책도 함께 찾아져요.", "카드를 펼치면 자세한 내용이 나와요.", "후기를 썼는지는 제목 줄 오른쪽 말풍선으로 알 수 있어요. 자세한 방법은 「기록하기」 탭의 「후기 쓰기」를 봐요."]},
       {"h": "검색·필터", "lines": ["돋보기를 누르면 제목, 저자, 후기, 태그 등으로 검색할 수 있어요.", "후기 있음/없음, 별점(5점, 4.5↑, 4↑, 3↑, 3 미만, 별점 없음)으로 좁혀 볼 수 있어요.", "예를 들어 \"후기 쓴 연극 중 4점 이상\"만 모으면 나의 최애 목록이 돼요.", "필터 줄의 「생각 포함」을 켜면, 타임라인에서 직접 쓴 생각이 목록에 함께 보여요.", "후기에 덧붙인 생각은 후기를 열면 볼 수 있어서 여기엔 나오지 않아요."]},
-      {"h": "달력", "lines": ["날짜 기준으로 언제 어떤 작품을 만났는지 한눈에 보여요.", "날짜를 누르고 「+ 이 날 기록하기」를 누르면 그날 바로 새 기록을 추가해요.", "그날 남긴 생각도 함께 볼 수 있어요.", "책을 완독한 날과 읽는 중 감상을 쓴 날은 카드로 보여요.\n· 완독한 날 → 「완독」 카드\n· 읽는 중 감상을 쓴 날 → 「독서함」 카드 (날짜 칸에 노란 빈 동그라미)\n달력에서만 보이고 목록에는 나오지 않아요.", "위쪽 목표 카드에서 목표 진행 상황을 볼 수 있어요.", "날짜를 누르면 아래 「그날의 생각」 줄 오른쪽 「+ 적기」로 그날의 생각을 따로 적을 수 있어요.\n지난 날짜에 적은 글에는 쓴 날짜가 함께 보여요."]},
+      {"h": "달력", "lines": ["날짜 기준으로 언제 어떤 작품을 만났는지 한눈에 보여요.", "날짜를 누르고 「+ 이 날 기록하기」를 누르면 그날 바로 새 기록을 추가해요.", "그날 남긴 생각도 함께 볼 수 있어요.", "책을 완독한 날과 읽는 중 감상을 쓴 날은 카드로 보여요.\n· 완독한 날 → 「완독」 카드\n· 읽는 중 감상을 쓴 날 → 「독서함」 카드 (날짜 칸에 노란 빈 동그라미)\n달력에서만 보이고 목록에는 나오지 않아요.", "위쪽 목표 카드에서 목표 진행 상황을 볼 수 있어요.", "달력 위쪽 「이달 n편」 줄에는 지금 읽는 중인 책이 「읽는 중 m권」으로 함께 나와요. 이번 달을 볼 때만 보여요.", "날짜를 누르면 아래 「그날의 생각」 줄 오른쪽 「+ 적기」로 그날의 생각을 따로 적을 수 있어요.\n지난 날짜에 적은 글에는 쓴 날짜가 함께 보여요."]},
       {"h": "타임라인", "lines": ["독립 생각과 덧붙인 생각이 날짜순으로 이어져요.", "타임라인에서는 지금 떠오른 생각만 적을 수 있어요. 지난 날짜의 생각은 달력에서 날짜를 골라 적어요.\n· 해당 날짜 칸에 「나중에 씀」으로 올라가요 (누르면 실제 쓴 날짜가 보여요)\n· 쓴 날짜에는 「생각 기록됨」 줄이 남아요 (누르면 달력의 그 생각으로 이동해요)", "「전체」에는 관람 기록과 백업·가져오기 같은 활동도 함께 보여요.", "공연·영화를 추가하면 타임라인에 두 줄이 남아요.\n· 추가한 시각 → 「기록 추가」\n· 실제 관람한 날짜·시간 → 「관람」\n지난 날짜의 완독을 추가한 책도 같아요. 추가한 시각의 「기록 추가」와 완독한 날의 「완독」이 남아요.\n관람·완독 줄은 기록의 날짜를 고치면 같이 옮겨지고, 아직 오지 않은 날짜면 그날이 되어야 나타나요.", "「내가 쓴 글 · 덧붙임」은 내가 직접 쓴 것만 모아 보여요.", "덧붙인 생각을 누르면 해당 작품으로 바로 이동해요.", "타임라인 줄을 삭제하면 종류에 따라 달라요.\n· 원본까지 삭제 → 생각, 덧붙임, 관람·완독 (내가 쓴 생각, 덧붙인 내용, 그 후기 기록)\n· 줄만 삭제 → 「후기」·「기록」 태그가 붙은 줄 (기록 추가, 후기 작성, 읽는 중, 독서 중단, 백업, 불러오기, 목표 설정, 생각 기록됨)\n줄만 지우면 후기 원본과 백업 파일, 가져온 기록, 생각 원본은 그대로 남아요. 삭제 전 확인 창에서 한 번 더 알려줘요."]},
-      {"h": "통계", "lines": ["이번 달, 최근 3개월, 올해, 전체 기간별로 얼마나 기록했는지 볼 수 있어요.", "달별·연도별 카테고리 편수와 책 장르까지 살펴보면 취향이 숫자로 보여요.", "날짜가 없는 기록(읽는 중·중단인 책)은 통계에서 빠져요.", "「목표」 탭에서 연도별·월별 독서 목표 권수를 정하고, 그래프로 완독 권수와 비교해요.", "올해·이번 달 목표 바에서는 지금 읽는 중인 책이 빗금으로 이어 붙어 보여요. 숫자와 퍼센트는 완독한 책만 센 값이에요."]},
+      {"h": "통계", "lines": ["이번 달, 최근 3개월, 올해, 전체 기간별로 얼마나 기록했는지 볼 수 있어요.", "달별·연도별 카테고리 편수와 책 장르까지 살펴보면 취향이 숫자로 보여요.", "책 장르 도넛의 조각이나 아래 장르 목록을 누르면 그 장르만 또렷하게 보이고, 가운데에 그 장르의 권수와 이름이 나와요. 같은 곳을 다시 누르거나 빈 곳을 누르면 원래대로 돌아와요.", "날짜가 없는 기록(읽는 중·중단인 책)과 아직 안 본 예정 기록은 통계에서 빠져요.", "「목표」 탭에서 연도별·월별 독서 목표 권수를 정하고, 그래프로 완독 권수와 비교해요.", "올해·이번 달 목표 바에서는 지금 읽는 중인 책이 빗금으로 이어 붙어 보여요. 숫자와 퍼센트는 완독한 책만 센 값이에요.", "월별 목표 카드의 「자동 계산」을 누르면 연 목표의 남은 권수를 이번 달부터 12월까지 나눠서 월별 목표로 넣어요.\n· 이번 달에 읽은 권수와 남은 일수를 함께 따져서, 한 달만 유난히 많거나 적지 않게 맞춰요.\n· 지난달 목표는 그대로예요.\n· 연 목표가 있어야 해요. 확인창에서 예시를 보고 정해요.", "월별 목표를 정하거나 고칠 때 「전체 월 적용」을 누르면 1~12월이 모두 입력한 권수로 바뀌어요.", "월별 목표 카드의 「목표 합계 n권」을 누르면 연 목표를 월별 목표의 합계로 바꿀지 물어봐요. 이미 같으면 누를 수 없어요.", "「자동 계산」「전체 월 적용」「목표 합계」로 바꾼 뒤에는 잠깐 「실행취소」로 되돌릴 수 있어요.", "「목록·달력 고정」으로 목록과 달력 맨 위에 독서 목표 바를 보일지 정해요. 어느 해 카드에서든 누를 수 있어요."]},
       {"h": "새로고침해도 그대로", "lines": ["새로고침해도 보던 탭, 필터, 검색어, 펼쳐둔 카드, 스크롤 위치가 유지돼요.", "탭을 완전히 닫았다가 다시 열면 처음 화면으로 시작해요."]}
     ] },
     { t: "생각 남기기", items: [
@@ -4128,13 +4197,15 @@
       {"warn": true, "h": "내 기록은 이 기기에만 저장돼요", "lines": ["후기는 서버로 전송되거나 다른 사람과 공유되지 않아요. **지금 쓰는 기기의 브라우저에만** 저장되고, 나만 볼 수 있어요.", "**브라우저 캐시·사이트 데이터를 지우거나 기기를 바꾸면 기록이 모두 사라져요.** 한 번 사라진 기록은 되돌릴 방법이 없어요.", "그러니 **백업을 꼭, 틈틈이** 해두세요.", "기록이 어느 정도 쌓였을 때, 기기를 바꾸기 전, 브라우저를 정리하기 전에는 반드시 해야 해요."]},
       {"h": "백업하기", "lines": ["맨 위의 「백업」을 누르면 JSON 파일로 저장돼요.", "덧붙인 생각과 독립 생각도 함께 담겨요.", "기기를 바꾸기 전, 브라우저를 초기화하기 전, 기록이 쌓였을 때 한 번씩 해두세요."]},
       {"h": "PDF로 저장하기", "lines": ["목록 화면 필터 줄 오른쪽의 「PDF 저장」을 누르면 원하는 후기를 선택하여 한번에 PDF 파일로 저장할 수 있어요.", "제목, 날짜, 별점, 한줄평, 후기, 덧붙인 생각이 함께 담겨요.", "탭, 필터, 검색으로 좁혀 두면 그 기록만 골라 담을 수 있어요.", "PDF는 읽거나 인쇄하려고 꺼내는 용도예요. 기록을 지키려면 「백업」도 따로 해두세요."]},
-      {"h": "백업 알림", "lines": ["기록이 3개 이상인데 백업한 적이 없으면 위쪽에 알림이 떠요.", "마지막 백업 뒤 내용이 바뀌고 7일이 지나도 알림이 떠요.", "「지금 백업」을 누르면 바로 저장돼요. 「나중에」를 누르면 3일 뒤에 다시 알려줘요."]},
+      {"h": "백업 알림", "lines": ["기록이 3개 이상인데 백업한 적이 없으면 위쪽에 알림이 떠요.", "마지막 백업 뒤 내용이 바뀌고 7일이 지나도 알림이 떠요.", "「지금 백업」을 누르면 바로 저장돼요. 「나중에」를 누르면 3일 뒤에 다시 알려줘요.", "알림 아래 「마지막 백업 · n일 전」 줄을 누르면 마지막으로 백업한 날짜와 시각이 보여요. 다시 누르면 원래대로 돌아와요. 백업한 적이 없거나 7일이 넘으면 이 줄이 빨갛게 바뀌어요."]},
       {"h": "불러오기", "lines": ["「불러오기」에서 백업했던 JSON 파일을 골라요.", "이미 있는 기록은 중복 추가되지 않고, 비어 있던 정보만 채워져요."]},
       {"h": "기기를 바꿀 때", "lines": ["기존 기기에서 「백업」으로 파일을 저장해요.", "그 파일을 새 기기로 옮겨요.", "새 기기에서 「불러오기」로 파일을 골라요.", "기록이 제대로 들어왔는지 확인한 뒤, 기존 기기의 데이터를 정리해요."]},
       {"h": "공연 앱 「플앱」 CSV로 옮겨오기", "lines": ["공연 일정 관리 앱 「플앱」에서 내보낸 CSV 파일을 같은 「불러오기」 버튼으로 가져올 수 있어요.", "「제목」과 「일시」 칸이 꼭 있어야 해요.", "「캘린더」「출연」「장소」「좌석」「리뷰/메모」 칸이 있으면 종류, 캐스팅, 극장, 좌석으로 함께 들어와요. 짧은 메모는 비고로, 긴 메모는 후기로 들어가요.", "이미 있는 기록은 건너뛰어서 중복 걱정 없이 옮겨올 수 있어요."]}
     ] },
     /* 업데이트 내역: 코드를 수정할 때마다 맨 위(최신순)에 한 줄씩 추가 */
     { t: "업데이트 내역", log: true, items: [
+      {"d": "2026-10-05 02:50", "h": "독서 목표 자동 계산", "p": "통계 「목표」 탭 월별 목표 카드에 「자동 계산」 버튼이 생겼어요. 연 목표의 남은 권수를 이번 달부터 12월까지 나눠서 월별 목표로 넣어요. 이번 달에 읽은 권수와 남은 일수를 함께 따져서 한 달만 유난히 많거나 적지 않게 맞추고, 확인창에서 예시를 보고 정해요. 「목표 합계 n권」을 누르면 연 목표를 월별 합계로 바꿀 수 있고, 월별 목표를 고칠 때 「전체 월 적용」으로 1~12월을 같은 권수로 바꿀 수 있어요. 「목록·달력 고정」 버튼은 어느 해로 넘겨도 보여요."},
+      {"d": "2026-10-05 02:50", "h": "달력·목록·통계 표시", "p": "달력의 「읽는 중 m권」은 이번 달을 볼 때만 나와요. 아직 안 본 예정 기록은 종류 글자(책·영화·연극·뮤지컬)도 띠처럼 연하게 보여요. 통계의 책 장르 색은 노란색 계열로 통일되어 도넛과 월별·연도별 막대에서 장르마다 같은 색이에요."},
       {"d": "2026-10-03 23:27", "h": "관람 전 기대 쓰기", "p": "영화·연극·뮤지컬 기록 창에 「관람 전」 「관람 후」 탭이 생겼어요. 「관람 전」에는 기대한 점이나 미리 알고 있던 점을, 「관람 후」에는 별점·한줄평·후기를 적어요. 관람 뒤에 떠올려 적어도 돼요. 카드에서는 후기 위쪽에 접고 펼 수 있는 「관람 전」 칸으로 보여요."},
       {"d": "2026-10-03 21:10", "h": "통계 책 장르 그래프", "p": "통계의 책 장르 비율이 원형(도넛) 그래프로 바뀌었어요. 조각에 장르 이름과 비율이 보이고, 글자가 조각 안에 안 들어갈 만큼 작은 조각은 지시선으로 바깥에 표시돼요. 가운데에는 읽은 책 권수가, 아래에는 장르별 색, 이름, 권수, 비율이 한 줄씩 나와요."},
       {"d": "2026-10-03 19:02", "h": "후기 있음·없음 표시", "p": "목록 카드의 제목 줄 오른쪽에 말풍선 아이콘이 생겼어요. 후기를 쓴 기록은 카테고리 색으로 꽉 찬 말풍선, 아직 안 쓴 기록은 흐린 빈 말풍선이에요. 빈 말풍선을 누르면 후기만 적는 창이 바로 열리고, 후기를 쓰면 꽉 찬 말풍선으로 바뀌어요. 읽는 중·중단 책에는 나오지 않아요."},
@@ -4150,7 +4221,7 @@
       {"d": "2026-10-03 09:56", "h": "독서 목표", "p": "독서 목표 바에서 지금 읽는 중인 책이 빗금으로 함께 보여요. 숫자와 퍼센트는 지금처럼 완독한 책 기준이고, 올해와 이번 달 목표에만 표시돼요."},
       {"d": "2026-10-02 22:23", "h": "되돌아보기", "p": "되돌아보기 카드의 「다른 기록」 옆에 「숨기기」 버튼이 생겼어요. 누르면 카드가 사라지고 작은 「되돌아보기 보기」 글자만 남아요. 이 글자를 누르면 다시 떠요."},
       {"d": "2026-10-02 22:06", "h": "PDF 저장", "p": "목록 화면 필터 줄 오른쪽(「생각 포함」 옆)에 「PDF 저장」 버튼이 생겼어요. 누르면 필터 줄의 버튼은 사라지고 선택 바가 나타나요. 원하는 후기를 골라 「PDF 만들기」를 누르면 PDF로 저장할 수 있고, 「취소」를 누르면 원래대로 돌아와요."},
-      {"d": "2026-10-02 21:02", "h": "독서 목표", "p": "통계 「목표」 탭 올해 카드에 「목록·달력 고정」 버튼이 생겼어요. 켜면 목록과 달력 맨 위에 독서 목표 바가 보이고, 끄면 바도 「독서 목표 보기」 글자도 안 보여요. 고정 중에 바 안의 「숨기기」는 잠깐 숨기는 용도라서, 「독서 목표 보기」 글자를 누르면 다시 떠요. 목록·달력의 독서 목표 한 줄을 누르면 그 자리에서 카드로 펼쳐지고, 다시 누르면 접혀요. 버튼은 「수정」과 「숨기기」예요."}
+      {"d": "2026-10-02 21:02", "h": "독서 목표", "p": "통계 「목표」 탭 연 목표 카드에 「목록·달력 고정」 버튼이 생겼어요. 켜면 목록과 달력 맨 위에 독서 목표 바가 보이고, 끄면 바도 「독서 목표 보기」 글자도 안 보여요. 고정 중에 바 안의 「숨기기」는 잠깐 숨기는 용도라서, 「독서 목표 보기」 글자를 누르면 다시 떠요. 목록·달력의 독서 목표 한 줄을 누르면 그 자리에서 카드로 펼쳐지고, 다시 누르면 접혀요. 버튼은 「수정」과 「숨기기」예요."}
     ] }
   ];
   var hTab = 0;
@@ -4545,8 +4616,8 @@
   function openForm(id) {
     if (miniState) {
       if ((id || null) === (miniState.eid || null)) { restoreWriting(); return; }
-      if (!confirm("내려둔 후기가 있어요. 버리고 새로 열까요?")) return;
-      discardMinimized();
+      askConfirm("내려둔 후기가 있어요.\n버리고 새로 열까요?", { ok: "버리고 열기", danger: true }, function () { discardMinimized(); openForm(id); });
+      return;
     }
     editingId = id || null;
     var r = id ? data.filter(function (x) { return x.id === id; })[0] : null;
@@ -4806,8 +4877,8 @@
   function closeForm() {
     if (layers.indexOf("form") < 0) { hideForm(); return; }
     if (layers[layers.length - 1] === "form" && formDirty()) {
-      if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) return;
-      skipConfirm = true;
+      askConfirm(CLOSE_Q, CLOSE_OPT, function () { skipConfirm = true; popLayer("form"); });
+      return;
     }
     popLayer("form");
   }
@@ -4883,12 +4954,55 @@
     var t = $("toast"); t.classList.remove("act"); t.textContent = msg; t.classList.add("show");
     clearTimeout(showToast.h); showToast.h = setTimeout(function () { t.classList.remove("show"); }, 1800);
   }
+  /* ---------- 앱 안 확인창: 폰 기본 팝업(confirm·alert) 대신 아래에서 올라오는 창 ---------- */
+  var dlgEl = null, dlgModal = false, dlgNo = null;
+  var DELQ = { ok: "삭제", danger: true };
+  var CLOSE_Q = "저장하지 않고 닫을까요?\n작성 중인 내용이 사라져요.";
+  var CLOSE_OPT = { ok: "닫기", cancel: "계속 작성", danger: true };
+  function dlgKey(e) {
+    if (e.key === "Escape" && dlgEl && !dlgModal) { e.preventDefault(); e.stopPropagation(); dlgCancelNow(); }
+  }
+  function dlgClose() {
+    if (!dlgEl) return;
+    var d = dlgEl; dlgEl = null; dlgNo = null; dlgModal = false;
+    document.removeEventListener("keydown", dlgKey, true);
+    d.classList.remove("show");
+    setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 200);
+  }
+  function dlgCancelNow() { var no = dlgNo; dlgClose(); if (no) no(); }
+  /* msg 첫 줄은 제목, 나머지는 설명. opt: ok·cancel 글자, danger(빨간 버튼), modal(바깥을 눌러도 안 닫힘), single(확인 버튼만) */
+  function askConfirm(msg, opt, yes, no) {
+    opt = opt || {};
+    if (dlgEl) dlgClose();
+    var lines = String(msg).split("\n"), title = lines[0], body = lines.slice(1).join("\n").trim();
+    var ov = el("div", "dlg"); ov.setAttribute("role", "alertdialog"); ov.setAttribute("aria-modal", "true"); ov.dataset.n = String(msg);
+    var sh = el("div", "dsheet");
+    sh.appendChild(el("div", "dt", title));
+    if (body) sh.appendChild(el("div", "dm", body));
+    var bt = el("div", "dbtn");
+    var cb = null;
+    if (!opt.single) { cb = el("button", "", opt.cancel || "취소"); cb.type = "button"; cb.onclick = dlgCancelNow; bt.appendChild(cb); }
+    var ob = el("button", "ok" + (opt.danger ? " danger" : ""), opt.ok || "확인"); ob.type = "button";
+    ob.onclick = function () { buzz(opt.danger ? 25 : 12); dlgNo = null; dlgClose(); if (yes) yes(); };
+    bt.appendChild(ob); sh.appendChild(bt); ov.appendChild(sh);
+    ov.onclick = function (e) { if (e.target === ov && !opt.modal) dlgCancelNow(); };
+    document.body.appendChild(ov);
+    dlgEl = ov; dlgModal = !!opt.modal; dlgNo = no || null;
+    document.addEventListener("keydown", dlgKey, true);
+    requestAnimationFrame(function () { ov.classList.add("show"); });
+    try { (opt.danger && cb ? cb : ob).focus(); } catch (x) {}
+  }
+  /* 안내만 하는 창(확인 버튼 하나). 같은 안내가 이미 떠 있으면 또 띄우지 않음 */
+  function askNotice(msg) {
+    if (dlgEl && dlgEl.dataset.n === String(msg)) return;
+    askConfirm(msg, { single: true });
+  }
   /* 삭제 직후 "실행취소"를 눌러 되돌릴 수 있는 알림 */
   function showUndoToast(msg, undo) {
     var t = $("toast"); t.textContent = "";
     t.appendChild(el("span", "", msg));
     var b = el("button", "", "실행취소"); b.type = "button";
-    b.onclick = function () { clearTimeout(showToast.h); t.classList.remove("show", "act"); undo(); };
+    b.onclick = function () { buzz(12); clearTimeout(showToast.h); t.classList.remove("show", "act"); undo(); };
     t.appendChild(b);
     t.classList.add("show", "act");
     clearTimeout(showToast.h);
@@ -4914,6 +5028,8 @@
   }
   window.addEventListener("popstate", function (e) {
     if (skipPop > 0) { skipPop--; return; }
+    /* 앱 확인창이 떠 있는 동안 뒤로가기: 창만 닫고(필수 선택창은 그대로) 화면 기록 위치는 되돌려 둠 */
+    if (dlgEl) { if (!dlgModal) dlgCancelNow(); history.pushState({ g: 1 + layers.length }, ""); return; }
     /* 자판이 올라와 있을 때 폰 뒤로가기: 자판만 내리고 창은 그대로 (닫기 버튼으로 닫는 경우는 제외) */
     if (progBack) progBack = false;
     else if (kbOpen()) {
@@ -4925,8 +5041,15 @@
     /* 열려 있는 창이 있으면 맨 위 창부터 닫기 */
     if (layers.length && g < 1 + layers.length) {
       var top = layers[layers.length - 1];
+      var finishTop = function (resetWriter) {
+        if (resetWriter) { $("text").value = writerInitPost; $("pre").value = writerInitPre; $("wtext").value = wField().value; $("wcnt").textContent = $("wtext").value.length + "자"; }   /* 기록 창에서 연 경우: 고친 내용은 버리고 원래대로 */
+        skipConfirm = false;
+        layers.pop(); hideLayer(top);
+      };
+      var restorePos = function () { history.pushState({ g: 1 + layers.length }, ""); };
       if (top === "form" && !skipConfirm && formDirty()) {
-        if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) { history.pushState({ g: 1 + layers.length }, ""); return; }
+        askConfirm(CLOSE_Q, CLOSE_OPT, function () { finishTop(false); }, restorePos);
+        return;
       }
       /* 카드에서 후기 창만 열었을 때(꾹 누르기·「후기 쓰기」)도 내용을 고쳤다면 같은 확인을 띄움 */
       if (top === "writer" && !skipConfirm) {
@@ -4935,12 +5058,11 @@
         if (writerDirect) wDirty = formDirty();
         else wDirty = $("text").value !== writerInitPost || $("pre").value !== writerInitPre;
         if (wDirty) {
-          if (!confirm("작성 중인 내용이 있어요. 저장하지 않고 닫을까요?")) { history.pushState({ g: 1 + layers.length }, ""); return; }
-          if (!writerDirect) { $("text").value = writerInitPost; $("pre").value = writerInitPre; $("wtext").value = wField().value; $("wcnt").textContent = $("wtext").value.length + "자"; }   /* 기록 창에서 연 경우: 고친 내용은 버리고 원래대로 */
+          askConfirm(CLOSE_Q, CLOSE_OPT, function () { finishTop(!writerDirect); }, restorePos);
+          return;
         }
       }
-      skipConfirm = false;
-      layers.pop(); hideLayer(top);
+      finishTop(false);
       return;
     }
     if (g >= 1) return;
@@ -4978,7 +5100,8 @@
   ["pointerdown", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, armGuard, { capture: true, once: true, passive: true }); });
   function save() {
     var title = $("title").value.trim();
-    if (!title) { alert("제목을 입력해 주세요."); $("title").focus(); return; }
+    if (!title) { askNotice("제목을 입력해 주세요."); $("title").focus(); return; }
+    buzz(15);   /* 저장할 때 진동 */
     if (form.type === "book" && $("date").value > today()) $("date").value = today();   /* 직접 입력으로 미래가 들어와도 저장은 막지 않고 오늘로 맞춤 */
     var rec = {
       type: form.type, title: title,
@@ -5307,7 +5430,7 @@
     var k = dkey(id), d = loadDrafts()[k];
     if (!d || !d.f) return;
     if (id && !data.some(function (x) { return x.id === id; })) { clearDraft(k); return; }
-    if (!confirm("저장하지 않고 닫힌 작성 내용이 있어요. 이어서 쓸까요?\n(취소하면 지워져요)")) { clearDraft(k); return; }
+    askConfirm("저장하지 않고 닫힌 작성 내용이 있어요.\n이어서 쓸까요?", { ok: "이어서 쓰기", cancel: "지우기", modal: true }, function () {
     var f = d.f;
     setKind(KIND[f.type] ? f.type : form.type);
     setStatus(f.status === "reading" || f.status === "paused" ? f.status : "done");
@@ -5318,6 +5441,7 @@
     form.time = /^\d{2}:\d{2}$/.test(f.time) ? f.time : "";
     $("date").value = f.date || ""; updateTimeBtn();
     growText(); growCast(); setVTab(vTab);
+    }, function () { clearDraft(k); });
   }
 
   /* ---------- 올해 독서 목표 ---------- */
@@ -5329,7 +5453,7 @@
   function saveGoals(g, silent) {
     var old = silent ? null : getGoals();
     try { localStorage.setItem(GKEY, JSON.stringify(g)); localStorage.setItem(LCKEY, String(Date.now())); }
-    catch (e) { alert("저장에 실패했어요. 브라우저 저장 공간을 확인해 주세요."); return; }
+    catch (e) { askNotice("저장에 실패했어요. 브라우저 저장 공간을 확인해 주세요."); return; }
     if (old) logGoalDiff(old, g);
   }
   /* 완독한 책만 센다: 읽는 중인 책은 제외, 완독한 날짜 기준. y는 "2026"(연도) 또는 "2026-01"(월) */
@@ -5351,7 +5475,7 @@
     var goals = getGoals(), goal = +goals[y] || 0, done = readCount(y), nowY = new Date().getFullYear();
     var reading = data.filter(function (r) { return r.type === "book" && r.status === "reading"; }).length;
     var pane = el("div", "pane gpane"); pane.dataset.t = "book";
-    /* 목록·달력 맨 위 진행바를 보일지(고정) 정하는 버튼. 올해 카드에서만 */
+    /* 목록·달력 맨 위 진행바를 보일지(고정) 정하는 버튼. 어느 해로 넘겨도 항상 보임 */
     var pinDone = false;
     function pinChips() {
       var w = el("div", "gpin");
@@ -5367,13 +5491,8 @@
     function pinRow() {
       var l = el("div", "gline end"); l.appendChild(pinChips()); return l;
     }
-    var h = el("div", "phead"), nav = el("div", "gnav");
-    var pv = el("button", "", "\u2039"); pv.type = "button"; pv.setAttribute("aria-label", "이전 해"); pv.disabled = y <= 2000;
-    pv.onclick = function () { gy = y - 1; goalEdit = false; mEdit = null; renderStats(); };
-    var nx = el("button", "", "\u203A"); nx.type = "button"; nx.setAttribute("aria-label", "다음 해"); nx.disabled = y >= nowY + 1;
-    nx.onclick = function () { gy = y + 1; goalEdit = false; mEdit = null; renderStats(); };
-    nav.appendChild(pv); nav.appendChild(el("b", "", y + "년 독서 목표")); nav.appendChild(nx);
-    h.appendChild(nav);
+    var h = el("div", "phead");
+    h.appendChild(el("b", "", y + "년 독서 목표"));   /* 연도 이동 화살표는 맨 위 연도 제목줄(월별 통계와 같은 모양)로 옮김 */
     var eb = el("button", "", goalEdit ? "닫기" : (goal ? "수정" : "목표 설정")); eb.type = "button";
     eb.onclick = function () { goalEdit = !goalEdit; mEdit = null; renderStats(); };
     h.appendChild(eb);
@@ -5414,7 +5533,7 @@
         rl0.appendChild(el("div", "gnote", "읽는 중 " + reading + "권"));
         rl0.appendChild(pinChips());
         pane.appendChild(rl0);
-      } else if (y === nowY) pane.appendChild(pinRow());
+      } else pane.appendChild(pinRow());
       return pane;
     }
 
@@ -5456,10 +5575,61 @@
       if (!pinDone) rl.appendChild(pinChips());
       pane.appendChild(rl);
     }
-    if (y === nowY && !pinDone) pane.appendChild(pinRow());
+    if (!pinDone) pane.appendChild(pinRow());
     return pane;
   }
 
+  /* ---------- 월별 목표 일괄 설정: 남은 권수를 남은 달에 비율대로 나눔(이번 달은 남은 일수만큼만 셈) ---------- */
+  function bulkSplit(y) {
+    var nowD = new Date(), nowY = nowD.getFullYear(), nowM = nowD.getMonth() + 1, goals = getGoals(), goalY = +goals[y] || 0;
+    if (y < nowY) { showToast("지난 해는 자동 계산할 수 없어요"); return; }
+    if (!goalY) { showToast("먼저 " + y + "년 목표를 설정해 주세요"); return; }
+    var doneY = readCount(String(y)), remain = goalY - doneY;
+    if (remain <= 0) { showToast("올해 목표를 이미 채웠어요"); return; }
+    var months = [];
+    for (var m = (y === nowY ? nowM : 1); m <= 12; m++) months.push(m);
+    var curKey = y + "-" + pad(nowM), rCur = readCount(curKey);
+    var dim = new Date(y, nowM, 0).getDate();
+    /* total권을 cnt개 달에 똑같이(남는 건 앞 달부터 1권씩) */
+    function eq(total, cnt) {
+      var base = Math.floor(total / cnt), left = total - base * cnt, a = [];
+      for (var k = 0; k < cnt; k++) a.push(base + (k < left ? 1 : 0));
+      return a;
+    }
+    var vals, targets = months, plan = {}, parts = [];
+    if (y !== nowY) {
+      vals = eq(remain, months.length);                          /* 내년 이후: 12개월 똑같이 */
+    } else {
+      var n = months.length, N = (remain + rCur) / n;            /* 이번 달 포함 남은 달이 모두 같은 목표 N이 되려면 */
+      var wCur = (dim - nowD.getDate() + 1) / dim;               /* 이번 달에 남은 비율(남은 일수 ÷ 그 달 일수) */
+      var share = remain * wCur / (wCur + (n - 1));              /* 날짜 비율로 계산한 이번 달 몫 */
+      if (n > 1 && rCur >= N) {
+        /* 이번 달에 이미 N 이상 읽음: 이번 달은 더 읽을 게 없으니 남은 권수를 다른 달에만 똑같이 나눔(이번 달 목표는 다른 달과 같게 표시) */
+        var o = eq(remain, n - 1);
+        vals = [o[0]].concat(o);
+      } else if (n > 1 && N - rCur > share) {
+        /* 똑같이 맞추면 이번 달에 너무 몰림: 이번 달은 남은 일수만큼만 한 달로 쳐서 나눔 */
+        var wts = months.map(function (m, k) { return k === 0 ? wCur : 1; }), tw = wts.reduce(function (a, b) { return a + b; }, 0);
+        var raw = wts.map(function (w) { return remain * w / tw; }); vals = raw.map(Math.floor);
+        var left = remain - vals.reduce(function (a, b) { return a + b; }, 0);
+        raw.map(function (v, k) { return { k: k, f: v - Math.floor(v) }; }).sort(function (a, b) { return b.f - a.f || a.k - b.k; })
+          .slice(0, left).forEach(function (q) { vals[q.k]++; });
+        vals[0] += rCur;
+      } else {
+        vals = eq(remain + rCur, n);                             /* 이번 달 포함 똑같이 */
+      }
+    }
+    targets.forEach(function (m, i) {
+      plan[y + "-" + pad(m)] = vals[i]; parts.push(m + "월 " + vals[i] + "권");
+    });
+    var rng = months.length > 1 ? months[0] + "월~12월" : "12월";
+    askConfirm((y === nowY ? "올해(" + y + "년)" : y + "년") + " 목표의 남은 " + remain + "권을 " + rng + "에 나눌까요?\n\n(예시)\n" + parts.join(" · "), { ok: "나누기" }, function () {
+      var old = getGoals(), ng = JSON.parse(JSON.stringify(old));
+      Object.keys(plan).forEach(function (k) { if (plan[k] >= 1) ng[k] = Math.min(999, plan[k]); else delete ng[k]; });
+      saveGoals(ng); renderStats();
+      showUndoToast("남은 달 목표를 나눠 정했어요", function () { saveGoals(old); renderStats(); });
+    });
+  }
   /* ---------- 목표 탭: 월별 목표 · 비교 그래프 ---------- */
   function monthPane(y) {
     var goals = getGoals(), nowD = new Date(), nowY = nowD.getFullYear(), nowM = nowD.getMonth() + 1, sum = 0;
@@ -5467,7 +5637,25 @@
     var pane = el("div", "pane gpane mpane"); pane.dataset.t = "book";
     var h = el("div", "phead");
     h.appendChild(el("b", "", y + "년 월별 목표"));
-    h.appendChild(el("span", "tot", sum ? "목표 합계 " + sum + "권" : ""));
+    var mr = el("div", "mright");
+    if (sum) {   /* 누르면 연 목표를 월별 합계로 바꿈(확인 후) */
+      var same = (+goals[y] || 0) === sum;   /* 이미 연 목표와 같으면 버튼처럼 안 보이고 눌러도 반응 없음 */
+      var tb = el("button", "mbulk" + (same ? " flat" : ""), "목표 합계 " + sum + "권"); tb.type = "button";
+      if (same) { tb.tabIndex = -1; tb.setAttribute("aria-disabled", "true"); }
+      tb.onclick = function () {
+        if (same) return;
+        var cur = +goals[y] || 0;
+        askConfirm(cur ? y + "년 목표를 " + cur + "권에서 " + sum + "권으로 바꿀까요?" : y + "년 목표를 " + sum + "권으로 설정할까요?", { ok: cur ? "바꾸기" : "설정하기" }, function () {
+          var old = getGoals(), ng = JSON.parse(JSON.stringify(old)); ng[y] = sum;
+          saveGoals(ng); renderStats();
+          showUndoToast(y + "년 목표를 " + sum + "권으로 바꿨어요", function () { saveGoals(old); renderStats(); });
+        });
+      };
+      mr.appendChild(tb);
+    }
+    var bb = el("button", "mbulk", "자동 계산"); bb.type = "button";
+    bb.onclick = function () { bulkSplit(y); };
+    mr.appendChild(bb); h.appendChild(mr);
     pane.appendChild(h);
     for (var m = 1; m <= 12; m++) (function (m) {
       var key = y + "-" + pad(m), goal = +goals[key] || 0, done = readCount(key);
@@ -5497,6 +5685,16 @@
         };
         var sv = el("button", "primary", "저장"); sv.type = "button"; sv.onclick = commit;
         ed.appendChild(sv);
+        var allb = el("button", "", "전체 월 적용"); allb.type = "button";
+        allb.onclick = function () {
+          var n = parseInt(inp.value, 10);
+          if (!(n >= 1 && n <= 999)) { showToast("1~999 사이 숫자로 입력해 주세요"); inp.focus(); return; }
+          var old = getGoals(), ng = JSON.parse(JSON.stringify(old));
+          for (var mm = 1; mm <= 12; mm++) ng[y + "-" + pad(mm)] = n;
+          saveGoals(ng); mEdit = null; renderStats();
+          showUndoToast("모든 달을 " + n + "권으로 정했어요", function () { saveGoals(old); renderStats(); });
+        };
+        ed.appendChild(allb);
         if (goal) {
           var rm = el("button", "dim", "목표 해제"); rm.type = "button";
           rm.onclick = function () { delete goals[key]; saveGoals(goals); mEdit = null; renderStats(); };
@@ -5544,6 +5742,15 @@
   }
   function renderGoalTab(w) {
     var y = gy, nowD = new Date(), nowY = nowD.getFullYear(), nowM = nowD.getMonth() + 1, goals = getGoals();
+    /* 맨 위 연도 제목 + 화살표: 월별 통계와 똑같은 .calhead */
+    var head = el("div", "calhead");
+    var pv = navBtn("<", "이전 해", function () { gy = y - 1; goalEdit = false; mEdit = null; renderStats(); });
+    var nx = navBtn(">", "다음 해", function () { gy = y + 1; goalEdit = false; mEdit = null; renderStats(); });
+    pv.disabled = y <= 2000; nx.disabled = y >= maxNavYear(true);
+    head.appendChild(pv);
+    var ct = el("div", "caltitle"); ct.appendChild(el("span", "", y + "년"));
+    head.appendChild(ct); head.appendChild(nx);
+    w.appendChild(head);
     w.appendChild(goalPane(y));
     w.appendChild(monthPane(y));
     var mc = [];
@@ -5758,6 +5965,7 @@
     var d = Math.floor((Date.now() - ts) / DAY);
     return d <= 0 ? "오늘" : d + "일 전";
   }
+  var bkShowDate = false;   /* 「마지막 백업」 줄을 누르면 n일 전 ↔ 날짜·시각 */
   function updateBackupBanner() {
     var n = data.length + thoughts.length, lb = 0, lc = 0, sn = 0;
     try { lb = +localStorage.getItem(LBKEY) || 0; lc = +localStorage.getItem(LCKEY) || 0; sn = +localStorage.getItem(SNKEY) || 0; } catch (e) {}
@@ -5772,8 +5980,13 @@
     var bl = $("bkLast");
     bl.hidden = !n;
     if (n) {
-      bl.textContent = lb ? "마지막 백업 · " + ago(lb) : "마지막 백업 · 없음";
-      bl.classList.toggle("warn", !lb || (lc > lb && now - lb >= 7 * DAY));
+      bl.textContent = lb ? "마지막 백업 · " + (bkShowDate ? stampOf(lb) : ago(lb)) : "마지막 백업 · 없음";
+      bl.classList.toggle("warn", !lb || now - lb >= 7 * DAY);   /* 백업이 없거나 7일 넘으면 강조색 */
+      bl.classList.toggle("tap", !!lb);
+      if (lb) { bl.setAttribute("role", "button"); bl.tabIndex = 0; bl.setAttribute("aria-label", bkShowDate ? "마지막 백업 날짜와 시각. 누르면 며칠 전인지 보여요" : "마지막 백업. 누르면 날짜와 시각이 보여요"); }
+      else { bl.removeAttribute("role"); bl.removeAttribute("tabindex"); bl.removeAttribute("aria-label"); }
+      bl.onclick = lb ? function () { bkShowDate = !bkShowDate; updateBackupBanner(); } : null;
+      bl.onkeydown = lb ? function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); bl.onclick(); } } : null;
     }
   }
 
@@ -5786,7 +5999,7 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
   }
   function exportData() {
-    if (!data.length && !thoughts.length) { alert("저장할 기록이 없어요."); return; }
+    if (!data.length && !thoughts.length) { askNotice("저장할 기록이 없어요."); return; }
     var t0 = ""; try { t0 = localStorage.getItem(TKEY) || ""; } catch (e) {}
     var out = [{ type: "meta", v: SCHEMA, title: t0, goals: getGoals(), at: today() }]
       .concat(data, thoughts.map(function (t) { return { type: "thought", id: t.id, d: t.d, tm: t.tm, t: t.t, w: t.w, wtm: t.wtm }; }),
@@ -5902,9 +6115,9 @@
         if (n.musical) parts.push("뮤지컬 " + n.musical);
         if (n.play) parts.push("연극·공연 " + n.play);
         if (n.movie) parts.push("영화 " + n.movie);
-        alert("CSV에서 " + added + "개를 불러왔어요." + (parts.length ? " (" + parts.join(", ") + ")" : "") +
+        askNotice("CSV에서 " + added + "개를 불러왔어요." + (parts.length ? " (" + parts.join(", ") + ")" : "") +
           (dup ? "\n이미 있는 기록 " + dup + "개는 건너뛰었어요." : "") + (bad ? "\n제목이나 날짜를 읽지 못한 " + bad + "개는 건너뛰었어요." : ""));
-      } catch (e) { alert("플앱 CSV 형식이 아니에요. (제목, 일시 칸이 필요해요)"); }
+      } catch (e) { askNotice("플앱 CSV 형식이 아니에요. (제목, 일시 칸이 필요해요)"); }
     };
     rd.readAsArrayBuffer(file);
   }
@@ -6008,8 +6221,8 @@
           logAct("백업 파일 가져오기 \u00B7 " + ip.join(", "), null, false, "sys");
         }
         render();
-        alert(added + "개를 불러왔어요." + (addedT ? " 생각 " + addedT + "개도 가져왔어요." : "") + (filled ? " 이미 있던 " + filled + "개는 후기를 채우거나 정리했어요." : "") + (updated ? " 이미 있던 " + updated + "개는 좌석 정보를 갱신했어요." : ""));
-      } catch (e) { alert("올바른 백업 파일이 아니에요."); }
+        askNotice(added + "개를 불러왔어요." + (addedT ? " 생각 " + addedT + "개도 가져왔어요." : "") + (filled ? " 이미 있던 " + filled + "개는 후기를 채우거나 정리했어요." : "") + (updated ? " 이미 있던 " + updated + "개는 좌석 정보를 갱신했어요." : ""));
+      } catch (e) { askNotice("올바른 백업 파일이 아니에요."); }
     };
     rd.readAsText(file);
   }
@@ -6232,7 +6445,7 @@
     if (v.calM >= 0 && v.calM <= 11) calM = +v.calM;
     if (/^\d{4}-\d{2}-\d{2}$/.test(v.selDate)) selDate = v.selDate;
     if (v.stat && typeof v.stat === "object") {
-      if (["range", "month", "goal"].indexOf(v.stat.mode) >= 0) stat.mode = v.stat.mode;
+      if (["year", "month", "range", "goal"].indexOf(v.stat.mode) >= 0) stat.mode = v.stat.mode;
       ["preset", "from", "to"].forEach(function (k) { if (v.stat[k] === null || typeof v.stat[k] === "string") stat[k] = v.stat[k]; });
       if (+v.stat.year) stat.year = +v.stat.year;
     }
@@ -6276,11 +6489,15 @@
   window.addEventListener("pagehide", saveViewState);
   /* 저장된 데이터를 읽지 못했다면 원본을 파일로 내려받을 기회를 줌 */
   if (corrupt.length) setTimeout(function () {
-    corrupt.forEach(function (c) {
+    var q = corrupt.slice();
+    (function next() {
+      var c = q.shift(); if (!c) return;
       var what = c.key === TLKEY ? "생각(타임라인)" : "후기";
-      if (confirm(what + " 저장 데이터 일부를 읽지 못했어요.\n원본은 브라우저에 따로 보관해 뒀어요.\n\n지금 원본을 파일로 저장해 둘까요?"))
+      askConfirm(what + " 저장 데이터 일부를 읽지 못했어요.\n원본은 브라우저에 따로 보관해 뒀어요.\n\n지금 원본을 파일로 저장해 둘까요?", { ok: "파일로 저장", cancel: "나중에" }, function () {
         saveFile(c.raw, "복구용_" + (c.key === TLKEY ? "생각" : "후기") + "_" + today() + ".json");
-    });
+        next();
+      }, next);
+    })();
   }, 400);
 })();
 </script>
