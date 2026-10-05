@@ -117,8 +117,10 @@
   }
   .card:active { background: #f7f8fb; }
   .card .bar { position: absolute; left: 9px; top: 11px; bottom: 11px; width: 3px; border-radius: 2px; background: var(--c); z-index: 3; }   /* 층 순서(아래→위): 버튼 줄 1 < 제목 줄 2 < 색 띠 3 < PDF 선택 바 4 < 상단 도구 5 */
-  .card .bar.soft { opacity: .35; }
-  .l2 .kind.soft { opacity: .35; }
+  /* 예정(아직 안 본) 기록: 띠·종류 글자·D-day 마크가 같은 진하기(--soft) */
+  :root { --soft: .55; }
+  .card .bar.soft { opacity: var(--soft); }
+  .l2 .kind.soft { opacity: var(--soft); }
   .l1 { display: flex; align-items: baseline; gap: 8px; }
   .card h2 {
     flex: 1; min-width: 0; margin: 0; font-family: var(--serif); font-size: 15.5px; font-weight: 600;
@@ -143,7 +145,8 @@
     flex: none; margin-left: 6px; background: rgba(232,180,0,.15); color: #8a6a00; border-radius: 4px;
     padding: 0 5px; font-size: 10.5px; font-weight: 500; line-height: 16px;
   }
-  .badge.dday { background: transparent; box-shadow: inset 0 0 0 1px currentColor; color: var(--ct, #8a6a00); font-weight: 600; }
+  .badge.dday { background: transparent; box-shadow: inset 0 0 0 1px currentColor; color: var(--ct, #8a6a00); font-weight: 600; opacity: var(--soft); }
+  .badge.dday.today { opacity: 1; }
   .badge.paused { background: rgba(120,126,150,.14); color: #6b7088; }
   .badge.stale { background: rgba(207,80,72,.10); color: #b0453d; }
   .badge.read { background: transparent; box-shadow: inset 0 0 0 1px rgba(232,180,0,.6); color: #8a6a00; }
@@ -180,7 +183,7 @@
     border-bottom: 1px solid var(--line); cursor: pointer;
   }
   .hl { display: flex; align-items: center; gap: 8px; height: 40px; }
-  .hl .kind.soft { opacity: .35; }
+  .hl .kind.soft { opacity: var(--soft); }
   .hl .kind { flex: none; color: var(--ct, var(--c)); font-weight: 700; font-size: 12.5px; }
   .hl .ht {
     flex: 1; min-width: 0; font-family: var(--serif); font-size: 14.5px; font-weight: 600;
@@ -304,9 +307,27 @@
   .phead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
   .phead b { font-family: var(--serif); font-size: 16px; }
   .phead .tot { font-size: 13px; color: var(--sub); }
-  .stack { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--line); gap: 2px; }
+  .stack { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--line); gap: 1px; }
   .stack i { display: block; background: var(--c); min-width: 3px; }
   .pane .stack { margin-bottom: 4px; }
+  /* 각 통계 탭 맨 위 종류별 막대: 굵게, 안에 이름·비율, 아래 범례와 간격 */
+  .pane .stack.big { height: 20px; border-radius: 6px; margin-bottom: 0; }
+  .stack.big + .crow { padding-top: 14px; }   /* 막대~범례 간격 = 제목~막대 간격 */
+  /* 통계 탭 모든 카드: 카드 위·아래 안쪽 여백, 제목~첫 항목 간격을 모두 14px로 통일 */
+  #statWrap .pane { padding-top: 14px; padding-bottom: 14px; }
+  #statWrap .pane .phead { margin-bottom: 14px; }
+  #statWrap .pane .mtab th { padding-top: 0; }                  /* 표 머리글 */
+  #statWrap .pane .mtab tfoot td { padding-bottom: 0; }         /* 표 맨 아래 합계 줄 */
+  #statWrap .pane > .crow:last-child { padding-bottom: 0; }     /* 종류별 카드 마지막 줄 */
+  #statWrap .pane .grow:last-child > * { padding-bottom: 0; }   /* 장르 도넛 마지막 범례 줄 */
+  #statWrap .pane .gdonut { margin: 0 auto 5px; }               /* 도넛: 제목 아래 14px, 범례 위 5px+줄 여백 9px=14px */
+  #statWrap .pane .gchart { padding-top: 14px; }                /* 목표 그래프: 막대 위 숫자 칸 */
+  #statWrap .rows > .prow:first-child { padding-top: 14px; }    /* 제목 없는 달별·연도별 줄 카드 */
+  #statWrap .rows > .prow:last-child { padding-bottom: 14px; }
+  .stack.big i { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 4px; overflow: hidden; border-radius: 0; color: #fff; font-size: 10.5px; line-height: 1; white-space: nowrap; }
+  .stack.big i.dk { color: rgba(0,0,0,.78); }
+  .stack.big i .sp { font-weight: 700; }
+  .stack.big i.noname .sn, .stack.big i.notext .sn, .stack.big i.notext .sp { display: none; }
   .crow { display: grid; grid-template-columns: 8px 1fr auto 46px; align-items: center; gap: 10px; padding: 9px 0; font-size: 14px; }
   .crow + .crow { border-top: 1px solid var(--line); }
   .crow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
@@ -325,14 +346,16 @@
   .gdonut .gout.b { font-weight: 700; fill: var(--sub); }
   .gdonut .gnum { fill: var(--ink); font-size: 24px; font-weight: 700; text-anchor: middle; }
   .gdonut .gunit { fill: var(--sub); font-size: 11px; text-anchor: middle; }
-  .gwrap { display: grid; grid-template-columns: 10px 1fr max-content max-content; column-gap: 10px; align-items: center; font-size: 14px; }
+  .gwrap { display: grid; grid-template-columns: 20px 1fr max-content max-content; column-gap: 0; align-items: stretch; font-size: 14px; }
   .grow { display: contents; }
-  .grow > * { padding: 7px 0; }
+  .grow > * { padding: 9px 0; display: flex; align-items: center; }
+  .grow > .num { padding-left: 10px; padding-right: 10px; justify-content: flex-end; }
+  .grow > .pct { justify-content: flex-end; }
   .grow > * { cursor: pointer; transition: opacity .15s; }
   .grow > .gdim { opacity: .35; }
   .grow > .gsel { color: var(--ink); font-weight: 700; }
-  .grow .gdot { width: 10px; height: 10px; padding: 0; border-radius: 50%; background: var(--gc); }
-  .grow b { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .grow .gdot { width: 20px; height: auto; padding: 0; border-radius: 0; background: radial-gradient(circle 5px at 5px 50%, var(--gc) 98%, transparent 100%); }
+  .grow > b { display: block; align-self: center; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .grow .num { color: var(--sub); text-align: right; white-space: nowrap; }
   .grow .pct { min-width: 40px; text-align: right; font-weight: 700; white-space: nowrap; }
   .prow { padding: 11px 16px; }
@@ -346,6 +369,11 @@
   .chip i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
   .chip em { font-style: normal; color: var(--mute); }
   .prow.zero .pl1 b { color: var(--mute); font-weight: 500; }
+  /* 막대·범례 눌러서 강조 */
+  [data-hl] { cursor: pointer; transition: opacity .15s; }
+  .hdim { opacity: .25; }
+  .chip.hsel { color: var(--ink); font-weight: 700; }
+  .crow.hsel { font-weight: 700; }
   .mtab { width: 100%; border-collapse: collapse; font-size: 13.5px; }
   .mtab th, .mtab td { text-align: center; padding: 8px 2px; }
   .mtab th { font-weight: 600; font-size: 12.5px; color: var(--sub); border-bottom: 1px solid var(--line); white-space: nowrap; }
@@ -684,6 +712,9 @@
   .gline { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-top: 3px; }
   .gline.end { justify-content: flex-end; margin-top: 8px; }
   .gline .gnote { margin-top: 0; }
+  .gline.fx { flex-wrap: nowrap; }   /* 고정 버튼이 아래 줄로 떨어져 높이가 변하지 않게 */
+  .gline.fx .gnote { min-width: 0; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-height: 20px; }
+  .gline.ph { visibility: hidden; }   /* 다른 해에서도 「읽는 중」 줄 높이만 남겨 카드 높이를 같게 */
   .gpin { display: flex; margin-left: auto; }
   .gpin button {
     flex: none; height: 26px; padding: 0; border: 0; border-radius: 0; background: transparent;
@@ -708,6 +739,8 @@
   .gmini b { color: var(--ink); white-space: nowrap; }
   .gmini.none b { color: var(--mute); font-weight: 400; }
   .gx .gxbox { margin: 0 0 8px; }
+  .gxbox .gnote { line-height: 20px; min-height: 20px; }   /* 빈 줄도 글자 있는 줄과 같은 높이 */
+  .gxbox .gnote.ph { visibility: hidden; }
   #list > .gx:first-child { margin-top: 10px; }   /* 달력(#calWrap 위 여백 12px)과 맞춤 */
   .gx .gxbox .phead { align-items: center; min-height: 30px; }   /* 버튼을 줄여도 제목 줄 높이는 그대로 */
   /* 알약 54×24. 동그라미(24×18)와 글자 칸 두 개가 "같은 상자"(24×18)라서 글자가 동그라미 정중앙에 올 수밖에 없는 구조.
@@ -758,6 +791,9 @@
   .gleg { display: flex; gap: 10px; align-items: center; font-size: 12px; color: var(--sub); }
   .gleg i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; background: var(--line2); }
   .gleg i.d { background: var(--c); }
+  .gleg > span, .gchart .gcol { cursor: pointer; transition: opacity .15s; }
+  .gleg > span.hsel { color: var(--ink); font-weight: 700; }
+  .gbars i, .gcol .gl { transition: opacity .15s; }
   .gchart { display: flex; gap: 3px; padding-top: 16px; }
   .gchart.sc { overflow-x: auto; }
   .gcol { flex: 1; min-width: 0; align-items: center; }
@@ -2174,13 +2210,31 @@
   }
 
   /* ---------- 목록 ---------- */
-  function isUpcoming(r) { return r.type !== "book" && !!r.date && r.date >= today(); }   /* 아직 안 본(관람일이 오늘 이후) 영화·연극·뮤지컬 */
+  /* 아직 안 본(예정) 영화·연극·뮤지컬: 관람일이 내일 이후이거나, 오늘이면서 적어 둔 시간이 아직 안 됐을 때.
+     오늘 일정이라도 시간을 안 적었거나 시간이 이미 지났으면 예정이 아님(띠·글자 원래 색, 일반 기록으로 취급) */
+  function isUpcoming(r) {
+    if (r.type === "book" || !r.date) return false;
+    var t = today();
+    if (r.date > t) return true;
+    if (r.date < t) return false;
+    return !!(r.time && r.time > nowHM());
+  }
+  /* D-day 마크를 달 기록: 예정 기록 + 시간 없이 오늘로 잡은 영화·공연(D-Day). 책은 미래 개념이 없어 안 달아요 */
+  function hasDday(r) {
+    if (r.type === "book" || !r.date) return false;
+    return isUpcoming(r) || (r.date === today() && !r.time);
+  }
   /* 예정 기록 D-day: 오늘이면 D-Day, 아니면 D-남은일수 (아직 안 본 영화·연극·뮤지컬만) */
   function ddayLabel(r) {
-    if (!isUpcoming(r)) return "";
+    if (!hasDday(r)) return "";
     var a = new Date(r.date + "T00:00:00"), b = new Date(); b.setHours(0, 0, 0, 0);
     var n = Math.round((a - b) / 86400000);
     return n <= 0 ? "D-Day" : "D-" + n;
+  }
+  /* D-day 마크: D-Day(오늘)일 때만 진하게, D-n은 예정 표시와 같은 연한 진하기 */
+  function ddayBadge(r) {
+    var t = ddayLabel(r);
+    return el("span", "badge dday" + (t === "D-Day" ? " today" : ""), t);
   }
   /* 아주 짧은 진동(지원하는 기기에서만 — 아이폰 사파리는 진동이 없어서 그냥 넘어감) */
   function buzz(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
@@ -2298,7 +2352,7 @@
     var head = el("div", "chead");
     var hl = el("div", "hl");
     hl.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), KIND[r.type].name));
-    if (isUpcoming(r)) hl.appendChild(el("span", "badge dday", ddayLabel(r)));
+    if (hasDday(r)) hl.appendChild(ddayBadge(r));
     if (mark) hl.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
     hl.appendChild(el("span", "ht", r.title));
     var w = r.status === "reading" ? "읽는 중" : r.status === "paused" ? "중단" : when;
@@ -2543,7 +2597,7 @@
 
       var l2 = el("div", "l2");
       l2.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), KIND[r.type].name));   /* 예정 기록은 종류 글자도 띠처럼 연하게 */
-      if (isUpcoming(r)) l2.appendChild(el("span", "badge dday", ddayLabel(r)));
+      if (hasDday(r)) l2.appendChild(ddayBadge(r));
       if (mark) l2.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
       if (r.status === "reading") l2.appendChild(el("span", "badge", "읽는 중"));
       if (!inDay && !mark) { var sl = staleLabel(r); if (sl) l2.appendChild(el("span", "badge stale", sl)); }
@@ -3695,11 +3749,54 @@
     return c;
   }
   function pct(n, total) { return total ? Math.round(n / total * 100) + "%" : "0%"; }
-  function stackBar(c) {
-    var s = el("div", "stack");
+  /* 막대 강조: root 안에서 data-hl 이 같은 것끼리 한 묶음. 하나를 누르면 나머지는 흐리게, 같은 걸 또 누르거나 빈 곳을 누르면 해제 */
+  function hlGroup(root) {
+    var sel = null;
+    function apply() {
+      [].slice.call(root.querySelectorAll("[data-hl]")).forEach(function (n) {
+        n.classList.toggle("hdim", !!sel && n.dataset.hl !== sel);
+        n.classList.toggle("hsel", !!sel && n.dataset.hl === sel);
+      });
+    }
+    [].slice.call(root.querySelectorAll("[data-hl]")).forEach(function (n) {
+      if (n.tagName !== "I") { n.setAttribute("role", "button"); n.tabIndex = 0; }
+    });
+    root.addEventListener("click", function (e) {
+      var n = e.target.closest ? e.target.closest("[data-hl]") : null;
+      if (n && root.contains(n)) sel = (sel === n.dataset.hl) ? null : n.dataset.hl;
+      else if (sel) sel = null;
+      else return;
+      apply();
+    });
+    root.addEventListener("keydown", function (e) {
+      if ((e.key === "Enter" || e.key === " ") && e.target.dataset && e.target.dataset.hl) { e.preventDefault(); e.target.click(); }
+    });
+  }
+  /* 굵은 막대 안의 이름·비율: 조각 폭에 안 들어가면 이름만, 그래도 안 되면 모두 숨김(아래 범례에 다 나옴) */
+  function fitStackLabels(st) {
+    function run() {
+      [].slice.call(st.children).forEach(function (i) {
+        var sn = i.querySelector(".sn"), sp = i.querySelector(".sp");
+        if (!sn || !sp || !i.clientWidth) return;
+        i.classList.remove("noname", "notext");
+        var w = i.clientWidth - 6, m = getComputedStyle(i).backgroundColor.match(/[\d.]+/g);
+        if (m && m.length >= 3) i.classList.toggle("dk", (m[0] * 299 + m[1] * 587 + m[2] * 114) / 1000 > 150);
+        if (sn.offsetWidth + 4 + sp.offsetWidth > w) {   /* 이름+비율이 한 줄에 안 들어가면 비율만 */
+          i.classList.add("noname");
+          if (sp.offsetWidth > w) i.classList.add("notext");   /* 비율도 안 들어가면 아무것도 안 보임 */
+        }
+      });
+    }
+    if (window.ResizeObserver) { try { new ResizeObserver(run).observe(st); } catch (e) {} }
+    requestAnimationFrame(run);
+  }
+  function stackBar(c, big) {
+    var s = el("div", "stack" + (big ? " big" : "")), sum = 0;
+    ORDER.forEach(function (t) { sum += c[t] || 0; });
     ORDER.forEach(function (t) {
       if (!c[t]) return;
-      var i = el("i"); i.dataset.t = t; i.style.flex = c[t] + " 1 0%";
+      var i = el("i"); i.dataset.t = t; i.dataset.hl = t;
+      if (big) { i.appendChild(el("span", "sn", KIND[t].name)); i.appendChild(el("span", "sp", pct(c[t], sum))); } i.style.flex = c[t] + " 1 0%";
       s.appendChild(i);
     });
     return s;
@@ -3711,15 +3808,17 @@
     h.appendChild(el("span", "tot", "총 " + total + "편"));
     pane.appendChild(h);
     if (!total) { pane.appendChild(el("div", "empty small", "이 기간에는 기록이 없어요.")); return pane; }
-    pane.appendChild(stackBar(c));
+    var sb = stackBar(c, true); pane.appendChild(sb); fitStackLabels(sb);
     ORDER.forEach(function (t) {
       var row = el("div", "crow"); row.dataset.t = t;
+      if (c[t]) row.dataset.hl = t;
       row.appendChild(el("i", "dot"));
       row.appendChild(el("span", "", KIND[t].name));
       row.appendChild(el("span", "num", c[t] + "편"));
       row.appendChild(el("span", "pct", pct(c[t], total)));
       pane.appendChild(row);
     });
+    hlGroup(pane);
     return pane;
   }
   function genrePane(items, title) {
@@ -3822,7 +3921,11 @@
       row.appendChild(el("span", "num", cnt[g] + "권"));
       row.appendChild(el("span", "pct", pct(cnt[g], books.length)));
       rowEls[g] = [].slice.call(row.children);
-      rowEls[g].forEach(function (c) { c.onclick = function () { pick(g); }; });   /* 아래 목록을 눌러도 같은 효과 */
+      rowEls[g].forEach(function (c) {   /* 아래 목록(점·이름·권수·비율 어디를 눌러도)도 같은 효과 */
+        c.onclick = function (e) { e.stopPropagation(); pick(g); };
+        c.setAttribute("role", "button"); c.tabIndex = 0;
+        c.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(g); } };
+      });
       wrap.appendChild(row);
     });
     pane.appendChild(wrap);
@@ -3869,8 +3972,8 @@
         order.forEach(function (g) {
           if (!c[g]) return;
           var col = genreColor(g);
-          var i = el("i"); i.style.background = col; i.style.flex = c[g] + " 1 0%"; st.appendChild(i);
-          var sp = el("span", "chip"); sp.style.setProperty("--c", col);
+          var i = el("i"); i.style.background = col; i.style.flex = c[g] + " 1 0%"; i.dataset.hl = g; st.appendChild(i);
+          var sp = el("span", "chip"); sp.style.setProperty("--c", col); sp.dataset.hl = g;
           sp.appendChild(el("i"));
           sp.appendChild(document.createTextNode(g + " " + c[g] + "권 "));
           sp.appendChild(el("em", "", pct(c[g], total)));
@@ -3880,6 +3983,7 @@
       }
       box.appendChild(row);
     });
+    hlGroup(box);
     return box;
   }
   function periodRow(label, items) {
@@ -3894,7 +3998,7 @@
       var ch = el("div", "chips");
       ORDER.forEach(function (t) {
         if (!c[t]) return;
-        var s = el("span", "chip"); s.dataset.t = t;
+        var s = el("span", "chip"); s.dataset.t = t; s.dataset.hl = t;
         s.appendChild(el("i"));
         s.appendChild(document.createTextNode(KIND[t].name + " " + c[t] + "편 "));
         s.appendChild(el("em", "", pct(c[t], total)));
@@ -4022,6 +4126,7 @@
           rows.appendChild(periodRow(m + "월", inY.filter(function (r) { return r.date.indexOf(mp) === 0; })));
         })(m);
       }
+      hlGroup(rows);
       w.appendChild(rows);
       var gpM = genreRatioListPane(y + "년 달별 책 장르", mdefs); if (gpM) w.appendChild(gpM);   /* 맨 아래 */
     }
@@ -4039,6 +4144,7 @@
         ys.forEach(function (yy) {
           yr.appendChild(periodRow(yy + "년", dated.filter(function (r) { return r.date.slice(0, 4) === yy; })));
         });
+        hlGroup(yr);
         w.appendChild(yr);
       }
       var gpY = genreRatioListPane("연도별 책 장르", ys.map(function (yy) {
@@ -4184,7 +4290,7 @@
       {"h": "검색·필터", "lines": ["돋보기를 누르면 제목, 저자, 후기, 태그 등으로 검색할 수 있어요.", "후기 있음/없음, 별점(5점, 4.5↑, 4↑, 3↑, 3 미만, 별점 없음)으로 좁혀 볼 수 있어요.", "예를 들어 \"후기 쓴 연극 중 4점 이상\"만 모으면 나의 최애 목록이 돼요.", "필터 줄의 「생각 포함」을 켜면, 타임라인에서 직접 쓴 생각이 목록에 함께 보여요.", "후기에 덧붙인 생각은 후기를 열면 볼 수 있어서 여기엔 나오지 않아요."]},
       {"h": "달력", "lines": ["날짜 기준으로 언제 어떤 작품을 만났는지 한눈에 보여요.", "날짜를 누르고 「+ 이 날 기록하기」를 누르면 그날 바로 새 기록을 추가해요.", "그날 남긴 생각도 함께 볼 수 있어요.", "책을 완독한 날과 읽는 중 감상을 쓴 날은 카드로 보여요.\n· 완독한 날 → 「완독」 카드\n· 읽는 중 감상을 쓴 날 → 「독서함」 카드 (날짜 칸에 노란 빈 동그라미)\n달력에서만 보이고 목록에는 나오지 않아요.", "위쪽 목표 카드에서 목표 진행 상황을 볼 수 있어요.", "달력 위쪽 「이달 n편」 줄에는 지금 읽는 중인 책이 「읽는 중 m권」으로 함께 나와요. 이번 달을 볼 때만 보여요.", "날짜를 누르면 아래 「그날의 생각」 줄 오른쪽 「+ 적기」로 그날의 생각을 따로 적을 수 있어요.\n지난 날짜에 적은 글에는 쓴 날짜가 함께 보여요."]},
       {"h": "타임라인", "lines": ["독립 생각과 덧붙인 생각이 날짜순으로 이어져요.", "타임라인에서는 지금 떠오른 생각만 적을 수 있어요. 지난 날짜의 생각은 달력에서 날짜를 골라 적어요.\n· 해당 날짜 칸에 「나중에 씀」으로 올라가요 (누르면 실제 쓴 날짜가 보여요)\n· 쓴 날짜에는 「생각 기록됨」 줄이 남아요 (누르면 달력의 그 생각으로 이동해요)", "「전체」에는 관람 기록과 백업·가져오기 같은 활동도 함께 보여요.", "공연·영화를 추가하면 타임라인에 두 줄이 남아요.\n· 추가한 시각 → 「기록 추가」\n· 실제 관람한 날짜·시간 → 「관람」\n지난 날짜의 완독을 추가한 책도 같아요. 추가한 시각의 「기록 추가」와 완독한 날의 「완독」이 남아요.\n관람·완독 줄은 기록의 날짜를 고치면 같이 옮겨지고, 아직 오지 않은 날짜면 그날이 되어야 나타나요.", "「내가 쓴 글 · 덧붙임」은 내가 직접 쓴 것만 모아 보여요.", "덧붙인 생각을 누르면 해당 작품으로 바로 이동해요.", "타임라인 줄을 삭제하면 종류에 따라 달라요.\n· 원본까지 삭제 → 생각, 덧붙임, 관람·완독 (내가 쓴 생각, 덧붙인 내용, 그 후기 기록)\n· 줄만 삭제 → 「후기」·「기록」 태그가 붙은 줄 (기록 추가, 후기 작성, 읽는 중, 독서 중단, 백업, 불러오기, 목표 설정, 생각 기록됨)\n줄만 지우면 후기 원본과 백업 파일, 가져온 기록, 생각 원본은 그대로 남아요. 삭제 전 확인 창에서 한 번 더 알려줘요."]},
-      {"h": "통계", "lines": ["이번 달, 최근 3개월, 올해, 전체 기간별로 얼마나 기록했는지 볼 수 있어요.", "달별·연도별 카테고리 편수와 책 장르까지 살펴보면 취향이 숫자로 보여요.", "책 장르 도넛의 조각이나 아래 장르 목록을 누르면 그 장르만 또렷하게 보이고, 가운데에 그 장르의 권수와 이름이 나와요. 같은 곳을 다시 누르거나 빈 곳을 누르면 원래대로 돌아와요.", "날짜가 없는 기록(읽는 중·중단인 책)과 아직 안 본 예정 기록은 통계에서 빠져요.", "「목표」 탭에서 연도별·월별 독서 목표 권수를 정하고, 그래프로 완독 권수와 비교해요.", "올해·이번 달 목표 바에서는 지금 읽는 중인 책이 빗금으로 이어 붙어 보여요. 숫자와 퍼센트는 완독한 책만 센 값이에요.", "월별 목표 카드의 「자동 계산」을 누르면 연 목표의 남은 권수를 이번 달부터 12월까지 나눠서 월별 목표로 넣어요.\n· 이번 달에 읽은 권수와 남은 일수를 함께 따져서, 한 달만 유난히 많거나 적지 않게 맞춰요.\n· 지난달 목표는 그대로예요.\n· 연 목표가 있어야 해요. 확인창에서 예시를 보고 정해요.", "월별 목표를 정하거나 고칠 때 「전체 월 적용」을 누르면 1~12월이 모두 입력한 권수로 바뀌어요.", "월별 목표 카드의 「목표 합계 n권」을 누르면 연 목표를 월별 목표의 합계로 바꿀지 물어봐요. 이미 같으면 누를 수 없어요.", "「자동 계산」「전체 월 적용」「목표 합계」로 바꾼 뒤에는 잠깐 「실행취소」로 되돌릴 수 있어요.", "「목록·달력 고정」으로 목록과 달력 맨 위에 독서 목표 바를 보일지 정해요. 어느 해 카드에서든 누를 수 있어요."]},
+      {"h": "통계", "lines": ["이번 달, 최근 3개월, 올해, 전체 기간별로 얼마나 기록했는지 볼 수 있어요.", "달별·연도별 카테고리 편수와 책 장르까지 살펴보면 취향이 숫자로 보여요.", "책 장르 도넛의 조각이나 아래 장르 목록을 누르면 그 장르만 또렷하게 보이고, 가운데에 그 장르의 권수와 이름이 나와요. 같은 곳을 다시 누르거나 빈 곳을 누르면 원래대로 돌아와요.", "종류·장르 막대(달별·연도별 포함)는 색 막대나 이름을 누르면 그 항목만 또렷하게 보이고, 목표 그래프는 달·연도나 위쪽 「목표」「달성」을 누르면 강조돼요. 다시 누르거나 빈 곳을 누르면 원래대로 돌아와요.", "날짜가 없는 기록(읽는 중·중단인 책)과 아직 안 본 예정 기록은 통계에서 빠져요.", "「목표」 탭에서 연도별·월별 독서 목표 권수를 정하고, 그래프로 완독 권수와 비교해요.", "올해·이번 달 목표 바에서는 지금 읽는 중인 책이 빗금으로 이어 붙어 보여요. 숫자와 퍼센트는 완독한 책만 센 값이에요.", "월별 목표 카드의 「자동 계산」을 누르면 연 목표의 남은 권수를 이번 달부터 12월까지 나눠서 월별 목표로 넣어요.\n· 이번 달에 읽은 권수와 남은 일수를 함께 따져서, 한 달만 유난히 많거나 적지 않게 맞춰요.\n· 지난달 목표는 그대로예요.\n· 연 목표가 있어야 해요. 확인창에서 예시를 보고 정해요.", "월별 목표를 정하거나 고칠 때 「전체 월 적용」을 누르면 1~12월이 모두 입력한 권수로 바뀌어요.", "월별 목표 카드의 「목표 합계 n권」을 누르면 연 목표를 월별 목표의 합계로 바꿀지 물어봐요. 이미 같으면 누를 수 없어요.", "「자동 계산」「전체 월 적용」「목표 합계」로 바꾼 뒤에는 잠깐 「실행취소」로 되돌릴 수 있어요.", "「목록·달력 고정」으로 목록과 달력 맨 위에 독서 목표 바를 보일지 정해요. 어느 해 카드에서든 누를 수 있어요."]},
       {"h": "새로고침해도 그대로", "lines": ["새로고침해도 보던 탭, 필터, 검색어, 펼쳐둔 카드, 스크롤 위치가 유지돼요.", "탭을 완전히 닫았다가 다시 열면 처음 화면으로 시작해요."]}
     ] },
     { t: "생각 남기기", items: [
@@ -4204,6 +4310,16 @@
     ] },
     /* 업데이트 내역: 코드를 수정할 때마다 맨 위(최신순)에 한 줄씩 추가 */
     { t: "업데이트 내역", log: true, items: [
+      {"d": "2026-10-05 06:40", "h": "D-Day 마크 진하게", "p": "D-Day(오늘)일 때만 마크가 진하게 보이고, D-3처럼 남은 날이 있으면 예정 표시와 같은 연한 진하기예요."},
+      {"d": "2026-10-05 06:20", "h": "오늘 일정 D-Day 표시", "p": "시간을 안 적은 오늘 날짜의 영화·공연은 예정으로 보지 않아서 띠와 종류 글자가 원래 색이고, D-Day 마크만 붙어요. 시간을 적었는데 아직 안 됐으면 예정(연한 표시 + D-Day), 이미 지났으면 일반 기록이에요. 책은 미래 개념이 없어서 D-day가 안 붙어요."},
+      {"d": "2026-10-05 06:00", "h": "예정 기준에 시간 반영", "p": "오늘 일정인데 정한 시간이 이미 지났으면 예정으로 보지 않아요. 띠와 종류 글자가 원래대로 돌아오고 D-day 마크도 없어져요. 아직 안 된 시간이거나 시간을 안 적은 오늘 일정은 지금처럼 예정이에요."},
+      {"d": "2026-10-05 05:40", "h": "예정 기록 표시 진하게", "p": "목록의 예정(아직 안 본) 기록에서 띠와 종류 글자가 조금 더 진해졌고, D-day 마크도 같은 진하기로 맞췄어요."},
+      {"d": "2026-10-05 05:20", "h": "목표 초과 문구", "p": "독서 목표를 넘겨 달성하면 「목표를 달성했어요!」 옆의 (+n권) 대신, 「남은 n권」이 있던 줄에 「목표보다 n권 더 읽었어요.」가 나와요. 딱 맞게 읽었으면 그 줄은 비어 있어요."},
+      {"d": "2026-10-05 05:00", "h": "목록·달력 독서 목표 카드 높이 고정", "p": "목록·달력의 독서 목표 카드가 목표를 달성했을 때도, 연↔월을 바꿀 때도 높이와 오른쪽 아래 버튼 위치가 그대로예요. 줄 구성을 같게 맞춰서 글자만 바뀌어 보여요."},
+      {"d": "2026-10-05 04:40", "h": "독서 목표 카드 높이 고정", "p": "통계 「목표」 탭에서 목표가 있는 해끼리 이동해도 독서 목표 카드 높이가 바뀌지 않아요. 줄 구성을 같게 맞췄고, 「목록·달력 고정」 버튼은 항상 같은 줄에 있어요."},
+      {"d": "2026-10-05 04:20", "h": "통계 카드 여백 통일", "p": "통계 탭의 모든 카드(종류별 요약, 카테고리 편수, 달별·연도별 줄, 장르 도넛·장르 막대, 목표 카드와 그래프)의 여백을 맞췄어요. 카드 위, 제목과 첫 항목 사이, 맨 아래가 모두 14px이에요. 제목 없는 카드는 위아래만 14px이에요."},
+      {"d": "2026-10-05 03:50", "h": "통계 맨 위 막대 굵게", "p": "통계 각 탭 맨 위의 종류별 막대가 조금 더 굵어지고, 조각 안에 이름과 비율이 한 줄로 들어가요. 조각이 좁으면 비율만, 그것도 안 되면 글자는 숨기고 아래 범례에서 확인해요. 막대와 아래 범례 사이 간격도 넓혔어요."},
+      {"d": "2026-10-05 03:30", "h": "통계 막대 눌러서 강조", "p": "통계의 종류별·달별·연도별 비율 막대와 책 장르 막대, 목표 그래프도 도넛처럼 누르면 그 항목만 또렷하게 보여요. 같은 곳을 다시 누르거나 빈 곳을 누르면 원래대로 돌아와요. 도넛 아래 장르 목록은 줄 전체가 눌려요."},
       {"d": "2026-10-05 02:50", "h": "독서 목표 자동 계산", "p": "통계 「목표」 탭 월별 목표 카드에 「자동 계산」 버튼이 생겼어요. 연 목표의 남은 권수를 이번 달부터 12월까지 나눠서 월별 목표로 넣어요. 이번 달에 읽은 권수와 남은 일수를 함께 따져서 한 달만 유난히 많거나 적지 않게 맞추고, 확인창에서 예시를 보고 정해요. 「목표 합계 n권」을 누르면 연 목표를 월별 합계로 바꿀 수 있고, 월별 목표를 고칠 때 「전체 월 적용」으로 1~12월을 같은 권수로 바꿀 수 있어요. 「목록·달력 고정」 버튼은 어느 해로 넘겨도 보여요."},
       {"d": "2026-10-05 02:50", "h": "달력·목록·통계 표시", "p": "달력의 「읽는 중 m권」은 이번 달을 볼 때만 나와요. 아직 안 본 예정 기록은 종류 글자(책·영화·연극·뮤지컬)도 띠처럼 연하게 보여요. 통계의 책 장르 색은 노란색 계열로 통일되어 도넛과 월별·연도별 막대에서 장르마다 같은 색이에요."},
       {"d": "2026-10-03 23:27", "h": "관람 전 기대 쓰기", "p": "영화·연극·뮤지컬 기록 창에 「관람 전」 「관람 후」 탭이 생겼어요. 「관람 전」에는 기대한 점이나 미리 알고 있던 점을, 「관람 후」에는 별점·한줄평·후기를 적어요. 관람 뒤에 떠올려 적어도 돼요. 카드에서는 후기 위쪽에 접고 펼 수 있는 「관람 전」 칸으로 보여요."},
@@ -5553,29 +5669,33 @@
     }
     pane.appendChild(tr);
 
-    var left = goal - done;
+    /* 목표가 있으면 어느 해로 넘겨도 카드 높이가 같도록 줄 구성을 고정:
+       ① 상태 문구 ② 자세한 문구(올해만) + 고정 버튼 ③ 읽는 중(있으면 올해만 글자, 다른 해는 같은 높이의 빈 줄) */
+    var left = goal - done, status = "", statusHi = false, detail = "";
     if (left <= 0) {
-      pane.appendChild(el("div", "gnote hi", "목표를 달성했어요!" + (done > goal ? " (+" + (done - goal) + "권)" : "")));
+      status = "목표를 달성했어요!"; statusHi = true;
+      if (done > goal) detail = "목표보다 " + (done - goal) + "권 더 읽었어요.";   /* 딱 맞게 읽었으면 생략 */
     } else if (y === nowY) {
       var diff = Math.round(done - expected);
-      pane.appendChild(el("div", "gnote hi", diff > 0 ? "예정보다 " + diff + "권 앞서가고 있어요" : diff < 0 ? "예정보다 " + (-diff) + "권 뒤처져 있어요" : "예정대로 가고 있어요"));
+      status = diff > 0 ? "예정보다 " + diff + "권 앞서가고 있어요" : diff < 0 ? "예정보다 " + (-diff) + "권 뒤처져 있어요" : "예정대로 가고 있어요"; statusHi = true;
       var daysLeft = total - elapsed;
-      var gl = el("div", "gline");
-      gl.appendChild(el("div", "gnote", "남은 " + left + "권" + (daysLeft > 0 ? " · 약 " + Math.max(1, Math.round(daysLeft / left)) + "일에 1권씩" : "")));
-      if (!reading) gl.appendChild(pinChips());   /* 읽는 중이 있으면 고정 버튼은 「읽는 중」 줄로 */
-      pane.appendChild(gl);
+      detail = "남은 " + left + "권" + (daysLeft > 0 ? " · 약 " + Math.max(1, Math.round(daysLeft / left)) + "일에 1권씩" : "");
     } else if (y < nowY) {
-      pane.appendChild(el("div", "gnote", left + "권 부족했어요"));
+      status = left + "권 부족했어요";
     } else {
-      pane.appendChild(el("div", "gnote", "남은 " + left + "권"));
+      status = "남은 " + left + "권";
     }
-    if (y === nowY && reading) {
-      var rl = el("div", "gline");
+    pane.appendChild(el("div", "gnote" + (statusHi ? " hi" : ""), status));
+    var gl = el("div", "gline fx");
+    gl.appendChild(el("div", "gnote", detail));
+    gl.appendChild(pinChips());
+    pane.appendChild(gl);
+    if (reading) {
+      var rl = el("div", "gline" + (y === nowY ? "" : " ph"));
       rl.appendChild(el("div", "gnote", "읽는 중 " + reading + "권"));
-      if (!pinDone) rl.appendChild(pinChips());
+      if (y !== nowY) rl.setAttribute("aria-hidden", "true");
       pane.appendChild(rl);
     }
-    if (!pinDone) pane.appendChild(pinRow());
     return pane;
   }
 
@@ -5714,6 +5834,27 @@
     var lg = el("span", "gleg");
     var a = el("span", ""); a.appendChild(el("i", "g")); a.appendChild(document.createTextNode("목표"));
     var b = el("span", ""); b.appendChild(el("i", "d")); b.appendChild(document.createTextNode("달성"));
+    var selCol = -1, selSer = "", legEls = { g: a, d: b }, colEls = [];
+    function applyG() {   /* 누른 달(연도) 또는 「목표」「달성」만 또렷하게, 나머지는 흐리게 */
+      var any = selCol >= 0 || !!selSer;
+      colEls.forEach(function (ce, ci) {
+        ["g", "d"].forEach(function (k) {
+          var dim = any && ((selCol >= 0 && selCol !== ci) || (selSer && selSer !== k));
+          ce.bars[k].classList.toggle("hdim", !!dim);
+        });
+        ce.gl.classList.toggle("hdim", selCol >= 0 && selCol !== ci);
+      });
+      ["g", "d"].forEach(function (k) {
+        legEls[k].classList.toggle("hsel", selSer === k);
+        legEls[k].classList.toggle("hdim", !!selSer && selSer !== k);
+      });
+    }
+    ["g", "d"].forEach(function (k) {
+      var n = legEls[k]; n.setAttribute("role", "button"); n.tabIndex = 0;
+      n.onclick = function (e) { e.stopPropagation(); selSer = (selSer === k) ? "" : k; applyG(); };
+      n.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); n.click(); } };
+    });
+    pane.addEventListener("click", function () { if (selCol >= 0 || selSer) { selCol = -1; selSer = ""; applyG(); } });   /* 빈 곳을 누르면 해제 */
     lg.appendChild(a); lg.appendChild(b); h.appendChild(lg);
     pane.appendChild(h);
     var max = 1, any = false, withGoal = 0, met = 0;
@@ -5724,16 +5865,21 @@
     });
     if (!any) { pane.appendChild(el("div", "empty small", "아직 목표나 완독 기록이 없어요.")); return pane; }
     var chart = el("div", "gchart" + (scroll ? " sc" : ""));
-    cols.forEach(function (c) {
-      var col = el("div", "gcol" + (c.now ? " now" : "")), bars = el("div", "gbars");
+    cols.forEach(function (c, ci) {
+      var col = el("div", "gcol" + (c.now ? " now" : "")), bars = el("div", "gbars"), ce = { bars: {}, gl: null };
+      colEls.push(ce);
+      col.setAttribute("role", "button"); col.tabIndex = 0; col.setAttribute("aria-label", c.l + " 강조");
+      col.onclick = function (e) { e.stopPropagation(); selCol = (selCol === ci) ? -1 : ci; applyG(); };
+      col.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); col.click(); } };
       [["g", c.g, "목표"], ["d", c.d, "달성"]].forEach(function (x) {
-        var bar = el("i", x[0]);
+        var bar = el("i", x[0]); ce.bars[x[0]] = bar;
         bar.style.height = (x[1] / max * 100) + "%";
         bar.setAttribute("title", c.l + " " + x[2] + " " + x[1] + "권");
         if (x[1] > 0 || c.g > 0) bar.appendChild(el("em", "", String(x[1])));
         bars.appendChild(bar);
       });
-      col.appendChild(bars); col.appendChild(el("div", "gl", c.l));
+      ce.gl = el("div", "gl", c.l);
+      col.appendChild(bars); col.appendChild(ce.gl);
       chart.appendChild(col);
     });
     pane.appendChild(chart);
@@ -5891,22 +6037,29 @@
       tick.setAttribute("title", "오늘까지의 예정 진도"); tr.appendChild(tick);
     }
     pane.appendChild(tr);
-    var left = goal - done;
+    /* 달성·진행 중·지난 기간 어느 경우든 줄 구성(상태 / 자세한 문구 / 읽는 중)을 같게 해서
+       연↔월을 바꿔도 카드 높이와 오른쪽 아래 버튼 위치가 그대로이고 글자만 바뀌어 보이게 함 */
+    var left = goal - done, status = "", statusHi = false, detail = "";
     if (left <= 0) {
-      pane.appendChild(el("div", "gnote hi", "목표를 달성했어요!" + (done > goal ? " (+" + (done - goal) + "권)" : "")));
+      status = "목표를 달성했어요!"; statusHi = true;
+      if (done > goal) detail = "목표보다 " + (done - goal) + "권 더 읽었어요.";   /* 딱 맞게 읽었으면 생략 */
     } else if (P.cur) {
       var diff = Math.round(done - expected);
-      pane.appendChild(el("div", "gnote hi", diff > 0 ? "예정보다 " + diff + "권 앞서가고 있어요" : diff < 0 ? "예정보다 " + (-diff) + "권 뒤처져 있어요" : "예정대로 가고 있어요"));
+      status = diff > 0 ? "예정보다 " + diff + "권 앞서가고 있어요" : diff < 0 ? "예정보다 " + (-diff) + "권 뒤처져 있어요" : "예정대로 가고 있어요"; statusHi = true;
       var daysLeft = total - elapsed;
-      pane.appendChild(el("div", "gnote", "남은 " + left + "권" + (daysLeft > 0 ? " \u00B7 약 " + Math.max(1, Math.round(daysLeft / left)) + "일에 1권씩" : "")));
+      detail = "남은 " + left + "권" + (daysLeft > 0 ? " \u00B7 약 " + Math.max(1, Math.round(daysLeft / left)) + "일에 1권씩" : "");
     } else if (P.past) {
-      pane.appendChild(el("div", "gnote", left + "권 부족했어요"));
+      status = left + "권 부족했어요";
     } else {
-      pane.appendChild(el("div", "gnote", "남은 " + left + "권"));
+      status = "남은 " + left + "권";
     }
-    if (P.cur) {
-      var reading = data.filter(function (r) { return r.type === "book" && r.status === "reading"; }).length;
-      if (reading) pane.appendChild(el("div", "gnote", "읽는 중 " + reading + "권"));
+    pane.appendChild(el("div", "gnote" + (statusHi ? " hi" : ""), status));
+    pane.appendChild(el("div", "gnote", detail));   /* 비어 있어도 한 줄 높이는 그대로 */
+    var reading = data.filter(function (r) { return r.type === "book" && r.status === "reading"; }).length;
+    if (reading) {   /* 읽는 중이 있으면 이번 기간이 아닐 때도 같은 높이의 빈 줄을 둠 */
+      var rl = el("div", "gnote" + (P.cur ? "" : " ph"), "읽는 중 " + reading + "권");
+      if (!P.cur) rl.setAttribute("aria-hidden", "true");
+      pane.appendChild(rl);
     }
     pane.appendChild(bt);
     return pane;
@@ -6487,6 +6640,17 @@
   ["click", "input", "change"].forEach(function (ev) { document.addEventListener(ev, queueViewSave, true); });
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") saveViewState(); });
   window.addEventListener("pagehide", saveViewState);
+  /* 오늘 일정 시간이 지나 「예정」에서 빠지는 순간 목록·달력을 다시 그림(글 쓰는 중이면 기다렸다가) */
+  var lastUpc = data.filter(hasDday).length;
+  function refreshUpcoming() {
+    var n = data.filter(hasDday).length;
+    if (n === lastUpc) return;
+    var a = document.activeElement;
+    if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+    lastUpc = n; render();
+  }
+  setInterval(refreshUpcoming, 30000);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") refreshUpcoming(); });
   /* 저장된 데이터를 읽지 못했다면 원본을 파일로 내려받을 기회를 줌 */
   if (corrupt.length) setTimeout(function () {
     var q = corrupt.slice();
