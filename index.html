@@ -22,6 +22,7 @@
     --movie: #c8443b;
     --show: #6b46b8;
     --musical: #ee5fa0;
+  --think: #5b6dd6;
     --star: #e3a11c;
     --sun: #cf5048;
     --sat: #4468b0;
@@ -33,6 +34,7 @@
   [data-k="movie"], [data-f="movie"], [data-type="movie"], [data-t="movie"] { --c: var(--movie); --cf: #fff; --ct: var(--movie); }
   [data-k="play"], [data-f="play"], [data-type="play"], [data-t="play"] { --c: var(--show); --cf: #fff; --ct: var(--show); }
   [data-k="musical"], [data-f="musical"], [data-type="musical"], [data-t="musical"] { --c: var(--musical); --cf: #fff; --ct: var(--musical); }
+  [data-k="think"], [data-f="think"], [data-type="think"], [data-t="think"] { --c: var(--think); --cf: #fff; --ct: var(--think); }
 
   [hidden] { display: none !important; }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -147,6 +149,30 @@
   }
   .badge.dday { background: transparent; box-shadow: inset 0 0 0 1px currentColor; color: var(--ct, #8a6a00); font-weight: 600; opacity: var(--soft); }
   .badge.dday.today { opacity: 1; }
+  .subin, .wsub { display: block; width: 100%; box-sizing: border-box; border: 0; border-bottom: 1px solid var(--line2); background: transparent; font: inherit; font-size: 15px; font-weight: 700; color: var(--ink); padding: 8px 2px; margin: 0 0 6px; outline: none; }
+  .subin[hidden], .wsub[hidden] { display: none; }
+  .wsub { margin: 4px 16px 0; width: calc(100% - 32px); }
+  .subin::placeholder, .wsub::placeholder { font-weight: 400; color: var(--mute); }
+  .entHint { font-size: 11.5px; color: var(--mute); }
+  #cardEntries .thead { display: flex; justify-content: space-between; align-items: baseline; }
+  .entitem { display: block; width: 100%; text-align: left; border: 0; border-top: 1px dashed var(--line2); background: none; padding: 11px 0; margin: 0; font: inherit; color: inherit; cursor: pointer; }
+  .entitem:first-child { border-top: 0; }
+  .entitem:active { opacity: .6; }
+  .entitem .em { font-size: 11.5px; color: var(--mute); }
+  .entitem .esub { font-size: 14px; font-weight: 700; margin-top: 3px; }
+  .entitem .et { margin-top: 3px; font-size: 14.5px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .entempty { padding: 6px 0; font-size: 13px; color: var(--mute); }
+  .esub { font-size: 14px; font-weight: 700; margin-top: 3px; overflow-wrap: anywhere; }
+  .card.open .esub + .text { margin-top: 3px; }
+  .rvstick .tkact { position: absolute; right: 0; top: -2px; display: flex; gap: 12px; background: var(--paper); }
+  .rvstick .tkact button { margin: 0; padding: 2px 0; border: 0; background: none; font: inherit; font-size: 12.5px; line-height: 20px; color: var(--sub); cursor: pointer; white-space: nowrap; }
+  .rvstick .tkact button:active { opacity: .6; }
+  .rvwrap.tkent .rmrow { padding-right: 90px; }
+  .card.open .rvwrap.tkent + .rvwrap.tkent { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line2); }
+  .card.open .detail > .rvwrap.tkent:first-child { margin-top: 14px; }
+  .badge.tkb { background: transparent; box-shadow: inset 0 0 0 1px currentColor; color: var(--think); font-weight: 600; }
+  .tkk { margin-bottom: 10px; }
+  #tkfsel[hidden], #tpfsel[hidden] { display: none; }
   .badge.paused { background: rgba(120,126,150,.14); color: #6b7088; }
   .badge.stale { background: rgba(207,80,72,.10); color: #b0453d; }
   .badge.read { background: transparent; box-shadow: inset 0 0 0 1px rgba(232,180,0,.6); color: #8a6a00; }
@@ -931,11 +957,12 @@
   #rtabs button.tgl::after { display: none; }
   /* PDF 저장: 생각 포함 오른쪽, 모서리가 작게 둥근 사각형 */
   #rtabs button.pdfb {
-    flex: none; margin: 0 0 0 -4px; height: var(--ctl); padding: 0 10px; border: 1px solid var(--line2);
+    flex: none; margin: 0 0 0 auto; height: var(--ctl); padding: 0 10px; border: 1px solid var(--line2);
     border-radius: 6px; background: var(--paper); color: var(--ink); font-size: 13px; font-weight: 500;
     white-space: nowrap; display: inline-flex; align-items: center; cursor: pointer;
   }
   #rtabs button.pdfb[hidden] { display: none; }
+  #rtabs button.tgl:not([hidden]) + button.pdfb { margin-left: -4px; }   /* 생각 포함이 있을 땐 바로 옆, 없을 땐(생각 탭 등) 오른쪽 끝 */
   #rtabs button.pdfb.on { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
 
   /* ===== 타임라인(생각) ===== */
@@ -996,8 +1023,8 @@
   .tent.tl .chip { flex: none; font-size: 11px; font-weight: 600; line-height: 17px; padding: 0 6px; border-radius: 5px; border: 1px solid var(--cc); color: var(--cc); background: var(--paper); }
   .tent.tl[data-k="a"] .chip { border-color: var(--line2); color: var(--mute); font-weight: 500; }
   /* 관람·완독 태그는 카테고리 색, 동그라미도 같은 색으로 채움 (기록 추가·후기·기록 줄은 속이 빈 원) */
-  .tent.tl[data-k="a"][data-ck="관람"] .chip, .tent.tl[data-k="a"][data-ck="완독"] .chip { border-color: var(--ct, var(--sub)); color: var(--ct, var(--sub)); font-weight: 600; }
-  .tent.tl[data-k="a"][data-ck="관람"] .dot, .tent.tl[data-k="a"][data-ck="완독"] .dot { background: var(--c, var(--sub)); border-color: var(--c, var(--sub)); }
+  .tent.tl[data-k="a"][data-ck="관람"] .chip, .tent.tl[data-k="a"][data-ck="완독"] .chip, .tent.tl[data-k="a"][data-ck="일기"] .chip, .tent.tl[data-k="a"][data-ck="생각타래"] .chip { border-color: var(--ct, var(--sub)); color: var(--ct, var(--sub)); font-weight: 600; }
+  .tent.tl[data-k="a"][data-ck="관람"] .dot, .tent.tl[data-k="a"][data-ck="완독"] .dot, .tent.tl[data-k="a"][data-ck="일기"] .dot, .tent.tl[data-k="a"][data-ck="생각타래"] .dot { background: var(--c, var(--sub)); border-color: var(--c, var(--sub)); }
   .tent.tl .sp { flex: 1; }
   .tent.tl .lgt { flex: 1; min-width: 0; margin: 0; padding: 0; border: 0; background: none; text-align: left; font: inherit; font-size: 13.5px; line-height: 1.5; color: var(--sub); overflow-wrap: anywhere; }
   .tent.tl button.lgt { cursor: pointer; }
@@ -1217,6 +1244,39 @@
   .gnopt svg { flex: none; }
   .gnopt.wide { grid-column: 1 / -1; background: #fff; border: 1px dashed var(--line2); color: var(--sub); }
   .gnopt.wide.on { background: var(--book, var(--ink)); border: 1px solid var(--book, var(--ink)); color: #4a3500; }
+
+  /* ===== 생각타래 분류 선택 ===== */
+  #topicBox { position: relative; }
+  #topic { padding-right: 40px; cursor: pointer; text-overflow: ellipsis; }
+  #topic:not([readonly]) { cursor: text; }
+  .gnwrap.open #topic { background: #fff; border-color: var(--line2); box-shadow: none; }
+  .tptag { margin-top: 2px; font-size: 12.5px; color: var(--sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tplist { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .tprow { display: flex; align-items: center; gap: 2px; }
+  .tpsel {
+    flex: 1 1 0; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 6px; min-height: 40px; padding: 0 12px;
+    border: 1px solid transparent; border-radius: 12px; background: #f5f6fa; color: var(--ink); font: inherit; font-size: 14px; text-align: left; cursor: pointer;
+  }
+  .tpsel > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tpsel:active { background: #e9ebf5; }
+  .tpsel.on { background: var(--book, var(--ink)); border-color: var(--book, var(--ink)); color: #4a3500; font-weight: 700; }
+  .tpsel svg { flex: none; }
+  .tpbtn { flex: none; height: 40px; padding: 0 8px; border: 0; background: transparent; color: var(--sub); font: inherit; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+  .tpbtn.del { color: #c0392b; }
+  .tpbtn:active { opacity: .6; }
+  .tpedit { flex: 1 1 0; min-width: 0; height: 40px; padding: 0 12px; border: 1px solid var(--line2); border-radius: 12px; background: #fff; font: inherit; font-size: 14px; color: var(--ink); }
+  .tpempty { padding: 4px 2px 10px; font-size: 13px; color: var(--mute); }
+
+  /* ===== 생각타래 글 순서 바꾸기 ===== */
+  .entrow { display: flex; align-items: stretch; gap: 6px; border-top: 1px dashed var(--line2); }
+  .entrow:first-child { border-top: 0; }
+  .entrow .entitem { flex: 1 1 0; min-width: 0; width: auto; border-top: 0; }
+  .entmv { flex: none; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+  .entmv button { width: 34px; height: 30px; padding: 0; border: 1px solid var(--line2); background: #fff; border-radius: 8px; color: var(--sub); font: inherit; font-size: 14px; line-height: 1; cursor: pointer; }
+  .entmv button:disabled { opacity: .3; cursor: default; }
+  .entmv button:active:not(:disabled) { opacity: .6; }
+  .rvstick .tkact button.mv { padding: 2px 3px; font-size: 14px; }
+  .rvstick .tkact button.mv:disabled { opacity: .25; cursor: default; }
 
   /* =====================================================================
      크기·간격 통일  (기준 = 상단 고정탭 .tools .tabs)
@@ -1620,6 +1680,7 @@
       <button data-f="movie">영화</button>
       <button data-f="play">연극</button>
       <button data-f="musical">뮤지컬</button>
+      <button data-f="think">생각</button>
     </div>
     <div class="sub rtabs" id="rtabs">
       <button type="button" class="sbtn" id="sbtn" aria-label="검색" aria-expanded="false">
@@ -1631,7 +1692,14 @@
       <label class="fsel" id="sfsel"><span id="slab">별점 전체</span>
         <select id="ssel" aria-label="별점 필터"></select>
       </label>
+      <label class="fsel" id="tkfsel" hidden><span id="tklab">생각 전체</span>
+        <select id="tksel" aria-label="생각 종류 필터"></select>
+      </label>
+      <label class="fsel" id="tpfsel" hidden><span id="tplab">분류 전체</span>
+        <select id="tpsel" aria-label="생각타래 분류 필터"></select>
+      </label>
       <button type="button" class="tgl" id="tgBtn" aria-pressed="false">생각 포함</button>
+      <button type="button" class="tgl" id="amBtn" aria-pressed="false" hidden>아무말 포함</button>
       <button type="button" class="pdfb" id="pdfBtn" hidden>PDF 저장</button>
     </div>
     <div id="qbox" hidden>
@@ -1716,10 +1784,26 @@
         <button data-k="movie">영화</button>
         <button data-k="play">연극</button>
         <button data-k="musical">뮤지컬</button>
+        <button data-k="think">생각</button>
       </div>
 
       <section class="fcard">
+        <div class="kinds tkk" id="tkKinds" data-k="think" hidden>
+          <button type="button" data-tk="diary" class="on">일기</button>
+          <button type="button" data-tk="thread">생각타래</button>
+        </div>
         <input type="text" id="title" class="bigtitle" placeholder="제목" aria-label="제목">
+
+        <div id="topicBox" class="fld" hidden>
+          <label for="topic">분류</label>
+          <div class="gnwrap">
+            <input type="text" id="topic" readonly maxlength="30" autocomplete="off" placeholder="눌러서 분류 고르기 (선택)" aria-haspopup="listbox" aria-expanded="false">
+            <button type="button" class="gnchev" id="topicChev" aria-label="분류 목록 열기" tabindex="-1">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="gnpop" id="topicPop" role="listbox" hidden></div>
+          </div>
+        </div>
 
         <div id="creatorBox" class="fld">
           <label for="creator" id="creatorLabel">저자</label>
@@ -1774,7 +1858,7 @@
           <textarea id="cast" rows="1" placeholder="콤마, 띄어쓰기, 줄바꿈으로 구분"></textarea>
         </div>
 
-        <div class="fld">
+        <div class="fld" id="noteBox">
           <label for="note">비고</label>
           <input type="text" id="note" maxlength="100" placeholder="예: 친구랑 같이 봄, 2층 앞줄, 재관람">
         </div>
@@ -1818,13 +1902,19 @@
 
       <section class="fcard" id="cardText">
         <div class="thead">
-          <label class="tl">후기</label>
+          <label class="tl" id="textLabel">후기</label>
           <button type="button" class="gbtn" id="gOpen">가이드 질문</button>
         </div>
+        <input type="text" id="sub" class="subin" placeholder="소제목 (선택)" maxlength="60" aria-label="소제목" hidden>
         <div class="paper">
           <textarea id="text" readonly placeholder="이 작품은 어땠나요? 여기를 눌러 전체 화면으로 적어보세요." aria-label="후기"></textarea>
           <span class="cnt" id="cnt">0자</span>
         </div>
+      </section>
+
+      <section class="fcard" id="cardEntries" hidden>
+        <div class="thead"><label class="tl">쓴 글</label><span class="entHint">눌러서 고치기 · ↑↓로 순서 바꾸기</span></div>
+        <div id="entList"></div>
       </section>
     </div>
   </div>
@@ -1845,6 +1935,7 @@
       <button type="button" class="vtab on" id="wtPost" role="tab" aria-selected="true">관람 후</button>
     </div>
     <div id="wPreBox" hidden><button type="button" class="gbtn" id="gOpenPre2">가이드 질문</button></div>
+    <input type="text" id="wsub" class="wsub" placeholder="소제목 (선택)" maxlength="60" aria-label="소제목" hidden>
     <textarea id="wtext" placeholder="이 작품은 어땠나요? 자유롭게 적어보세요." aria-label="후기 쓰기"></textarea>
     <span class="wc" id="wcnt">0자</span>
   </div>
@@ -1931,8 +2022,53 @@
     book:  { name: "책",   who: "저자",     when: "완독한 날" },
     movie: { name: "영화", who: "감독",     when: "본 날" },
     play:    { name: "연극",   who: "극장", when: "관람 일시", cast: true },
-    musical: { name: "뮤지컬", who: "극장", when: "관람 일시", cast: true }
+    musical: { name: "뮤지컬", who: "극장", when: "관람 일시", cast: true },
+    think: { name: "생각", who: "", when: "날짜" }
   };
+  /* 생각 카테고리: 일기(tk=diary) / 생각타래(tk=thread). 본문은 text, 덧붙임·이어쓴 글은 later에 쌓임 */
+  function isThink(r) { return !!r && r.type === "think"; }
+  function isThread(r) { return isThink(r) && r.tk === "thread"; }
+  function tkName(r) { return isThread(r) ? "생각타래" : "일기"; }
+  /* 별점·관람 전 기대가 없는 종류(책·생각)와 있는 종류(영화·연극·뮤지컬) 구분 */
+  function hasPre(k) { return k !== "book" && k !== "think"; }
+  /* 목록·달력에서 위치를 정하는 날짜: 이어쓰기는 마지막으로 이어 쓴 날 */
+  function rDate(r) { return r.date || ""; }
+  /* 생각의 작성(등록) 시각: 저장할 때 남긴 cr, 없으면 앱이 만든 id(만든 시각) */
+  function createdMs(r) {
+    if (isFinite(+r.cr) && +r.cr > 0) return +r.cr;
+    return (r.id > 1.4e12 && r.id <= Date.now() + 60000) ? +r.id : 0;
+  }
+  function createdWhen(r) {
+    var ms = createdMs(r), pre = isThread(r) ? "등록 " : "작성 ";
+    if (!ms) return r.date ? pre + shortDate(r.date) : "";
+    var d = new Date(ms);
+    return pre + shortDate(ymd(d)) + " " + fmtTime(pad(d.getHours()) + ":" + pad(d.getMinutes()));
+  }
+  /* 이어쓰기: 처음 글도 이어 쓴 글도 같은 「글」로 later 한 곳에 쌓음(예전에 text에 있던 처음 글은 옮김) */
+  function tkNormalize(r) {
+    if (r.type !== "think") return;
+    r.tk = r.tk === "thread" ? "thread" : "diary";
+    if (isFinite(+r.cr) && +r.cr > 0) r.cr = +r.cr; else delete r.cr;
+    if (r.tk === "thread") {
+      if (String(r.text || "").trim()) {
+        r.later = [{ d: r.date || today(), tm: r.time || "", t: String(r.text).trim() }].concat(r.later || []);
+        if (r.te) r.later[0].te = +r.te;
+      }
+      r.text = ""; r.pre = ""; r.note = ""; r.take = ""; r.time = "";
+      delete r.ta; delete r.te;
+      var tpn = cleanTopic(r.topic); if (tpn) r.topic = tpn; else delete r.topic;
+    } else {
+      delete r.topic;
+      r.note = ""; r.later = r.later || [];
+      if (r.date) r.title = tkDayLabelOf(r.date);
+    }
+  }
+  function tkDayLabelOf(ds) {
+    var d = new Date(ds + "T00:00:00");
+    return "[일기] " + (isNaN(d.getTime()) ? ds : ds.replace(/-/g, ".") + " (" + ["일", "월", "화", "수", "목", "금", "토"][d.getDay()] + ")");   /* 일기 제목: 「[일기] 2026.10.06 (화)」 */
+  }
+  /* 카드에 보이는 제목: 분류가 있는 생각타래는 「[분류] 제목」 */
+  function showTitle(r) { return isThread(r) && r.topic ? "[" + r.topic + "] " + r.title : r.title; }
 
   var TLKEY = "reviews-thoughts-v1", tseq = 0;
   var migrated = false, corrupt = [];
@@ -1941,9 +2077,12 @@
   var thoughts = loadThoughts();
   var ACTKEY = "reviews-activity-v1", acts = loadActs();
   var filter = "all";
+  var tkf = "all";   /* 생각 탭 안의 종류 필터: all / diary / thread */
+  var tpf = "all";   /* 생각 탭 안의 분류 필터: all / none(분류 없음) / 분류 이름 */
   var rfilter = "all";
   var sfilter = "all";
   var showTh = false;
+  var showAm = false;   /* 생각 탭에서 타임라인에 그냥 쓴 「아무말」도 같이 보기 */
   var selMode = false, selIds = {};   /* PDF 내보내기 선택 모드 */
   var tlLimit = 60, tlOnly = false;
   var tEditId = null;
@@ -1953,7 +2092,8 @@
   var searchOpen = false;
   var addingId = null;
   var recallSeed = 0, recallPickId = null, recallLastId = null;
-  var form = { type: "book", rating: 0, status: "done" };
+  var form = { type: "book", rating: 0, status: "done", tk: "diary", eidx: null };   /* eidx: 이어쓰기 글을 쓰는 중이면 그 글 번호(-1 = 새 글), 아니면 null */
+  var lastTk = "diary";   /* 가장 최근에 고른 생각 종류 */
   var PAKEY = "reviews-pausedopen-v1";
   var pausedOpen = false;
   try { pausedOpen = localStorage.getItem(PAKEY) === "1"; } catch (e) {}
@@ -2008,6 +2148,7 @@
       if (x && x.t && String(x.t).trim()) {
         var o = { d: /^\d{4}-\d{2}-\d{2}$/.test(x.d) ? x.d : today(), tm: /^\d{2}:\d{2}$/.test(x.tm) ? x.tm : "", t: String(x.t) };
         if (isFinite(+x.te) && +x.te > 0) o.te = +x.te;   /* 마지막으로 고친 시각 */
+        if (x.h && String(x.h).trim()) o.h = String(x.h).trim().slice(0, 60);   /* 생각타래 글의 소제목(선택) */
         out.push(o);
       }
     });
@@ -2069,6 +2210,7 @@
       if (!String(r.pre || "").trim()) { delete r.pta; delete r.pte; }
       if (r.id == null || !isFinite(+r.id) || seen[r.id]) { r.id = ++maxId; migrated = true; }
       seen[r.id] = 1;
+      tkNormalize(r);
       out.push(r);
     });
     if (dropped) { backupCorrupt(KEY, raw); migrated = true; }
@@ -2140,6 +2282,7 @@
     persistActs();
   }
   function actVerb(r) {
+    if (r.type === "think") return r.tk === "thread" ? "생각타래 시작" : "일기 작성";
     if (r.type === "book") return r.status === "reading" ? "읽는 중 등록" : r.status === "paused" ? "독서 중단" : "완독";
     return "관람";
   }
@@ -2177,14 +2320,15 @@
       have[r.id] = 1; done.push(r.id); fresh++;
       var txt = byRid[r.id] || "", it = idTime(r.id);
       function add(v, w) {
+        if (v === "생각타래 시작" && txt.indexOf("\u300D 이어쓰기 시작") >= 0) return;
         if (txt.indexOf("\u300D " + v) >= 0 || txt.indexOf(" \u00B7 " + v) >= 0) return;
         var d = it ? it.d : (r.date || today()), tm = it ? it.tm : "";
         if (w && r.date) { d = r.date; tm = r.time || ""; }
         acts.push({ id: Date.now() + (tseq++), d: d, tm: tm, t: "\u300C" + r.title + "\u300D " + v, rid: r.id, ty: r.type, w: !!w });
         added++;
       }
-      add(actVerb(r), r.type !== "book");
-      if (hasReview(r)) add("후기 작성", false);
+      add(actVerb(r), r.type === "think" ? r.tk !== "thread" && !!r.date : r.type !== "book");
+      if (hasReview(r) && r.type !== "think") add("후기 작성", false);
     });
     if (fresh) { try { localStorage.setItem(ASKEY, JSON.stringify(done)); } catch (e) {} }
     added += syncPreActs();
@@ -2242,7 +2386,7 @@
   /* 아직 안 본(예정) 영화·연극·뮤지컬: 관람일이 내일 이후이거나, 오늘이면서 적어 둔 시간이 아직 안 됐을 때.
      오늘 일정이라도 시간을 안 적었거나 시간이 이미 지났으면 예정이 아님(띠·글자 원래 색, 일반 기록으로 취급) */
   function isUpcoming(r) {
-    if (r.type === "book" || !r.date) return false;
+    if (r.type === "book" || r.type === "think" || !r.date) return false;
     var t = today();
     if (r.date > t) return true;
     if (r.date < t) return false;
@@ -2250,7 +2394,7 @@
   }
   /* D-day 마크를 달 기록: 예정 기록 + 시간 없이 오늘로 잡은 영화·공연(D-Day). 책은 미래 개념이 없어 안 달아요 */
   function hasDday(r) {
-    if (r.type === "book" || !r.date) return false;
+    if (r.type === "book" || r.type === "think" || !r.date) return false;
     return isUpcoming(r) || (r.date === today() && !r.time);
   }
   /* 예정 기록 D-day: 오늘이면 D-Day, 아니면 D-남은일수 (아직 안 본 영화·연극·뮤지컬만) */
@@ -2283,13 +2427,23 @@
     var q = useSearch ? $("q").value.trim().toLowerCase() : "";
     return data.filter(function (r) {
       if (filter !== "all" && r.type !== filter) return false;
+      if (r.type === "think") {
+        /* 생각은 「생각」 탭에선 늘, 전체 탭에선 「생각 포함」을 켰을 때(목록)만 보임. 달력은 늘 보임 */
+        if (filter === "all" && !(showTh || view === "cal")) return false;
+        if (filter === "all" && anyFilter()) return false;
+        if (filter === "think" && tkf !== "all" && r.tk !== tkf) return false;
+        if (filter === "think" && tpf !== "all") {   /* 분류 필터: 일기는 분류가 없으니 빠짐 */
+          if (!isThread(r)) return false;
+          if (tpf === "none" ? !!r.topic : r.topic !== tpf.slice(2)) return false;
+        }
+      }
       if (filter !== "book" && r.status !== "done" && !q) return false;   /* 전체·다른 탭엔 완료된 것만(검색할 땐 읽는 중·중단도 찾음) */
       if ((rfilter !== "all" || sfilter !== "all") && r.status !== "done") return false;   /* 후기·별점 필터엔 완독한 책만 */
       if (rfilter === "yes" && !hasReview(r)) return false;
       if (rfilter === "no" && hasReview(r)) return false;
       if (!starOk(r, sfilter)) return false;
       if (!q) return true;
-      return (r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.pre || "") + " " + (r.quote || "") + " " + (r.later || []).concat(r.rlog || []).map(function (x) { return x.t; }).join(" ") + " " + (r.tags || []).map(function (t) { return "#" + t; }).join(" ")).toLowerCase().indexOf(q) > -1;
+      return (r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.topic || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.pre || "") + " " + (r.quote || "") + " " + (r.later || []).concat(r.rlog || []).map(function (x) { return x.t; }).join(" ") + " " + (r.tags || []).map(function (t) { return "#" + t; }).join(" ")).toLowerCase().indexOf(q) > -1;
     });
   }
 
@@ -2380,10 +2534,10 @@
   function buildHead(r, when, mark) {
     var head = el("div", "chead");
     var hl = el("div", "hl");
-    hl.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), KIND[r.type].name));
+    hl.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), isThink(r) ? "생각 ▸ " + tkName(r) : KIND[r.type].name));   /* 생각 ▸ 일기 / 생각 ▸ 생각타래 */
     if (hasDday(r)) hl.appendChild(ddayBadge(r));
     if (mark) hl.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
-    hl.appendChild(el("span", "ht", r.title));
+    hl.appendChild(el("span", "ht", showTitle(r)));
     var w = r.status === "reading" ? "읽는 중" : r.status === "paused" ? "중단" : when;
     if (w) hl.appendChild(el("span", "hd", w));
     head.appendChild(hl);
@@ -2400,7 +2554,7 @@
   /* 세부정보(후기와 함께 스크롤) */
   function buildInfo(r) {
     var info = el("div", "cinfo");
-    info.hidden = !infoOpen[r.id];
+    info.hidden = isThink(r) ? false : !infoOpen[r.id];   /* 생각: 태그가 있을 때만, 늘 펼쳐진 채로 */
     /* 세부정보 영역(제자리·덮개 모두)을 누르면 카드 접힘. 글자를 드래그해 선택 중일 땐 접지 않음 */
     info.style.cursor = "pointer";
     info.onclick = function (e) {
@@ -2409,10 +2563,12 @@
       if (sel && String(sel).length) return;
       closeCard(r.id); render(); keepVisible(r.id);
     };
-    var fr = el("div", "frow");
-    fr.appendChild(el("div", "ftitle", r.title));
-    if (r.rating) fr.appendChild(makeStars(r));
-    info.appendChild(fr);
+    if (!isThink(r)) {
+      var fr = el("div", "frow");
+      fr.appendChild(el("div", "ftitle", r.title));
+      if (r.rating) fr.appendChild(makeStars(r));
+      info.appendChild(fr);
+    }
     function line(label, val) {
       var c = el("div", "cast");
       c.appendChild(el("b", "", label));
@@ -2549,9 +2705,9 @@
       syncToggles();
     };
     var eb = el("button", "", "수정"); eb.type = "button";
-    var ab = el("button", "", r.status !== "done" ? "읽는 중 감상 추가" : "생각 덧붙이기"); ab.type = "button";
+    var ab = el("button", "", r.status !== "done" ? "읽는 중 감상 추가" : isThread(r) ? "이어쓰기" : "생각 덧붙이기"); ab.type = "button";
     var db = el("button", "del", "삭제"); db.type = "button";
-    ab.onclick = function (e) { e.stopPropagation(); addingId = r.id; render(); };
+    ab.onclick = function (e) { e.stopPropagation(); if (isThread(r)) openThreadWriter(r.id, -1); else { addingId = r.id; render(); } };
     eb.onclick = function (e) { e.stopPropagation(); openForm(r.id); };
     db.onclick = function (e) {
       e.stopPropagation();
@@ -2562,7 +2718,7 @@
       data = data.filter(function (x) { return x.id !== r.id; });
       acts = acts.filter(function (a) { return !(a.ty !== "sys" && a.rid === gone.id); });
       persist(); persistActs(); render();
-      showUndoToast("후기를 삭제했어요", function () {
+      showUndoToast(isThink(gone) ? "생각을 삭제했어요" : "후기를 삭제했어요", function () {
         if (data.some(function (x) { return x.id === gone.id; })) return;
         data.splice(Math.min(Math.max(pos, 0), data.length), 0, gone);
         removedActs.forEach(function (o) { acts.splice(Math.min(o.i, acts.length), 0, o.a); });
@@ -2570,7 +2726,8 @@
       });
       });
     };
-    bar.appendChild(tg); bar.appendChild(eb);
+    if (!isThink(r)) bar.appendChild(tg);   /* 생각: 세부정보(태그)는 접기·펼치기 없이 늘 보임 */
+    bar.appendChild(eb);
     if (addingId !== r.id) bar.appendChild(ab);
     bar.appendChild(db);
     return bar;
@@ -2619,13 +2776,13 @@
 
     if (!isOpen) {
       var l1 = el("div", "l1");
-      l1.appendChild(el("h2", "", r.title));
+      l1.appendChild(el("h2", "", showTitle(r)));
       if (r.rating) l1.appendChild(makeStars(r));
-      if (r.status === "done" && !(isUpcoming(r) && !hasReview(r))) l1.appendChild(makeRvIcon(r));   /* 후기 있으면 채운 말풍선, 없으면 흐린 빈 말풍선 */
+      if (r.status === "done" && !isThink(r) && !(isUpcoming(r) && !hasReview(r))) l1.appendChild(makeRvIcon(r));   /* 후기 있으면 채운 말풍선, 없으면 흐린 빈 말풍선 */
       card.appendChild(l1);
 
       var l2 = el("div", "l2");
-      l2.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), KIND[r.type].name));   /* 예정 기록은 종류 글자도 띠처럼 연하게 */
+      l2.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), isThink(r) ? "생각 ▸ " + tkName(r) : KIND[r.type].name));   /* 예정 기록은 종류 글자도 띠처럼 연하게. 생각은 「생각 ▸ 일기」「생각 ▸ 생각타래」 */
       if (hasDday(r)) l2.appendChild(ddayBadge(r));
       if (mark) l2.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
       if (r.status === "reading") l2.appendChild(el("span", "badge", "읽는 중"));
@@ -2635,11 +2792,25 @@
       var when = inDay
         ? (mark && mark.k === "read" ? (mark.tm ? fmtTime(mark.tm) : "") : (r.time ? fmtTime(r.time) : ""))
         : (r.date ? shortDate(r.date) + (r.time ? " " + fmtTime(r.time) : "") : (r.time ? fmtTime(r.time) : ""));
+      if (isThink(r)) when = createdWhen(r);   /* 생각은 날짜 자리에 작성(등록)한 날짜·시각 */
       if (when) l2.appendChild(el("span", "m d", when));
       var nLg = (r.rlog || []).length, nLt = (r.later || []).length;
-      if (nLg || nLt) l2.appendChild(el("span", "lcnt", (nLg ? "기록 " + nLg : "") + (nLg && nLt ? " · " : "") + (nLt ? "생각 +" + nLt : "")));
+      if (isThread(r)) { if (nLt) l2.appendChild(el("span", "lcnt", "글 " + nLt)); }
+      else if (nLg || nLt) l2.appendChild(el("span", "lcnt", (nLg ? "기록 " + nLg : "") + (nLg && nLt ? " · " : "") + (nLt ? "생각 +" + nLt : "")));
       card.appendChild(l2);
       if (r.take) card.appendChild(mkTake(r.take));
+      if (isThink(r)) {   /* 일기: 본문 첫 줄 / 이어쓰기: 가장 최근에 이어 쓴 글(없으면 첫 글) 한 줄 미리보기 */
+        var pv = null;
+        if (isThread(r)) {
+          (r.later || []).forEach(function (x) { if (!pv || (x.d + (x.tm || "")) >= (pv.d + (pv.tm || ""))) pv = x; });
+        } else if (hasReview(r)) pv = { d: "", t: r.text };
+        if (pv) {
+          var pl = el("div", "lastlog");
+          if (pv.d) pl.appendChild(el("b", "", shortDate(pv.d)));
+          pl.appendChild(document.createTextNode((pv.h ? pv.h + " · " : "") + String(pv.t).replace(/\s+/g, " ").trim()));
+          card.appendChild(pl);
+        }
+      }
       if (mark && mark.k === "read" || r.status !== "done") {   /* 어디까지 어떤 생각이었는지 한 줄로(독서함 카드는 그날 쓴 것) */
         var ll = mark && mark.k === "read" ? mark.entry : lastLog(r);
         if (ll) {
@@ -2663,9 +2834,10 @@
       };
     } else {
       var whenFull = r.date ? shortDate(r.date) + (r.time ? " " + fmtTime(r.time) : "") : (r.time ? fmtTime(r.time) : "");
+      if (isThink(r)) whenFull = createdWhen(r);
       card.appendChild(buildHead(r, whenFull, mark));
-      var info = buildInfo(r);
-      card.appendChild(info);
+      var info = (isThink(r) && !(r.tags && r.tags.length)) ? null : buildInfo(r);
+      if (info) card.appendChild(info);
       card.appendChild(buildBar(r, info, card));
 
       var det = el("div", "detail");
@@ -2673,7 +2845,7 @@
       if (addingId === r.id) dockNeed = r;
       /* 읽는 중 감상(날짜별 독서 기록)를 메인 후기보다 위에 */
       buildLogSection(det, r, "rlog", "읽는 중 감상", "읽다가 든 생각…", false, "기록");
-      if (r.type !== "book") { var pb = buildPre(r); if (pb) det.appendChild(pb); }   /* 관람 전: 후기 위쪽 */
+      if (hasPre(r.type)) { var pb = buildPre(r); if (pb) det.appendChild(pb); }   /* 관람 전: 후기 위쪽 */
       if (hasReview(r)) {   /* 공백·빈 줄만 있는 후기는 없는 것으로 봄(빈 칸이 점선을 만들지 않게) */
         /* 후기 위 줄: 왼쪽엔 입력 날짜·시각, 오른쪽엔 「후기 수정」 글자. 후기 글자는 그대로 선택·복사 가능 */
         var rvw = el("div", "rvwrap");
@@ -2692,6 +2864,15 @@
         var tx = el("div", "text", r.text);
         rvw.appendChild(tx);
         det.appendChild(rvw);
+      } else if (isThread(r)) {
+        /* 이어쓰기: 글이 하나도 없을 때만 */
+      } else if (isThink(r)) {   /* 일기: 눌러서 본문 쓰기 */
+        var nt = el("div", "noreview", "일기 쓰기");
+        nt.setAttribute("role", "button"); nt.tabIndex = 0;
+        nt.setAttribute("aria-label", "일기 쓰기");
+        nt.onclick = function (e) { e.stopPropagation(); openReviewWriter(r.id); };
+        nt.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); openReviewWriter(r.id); } };
+        det.appendChild(nt);
       } else if (r.status === "done" && !isUpcoming(r)) {   /* 읽는 중·중단 책엔 메인 후기 칸 대신 「읽는 중 감상」만. 아직 안 본(예정) 기록엔 「후기 쓰기」 없이 「관람 전」만 */
         var nr = el("div", "noreview", r.type === "book" ? "후기 쓰기" : "후기 없음");   /* 영화·연극·뮤지컬: 눌러서 후기를 쓸 수 있음 */
         nr.setAttribute("role", "button"); nr.tabIndex = 0;
@@ -2761,7 +2942,7 @@
 
   function render() {
     dockNeed = null;
-    var doneN = data.filter(function (r) { return r.status === "done"; }).length;
+    var doneN = data.filter(function (r) { return r.status === "done" && r.type !== "think"; }).length;
     $("count").textContent = "지금까지 " + doneN + "편의 기록";
     if (view !== "list") { selMode = false; selIds = {}; }
     $("list").hidden = view !== "list";
@@ -2774,8 +2955,31 @@
     $("sbtn").setAttribute("aria-expanded", searchOpen ? "true" : "false");
     $("tabs").hidden = view === "stat" || view === "tl";
     $("rtabs").hidden = view === "stat" || view === "tl";
-    $("tgBtn").hidden = view !== "list" || selMode;
-    var inKind = data.filter(function (r) { return (filter === "all" || r.type === filter) && r.status === "done"; });
+    var inThink = filter === "think";
+    $("tgBtn").hidden = view !== "list" || selMode || filter !== "all";   /* 생각 포함은 「전체」 탭에서만 */
+    $("rfsel").hidden = inThink; $("sfsel").hidden = inThink; $("tkfsel").hidden = !inThink;
+    $("tpfsel").hidden = !inThink || tkf === "diary";
+    if (inThink) {
+      var tkPool = data.filter(function (r) { return r.type === "think"; });
+      var tkOpt = [["all", "생각 전체 (" + tkPool.length + ")", "생각 전체"],
+        ["diary", "일기 (" + tkPool.filter(function (r) { return r.tk !== "thread"; }).length + ")", "일기"],
+        ["thread", "생각타래 (" + tkPool.filter(isThread).length + ")", "생각타래"]];
+      fillSelect($("tksel"), tkOpt, tkf); $("tklab").textContent = labelOf(tkOpt, tkf);
+      $("tkfsel").classList.toggle("act", tkf !== "all");
+      if (tkf === "diary") tpf = "all";
+      else {
+        var tpThreads = tkPool.filter(isThread), tpOpt = [["all", "분류 전체 (" + tpThreads.length + ")", "분류 전체"]];
+        allTopics().forEach(function (t) {
+          tpOpt.push(["t:" + t, t + " (" + tpThreads.filter(function (r) { return r.topic === t; }).length + ")", t]);
+        });
+        var nNone = tpThreads.filter(function (r) { return !r.topic; }).length;
+        if (nNone) tpOpt.push(["none", "분류 없음 (" + nNone + ")", "분류 없음"]);
+        if (!tpOpt.some(function (o) { return o[0] === tpf; })) tpf = "all";   /* 지워지거나 이름이 바뀐 분류를 보고 있었다면 전체로 */
+        fillSelect($("tpsel"), tpOpt, tpf); $("tplab").textContent = labelOf(tpOpt, tpf);
+        $("tpfsel").classList.toggle("act", tpf !== "all");
+      }
+    }
+    var inKind = data.filter(function (r) { return (filter === "all" || r.type === filter) && r.status === "done" && r.type !== "think"; });
     var rPool = inKind.filter(function (r) { return starOk(r, sfilter); });
     var nYes = rPool.filter(hasReview).length;
     var rOpt = [["all", "후기 전체 (" + rPool.length + ")", "후기 전체"], ["yes", "후기 있음 (" + nYes + ")", "후기 있음"], ["no", "후기 없음 (" + (rPool.length - nYes) + ")", "후기 없음"]];
@@ -2785,6 +2989,9 @@
     fillSelect($("ssel"), sOpt, sfilter); $("slab").textContent = labelOf(sOpt, sfilter);
     $("tgBtn").classList.toggle("on", showTh);
     $("tgBtn").setAttribute("aria-pressed", showTh ? "true" : "false");
+    $("amBtn").hidden = view !== "list" || selMode || filter !== "think" || tkf !== "all" || tpf !== "all";   /* 일기·생각타래·분류로 좁히면 아무말은 해당 없음 */
+    $("amBtn").classList.toggle("on", showAm);
+    $("amBtn").setAttribute("aria-pressed", showAm ? "true" : "false");
     $("rfsel").classList.toggle("act", rfilter !== "all");
     $("sfsel").classList.toggle("act", sfilter !== "all");
     Array.prototype.forEach.call($("views").children, function (b) {
@@ -2798,6 +3005,8 @@
     updateToolH();
     syncToggles();
     $("closeAll").disabled = !document.querySelector(".card.open");
+    $("add").textContent = filter === "think" ? "+ 생각 추가" : "+ 후기 추가";
+    Array.prototype.forEach.call($("tabs").children, function (b) { b.classList.toggle("on", b.dataset.f === filter); });   /* 새로고침 뒤에도 보던 탭 표시 */
     updateBackupBanner();
     syncDock();
   }
@@ -2811,7 +3020,7 @@
   }
   function labelOf(opts, cur) { for (var i = 0; i < opts.length; i++) if (opts[i][0] === cur) return opts[i][2]; return ""; }
 
-  function groupKey(r) { return r.status === "reading" ? "reading" : r.status === "paused" ? "paused" : (r.date ? r.date.slice(0, 7) : "none"); }
+  function groupKey(r) { return r.status === "reading" ? "reading" : r.status === "paused" ? "paused" : (rDate(r) ? rDate(r).slice(0, 7) : "none"); }
   function groupLabel(k) {
     if (k === "reading") return "읽는 중";
     if (k === "paused") return "중단";
@@ -2877,10 +3086,10 @@
     dockEl = el("div", "tdock"); dockRid = r.id;
     dockEl.dataset.type = r.type;   /* 입력칸 테두리·제목이 그 기록의 대표 색을 따름 */
     var hd = el("div", "tdh");
-    hd.appendChild(el("b", "", key === "later" ? "생각 덧붙이기" : "읽는 중 감상"));
+    hd.appendChild(el("b", "", key === "later" ? (isThread(r) ? "이어쓰기" : "생각 덧붙이기") : "읽는 중 감상"));
     hd.appendChild(el("span", "", "\u300C" + r.title + "\u300D"));
     dockEl.appendChild(hd);
-    dockEl.appendChild(makeCompose(r, key, key === "later" ? "지금 다시 생각해 보니…" : "읽다가 든 생각…"));
+    dockEl.appendChild(makeCompose(r, key, key === "later" ? (isThread(r) ? "이어서 적어요…" : "지금 다시 생각해 보니…") : "읽다가 든 생각…"));
     dockWrap.appendChild(dockEl);
     document.body.appendChild(dockWrap);
     dockPad = document.body.style.paddingBottom;
@@ -3021,7 +3230,71 @@
     if (composing) lw.appendChild(makeCompose(r, key, ph));
     det.appendChild(lw);
   }
+  /* 생각타래 글 순서 바꾸기: 위(-1)·아래(+1)로 한 칸 옮기고 바로 저장 */
+  function moveEntry(r, idx, dir) {
+    var arr = r && r.later, j = idx + dir;
+    if (!arr || idx < 0 || idx >= arr.length || j < 0 || j >= arr.length) return false;
+    var t = arr[idx]; arr[idx] = arr[j]; arr[j] = t;
+    persist();
+    return true;
+  }
+  /* 이어쓰기 카드: 모든 글이 같은 위상(트위터 타래처럼). 후기처럼 날짜·시각 줄 + 수정·삭제 + 본문 */
+  function buildThreadEntries(det, r) {
+    var arr = r.later || [];
+    if (!arr.length) {
+      var nt = el("div", "noreview", "첫 글 쓰기");
+      nt.setAttribute("role", "button"); nt.tabIndex = 0;
+      nt.onclick = function (e) { e.stopPropagation(); openThreadWriter(r.id, -1); };
+      nt.onkeydown = function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); openThreadWriter(r.id, -1); } };
+      det.appendChild(nt);
+      return;
+    }
+    arr.forEach(function (x, idx) {
+      var w = el("div", "rvwrap tkent");
+      var st = el("div", "rvstick"), act = el("div", "tkact");
+      var eb = el("button", "", "수정"); eb.type = "button";
+      eb.onclick = function (e) { e.stopPropagation(); openThreadWriter(r.id, idx); };
+      var db = el("button", "", "삭제"); db.type = "button";
+      db.onclick = function (e) {
+        e.stopPropagation();
+        askConfirm("이 글을 정말 삭제할까요?\n삭제 직후 몇 초 동안은 되돌릴 수 있어요.", DELQ, function () {
+          var item = r.later.splice(idx, 1)[0], rid = r.id;
+          persist(); render();
+          showUndoToast("글을 삭제했어요", function () {
+            var cur = data.filter(function (y) { return y.id === rid; })[0];
+            if (!cur) return;
+            cur.later = cur.later || [];
+            cur.later.splice(Math.min(idx, cur.later.length), 0, item);
+            persist(); render();
+          });
+        });
+      };
+      if (arr.length > 1) {   /* 글 순서 바꾸기 */
+        var upb = el("button", "mv", "↑"); upb.type = "button"; upb.setAttribute("aria-label", "위로 옮기기"); upb.disabled = idx === 0;
+        upb.onclick = function (e) { e.stopPropagation(); if (moveEntry(r, idx, -1)) render(); };
+        var dnb = el("button", "mv", "↓"); dnb.type = "button"; dnb.setAttribute("aria-label", "아래로 옮기기"); dnb.disabled = idx === arr.length - 1;
+        dnb.onclick = function (e) { e.stopPropagation(); if (moveEntry(r, idx, 1)) render(); };
+        act.appendChild(upb); act.appendChild(dnb);
+      }
+      act.appendChild(eb); act.appendChild(db); st.appendChild(act); w.appendChild(st);
+      var row = el("div", "rmrow");
+      var stamp = x.d.replace(/-/g, ".") + (x.tm ? " " + fmtTime(x.tm) : "");
+      var meta = el("div", "rmeta");
+      if (x.te) {
+        var eb2 = el("button", "rmedit"); eb2.type = "button";
+        var showEd = false;
+        var paint = function () { eb2.textContent = showEd ? "최종 수정 " + stampOf(x.te) : stamp + " (수정됨)"; };
+        eb2.onclick = function (e) { e.stopPropagation(); showEd = !showEd; paint(); };
+        paint(); meta.appendChild(eb2);
+      } else meta.textContent = stamp;
+      row.appendChild(meta); w.appendChild(row);
+      if (x.h) w.appendChild(el("div", "esub", x.h));
+      w.appendChild(el("div", "text", x.t));
+      det.appendChild(w);
+    });
+  }
   function appendDetailExtra(det, r) {
+    if (isThread(r)) { buildThreadEntries(det, r); return; }
     buildLogSection(det, r, "later", "덧붙인 생각", "지금 다시 생각해 보니…", false, "생각");
   }
 
@@ -3050,7 +3323,7 @@
     var tr = data.filter(function (x) { return x.id === id; })[0];
     var notDone = !!(tr && tr.status !== "done");
     if (tr && tr.status === "paused") setPausedOpen(true);
-    view = "list"; filter = notDone ? "book" : "all"; rfilter = "all"; sfilter = "all";
+    view = "list"; filter = notDone ? "book" : isThink(tr) ? "think" : "all"; rfilter = "all"; sfilter = "all"; tkf = "all"; tpf = "all";
     Array.prototype.forEach.call($("tabs").children, function (b) { b.classList.toggle("on", b.dataset.f === filter); });
     $("q").value = ""; searchOpen = false;
     openIds[id] = true; infoOpen[id] = true;
@@ -3096,6 +3369,8 @@
     if (/ 완독$/.test(t)) return "완독";
     if (/ 후기 작성$/.test(t)) return "후기";
     if (/ 관람 전 기대 작성$/.test(t)) return "후기";   /* 관람 전 기대도 타임라인에선 「후기」 태그 */
+    if (/ 일기 작성$/.test(t)) return "일기";
+    if (/ (생각타래|이어쓰기) 시작$/.test(t)) return "생각타래";
     return "기록";
   }
   /* 「생각 기록됨」 줄을 누르면 달력 탭의 그 날짜, 그 생각 줄로 이동 */
@@ -3119,7 +3394,7 @@
     if (e.k === "a" && / 기록 추가$/.test(e.lg.t)) box.dataset.old = "1";   /* 옛날 기록 추가: 테두리만 있는 점 */
     box.appendChild(el("span", "dot"));
     var bd = el("div", "bd"), hd = el("div", "hd");
-    hd.appendChild(el("span", "chip", e.k === "a" ? actChip(e.lg.t) : (e.k === "l" && e.src === "rlog") ? "독서" : TL_CHIP[e.k]));
+    hd.appendChild(el("span", "chip", e.k === "a" ? actChip(e.lg.t) : (e.k === "l" && e.src === "rlog") ? "독서" : (e.k === "l" && isThread(e.r)) ? "이어쓰기" : TL_CHIP[e.k]));
     var editing = e.k === "t" && tEditId === e.th.id;
     if (e.k === "a") {
       if (rec) { var lb = el("button", "lgt", e.t); lb.type = "button"; lb.onclick = function () { gotoReview(rec.id); }; hd.appendChild(lb); }
@@ -3166,7 +3441,11 @@
       cb.appendChild(cn); cb.appendChild(sv); ed.appendChild(ta); ed.appendChild(cb);
       bd.appendChild(ed);
       setTimeout(function () { ta.focus(); }, 0);
-    } else if (e.k !== "a") bd.appendChild(el("div", "tx", e.t));
+    } else if (e.k !== "a") {
+      var xh = (e.k === "l" && e.r && e.src === "later" && e.r.later[e.idx]) ? e.r.later[e.idx].h : "";
+      if (xh) { var hh = el("div", "tx", xh); hh.style.fontWeight = "700"; bd.appendChild(hh); }
+      bd.appendChild(el("div", "tx", e.t));
+    }
     box.appendChild(bd);
     return box;
   }
@@ -3175,7 +3454,7 @@
     if (pos < 0) return;
     var kind = actChip(gone.t);
     var rec = gone.ty !== "sys" && gone.rid ? data.filter(function (x) { return x.id === gone.rid; })[0] : null;
-    if (!rec || (kind !== "관람" && kind !== "완독")) {
+    if (!rec || (kind !== "관람" && kind !== "완독" && !(kind === "일기" && gone.w))) {
       /* 후기·읽는 중·백업·가져오기·목표 기록: 타임라인 기록만 지우므로 확인창 없이 바로 삭제하고, 되돌리기만 띄움 */
       acts.splice(pos, 1); persistActs(); render();
       showUndoToast("기록을 삭제했어요", function () {
@@ -3240,7 +3519,7 @@
     var th = el("div", "th");
     var when = (withDate ? fmtDay(e.d) + (e.tm ? " " : "") : "") + (e.tm || "");
     if (e.k === "t" && isBack(e.th)) when = (withDate ? fmtDay(e.d) + " · " : "") + wroteText(e.th);
-    var lbl = (e.k === "l" && e.src === "rlog") ? "독서 기록" : "덧붙임";
+    var lbl = (e.k === "l" && e.src === "rlog") ? "독서 기록" : (e.k === "l" && isThread(e.r)) ? "이어쓰기" : "덧붙임";
     th.appendChild(el("span", "tm", when || (e.k === "l" ? lbl : "")));
     if (withDate) th.appendChild(el("span", "tag", e.k === "t" ? "생각" : lbl));
     var editing = e.k === "t" && tEditId === e.th.id;
@@ -3259,7 +3538,7 @@
       var lk = el("button", "tlink"); lk.type = "button"; lk.dataset.t = e.r.type;
       lk.appendChild(document.createTextNode("\u21B3 "));
       lk.appendChild(el("b", "", e.r.title));
-      lk.appendChild(document.createTextNode(e.src === "rlog" ? " 독서 기록" : " 에 덧붙임"));
+      lk.appendChild(document.createTextNode(e.src === "rlog" ? " 독서 기록" : isThread(e.r) ? " 이어쓰기" : " 에 덧붙임"));
       lk.onclick = function () { gotoReview(e.r.id); };
       box.appendChild(lk);
     }
@@ -3340,7 +3619,7 @@
   function pickRecall() {
     var t = new Date();
     var limit = ymd(new Date(t.getFullYear(), t.getMonth(), t.getDate() - 30));
-    var pool = data.filter(function (r) { return r.date && r.date <= limit && (r.take || r.text || r.quote); })
+    var pool = data.filter(function (r) { return r.type !== "think" && r.date && r.date <= limit && (r.take || r.text || r.quote); })
       .sort(function (a, b) { return a.id - b.id; });
     if (!pool.length) return null;
     var base = hashStr(today());
@@ -3427,29 +3706,30 @@
       var ra = a.status === "reading" ? 2 : a.status === "paused" ? 1 : 0, rb = b.status === "reading" ? 2 : b.status === "paused" ? 1 : 0;
       if (ra !== rb) return rb - ra;
       if (ra) return lastTouch(b).localeCompare(lastTouch(a)) || b.id - a.id;
-      return (b.date || "").localeCompare(a.date || "") || (b.time || "").localeCompare(a.time || "") || b.id - a.id;
+      return rDate(b).localeCompare(rDate(a)) || (b.time || "").localeCompare(a.time || "") || b.id - a.id;
     });
     var list = $("list");
     list.textContent = "";
     var qv = $("q").value.trim().toLowerCase();
-    var rc = (!anyFilter() && !qv && !selMode) ? buildRecall() : null;
+    var rc = (!anyFilter() && !qv && !selMode && filter !== "think") ? buildRecall() : null;
     if (rc) list.appendChild(rc);
     var gm = (!selMode && (filter === "book" || filter === "all")) ? buildListGoal() : null;   /* 달력처럼 목표 설정 여부·검색과 상관없이 항상 표시 */
     if (gm) list.appendChild(gm);
 
-    /* 생각 포함: 타임라인에서 직접 쓴 생각만(필터가 없을 때) */
+    /* 아무말 포함: 생각 탭에서만, 타임라인에 그냥 쓴 글을 일기·생각타래와 시간순으로 섞어 보여줌(전체 목록에는 넣지 않음) */
     var extra = [];
-    if (showTh && !selMode) {
-      var plain = !anyFilter();
+    if (showAm && !selMode && filter === "think" && tkf === "all" && tpf === "all") {
       tlEntries(items).forEach(function (e) {
-        if (e.k !== "t" || !plain) return;   /* 덧붙임은 후기를 열면 보이므로 제외, 직접 쓴 생각만 */
+        if (e.k !== "t") return;   /* 덧붙임은 후기를 열면 보이므로 제외, 직접 쓴 글만 */
         if (qv && e.t.toLowerCase().indexOf(qv) < 0) return;
         extra.push(e);
       });
     }
     if (!items.length && !extra.length) {
       list.appendChild(el("div", "empty",
-        !data.length ? "아직 기록이 없어요. 아래 버튼으로 첫 후기를 남겨보세요."
+        (filter === "think" && !qv && tkf === "all" && tpf === "all") ? "아직 쓴 생각이 없어요. 아래 버튼으로 일기나 생각타래를 시작해 보세요."
+        : (filter === "think" && !qv) ? "조건에 맞는 생각이 없어요."
+        : !data.length ? "아직 기록이 없어요. 아래 버튼으로 첫 후기를 남겨보세요."
         : (!qv && rfilter === "no" && filter === "all" && sfilter === "all") ? "후기가 비어 있는 기록이 없어요."
         : (!qv && rfilter === "yes" && filter === "all" && sfilter === "all") ? "후기를 쓴 기록이 아직 없어요."
         : (!qv && anyFilter()) ? "조건에 맞는 기록이 없어요."
@@ -3466,7 +3746,7 @@
       var g = groups[k];
       var gh = el("div", "gh");
       gh.appendChild(el("span", "", groupLabel(k)));
-      gh.appendChild(el("span", "n", (g.rv.length ? String(g.rv.length) : "") + (g.ex.length ? (g.rv.length ? " · " : "") + "생각 " + g.ex.length : "")));
+      gh.appendChild(el("span", "n", (g.rv.length ? String(g.rv.length) : "") + (g.ex.length ? (g.rv.length ? " · " : "") + "아무말 " + g.ex.length : "")));
       list.appendChild(gh);
       if (k === "paused") {   /* 중단은 기본 접힘 (검색 중엔 펼침) */
         var forceOpen = !!qv || selMode;
@@ -3482,9 +3762,19 @@
       }
       var rows = el("div", "rows");
       list.appendChild(rows);
-      var all = g.rv.map(function (r, i) { return { kind: 0, d: r.date || "", tm: "", i: i, r: r }; })
+      var all = g.rv.map(function (r, i) { return { kind: 0, d: rDate(r), tm: "", i: i, r: r }; })
         .concat(g.ex.map(function (e, i) { return { kind: 1, d: e.d, tm: e.tm || "", i: i, e: e }; }));
-      if (g.ex.length) all.sort(function (a, b) {
+      /* 생각 탭: 일기·생각타래는 쓴(등록한) 시각, 아무말은 쓴 시각으로 최신순 */
+      function tsOf(x) {
+        if (x.kind === 1) return x.d + " " + (x.tm || "00:00");
+        var ms = createdMs(x.r), dd = x.d || "", tm = "00:00";
+        if (ms) { var cd = new Date(ms); if (ymd(cd) === dd) tm = pad(cd.getHours()) + ":" + pad(cd.getMinutes()); }
+        return dd + " " + tm;
+      }
+      if (g.ex.length && filter === "think") all.sort(function (a, b) {
+        return tsOf(b).localeCompare(tsOf(a)) || (a.kind - b.kind) || (a.i - b.i);
+      });
+      else if (g.ex.length) all.sort(function (a, b) {
         return b.d.localeCompare(a.d) || (a.kind - b.kind) || (a.kind === 0 ? a.i - b.i : (b.tm.localeCompare(a.tm) || a.i - b.i));
       });
       all.forEach(function (x) { rows.appendChild(x.kind === 0 ? buildCard(x.r, false) : buildTEntry(x.e, true)); });
@@ -3560,13 +3850,14 @@
       var body = (r.text || "").replace(/^\s*\n/, "").replace(/\s+$/, "");
       if (body) blk.appendChild(el("div", "pr-body", body));
       var len = body.length;
-      [["rlog", "독서 기록"], ["later", "덧붙인 생각"]].forEach(function (g) {
+      [["rlog", "독서 기록"], ["later", isThread(r) ? "이어쓴 글" : "덧붙인 생각"]].forEach(function (g) {
         var later = (r[g[0]] || []).slice().sort(function (a, b) { return (a.d + (a.tm || "")).localeCompare(b.d + (b.tm || "")); });
         if (!later.length) return;
         blk.appendChild(el("div", "pr-lh", "\u2500\u2500 " + g[1] + " \u2500\u2500"));
         later.forEach(function (x) {
           var th = el("div", "pr-th");
           th.appendChild(el("div", "pr-ld", dots(x.d) + (x.tm ? " " + x.tm : "")));
+          if (x.h) { var ph = el("div", "pr-lt", x.h); ph.style.fontWeight = "700"; th.appendChild(ph); }
           th.appendChild(el("div", "pr-lt", x.t.replace(/\s+$/, "")));
           blk.appendChild(th);
           len += x.t.length;
@@ -3602,7 +3893,7 @@
     items.forEach(function (r) { (byDate[r.date] = byDate[r.date] || []).push(r); });
     var tdBy = {};
     tlEntries(allItems).forEach(function (e) {
-      if (e.k === "t" && anyFilter()) return;
+      if (e.k === "t" && (anyFilter() || filter === "think")) return;   /* 생각 탭에선 아무말 줄 없이 일기·이어쓰기만 */
       if (e.k === "l" && e.src === "rlog") return;   /* 읽는 중 감상은 덧글이 아니라 후기라서 「그날의 생각」에서 뺌 */
       (tdBy[e.d] = tdBy[e.d] || []).push(e);
     });
@@ -3632,14 +3923,15 @@
     }
 
     var prefix = calY + "-" + pad(calM + 1) + "-";
-    var cnt = items.filter(function (r) { return r.date.indexOf(prefix) === 0; }).length;
+    var cnt = items.filter(function (r) { return r.type !== "think" && r.date.indexOf(prefix) === 0; }).length;
     $("calTitle").textContent = calY + "년 " + (calM + 1) + "월";
     var tcnt = 0;
     Object.keys(tdBy).forEach(function (k) { if (k.indexOf(prefix) === 0) tcnt += tdBy[k].length; });
+    items.forEach(function (r) { if (r.type === "think" && r.date.indexOf(prefix) === 0) tcnt++; });
     /* 읽는 중인 책은 날짜가 없어서 이번 달을 볼 때만 지금 읽고 있는 권수를 보여줌(책·전체 탭, 후기·별점 필터 없을 때만) */
     var nowD = new Date(), isCurMonth = calY === nowD.getFullYear() && calM === nowD.getMonth();
     var rdCnt = (isCurMonth && (filter === "all" || filter === "book") && rfilter === "all" && sfilter === "all") ? readingNow() : 0;
-    $("calSum").textContent = (cnt ? "이달 " + cnt + "편" : "이달 기록 없음") + (rdCnt ? " · 읽는 중 " + rdCnt + "권" : "") + (tcnt ? " · 생각 " + tcnt : "");
+    $("calSum").textContent = (cnt ? "이달 " + cnt + "편" : (filter === "think" ? "" : "이달 기록 없음")) + (rdCnt ? " · 읽는 중 " + rdCnt + "권" : "") + (tcnt ? " · 생각 " + tcnt : "");
 
     var first = (new Date(calY, calM, 1).getDay() + 6) % 7; /* 월요일 시작 */
     var days = new Date(calY, calM + 1, 0).getDate();
@@ -3663,11 +3955,15 @@
         btn.appendChild(el("span", "", String(d)));
         if (list.length || tl.length || rd.length) {
           var dots = el("span", "dots");
-          list.slice(0, 4 - (tl.length ? 1 : 0) - (rd.length ? 1 : 0)).forEach(function (r) {
+          /* 이어쓰기에 이어 쓴 날: 생각 색(파란) 점. 아무말·일반 덧붙임은 기존처럼 속이 빈 점 */
+          var tkLater = tl.some(function (e) { return e.k === "l" && isThink(e.r); }) && !list.some(isThink);
+          var plainTd = tl.some(function (e) { return !(e.k === "l" && isThink(e.r)); });
+          list.slice(0, 4 - (plainTd ? 1 : 0) - (tkLater ? 1 : 0) - (rd.length ? 1 : 0)).forEach(function (r) {
             var dot = el("i"); dot.dataset.t = r.type; dots.appendChild(dot);
           });
+          if (tkLater) { var tdot = el("i"); tdot.dataset.t = "think"; dots.appendChild(tdot); }
           if (rd.length) dots.appendChild(el("i", "rd"));   /* 독서함: 노란 빈 동그라미 */
-          if (tl.length) dots.appendChild(el("i", "td"));
+          if (plainTd) dots.appendChild(el("i", "td"));
           btn.appendChild(dots);
         }
         btn.onclick = function () { selDate = ds; renderCal(); };
@@ -3690,7 +3986,7 @@
     reads.forEach(function (m) { dl.appendChild(buildCard(m.r, true, m)); });
     var tbox = $("dayTh");
     tbox.textContent = "";
-    var canWrite = !anyFilter() && selDate <= today();
+    var canWrite = !anyFilter() && filter !== "think" && selDate <= today();
     if (dth.length || canWrite) {
       var h2 = el("div", "dayh2"); h2.appendChild(el("span", "", "그날의 생각"));
       if (dth.length) h2.appendChild(el("span", "n", String(dth.length)));
@@ -4071,7 +4367,7 @@
   function renderStats() {
     var w = $("statWrap");
     w.textContent = "";
-    var dated = data.filter(function (r) { return r.date && !isUpcoming(r); });   /* 아직 안 본 예정 기록은 통계(목표 제외)에서 뺌 */
+    var dated = data.filter(function (r) { return r.type !== "think" && r.date && !isUpcoming(r); });   /* 아직 안 본 예정 기록은 통계(목표 제외)에서 뺌 */
 
     var modes = el("div", "sub");
     [["year", "연도별"], ["month", "월별"], ["range", "기간별"], ["goal", "목표"]].forEach(function (m) {
@@ -4083,7 +4379,7 @@
 
     if (stat.mode === "goal") { renderGoalTab(w); return; }
 
-    if (!data.length) {
+    if (!data.some(function (r) { return r.type !== "think"; })) {
       w.appendChild(el("div", "empty", "아직 기록이 없어서 통계를 낼 수 없어요."));
       return;
     }
@@ -4177,7 +4473,7 @@
       if (gpY) w.appendChild(gpY);   /* 맨 아래 */
     }
 
-    var undated = data.filter(function (r) { return !r.date; }).length, upc = data.filter(isUpcoming).length;
+    var undated = data.filter(function (r) { return r.type !== "think" && !r.date; }).length, upc = data.filter(isUpcoming).length;
     if (undated) w.appendChild(el("div", "hint2", "날짜가 없는 기록 " + undated + "개(읽는 중인 책 등)는 통계에 포함되지 않아요."));
     if (upc) w.appendChild(el("div", "hint2", "아직 안 본 예정 기록 " + upc + "개는 통계에 포함되지 않아요."));
   }
@@ -4684,6 +4980,156 @@
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && genreIsOpen()) { closeGenrePop(); e.stopImmediatePropagation(); e.preventDefault(); }
   }, true);
+  /* ---------- 생각타래 분류 ---------- */
+  /* 분류 이름은 각 생각타래(topic)에 글자로 저장되고, 목록(TPKEY)은 직접 입력해서 생긴 분류를 모아 둠.
+     이름을 바꾸면 쓰던 생각타래도 같이 바뀌고, 지우면 생각타래는 남고 분류만 비워짐 */
+  var TPKEY = "reviews-topics-v1";
+  var topicEditing = null;   /* 목록에서 이름을 고치는 중인 분류 */
+  function cleanTopic(s) { return String(s == null ? "" : s).replace(/\s+/g, " ").trim().slice(0, 30); }
+  function storedTopics() {
+    var out = [];
+    try {
+      var a = JSON.parse(localStorage.getItem(TPKEY));
+      (Array.isArray(a) ? a : []).forEach(function (t) { t = cleanTopic(t); if (t && out.indexOf(t) < 0) out.push(t); });
+    } catch (e) {}
+    return out;
+  }
+  function allTopics() {
+    var out = storedTopics();
+    data.forEach(function (r) { if (isThread(r) && r.topic && out.indexOf(r.topic) < 0) out.push(r.topic); });   /* 백업으로 들어온 분류도 목록에 */
+    return out;
+  }
+  function saveTopics(list) {
+    try { localStorage.setItem(TPKEY, JSON.stringify(list)); localStorage.setItem(LCKEY, String(Date.now())); } catch (e) {}
+  }
+  function addTopicToList(t) {
+    t = cleanTopic(t); if (!t) return;
+    var l = allTopics(); if (l.indexOf(t) < 0) l.push(t);
+    saveTopics(l);
+  }
+  function renameTopic(oldN, raw) {
+    var nn = cleanTopic(raw);
+    if (!nn) { showToast("분류 이름을 입력해 주세요"); return false; }
+    if (nn === oldN) return true;
+    var list = allTopics(), i = list.indexOf(oldN);
+    if (i < 0) return false;
+    if (list.indexOf(nn) > -1) { showToast("같은 이름의 분류가 이미 있어요"); return false; }
+    list[i] = nn;
+    data.forEach(function (r) { if (isThink(r) && r.topic === oldN) r.topic = nn; });
+    saveTopics(list); persist();
+    var ti = $("topic"), dirty = formDirty();
+    if (cleanTopic(ti.value) === oldN) { ti.value = nn; if (!dirty) formSnap = snapForm(); }   /* 열려 있는 입력창도 같이 */
+    render();
+    showToast("분류 이름을 바꿨어요");
+    return true;
+  }
+  function deleteTopic(name) {
+    askConfirm("「" + name + "」 분류를 삭제할까요?\n이 분류를 쓰던 생각타래는 그대로 남고, 분류만 비워져요.", { ok: "삭제", danger: true }, function () {
+      data.forEach(function (r) { if (isThink(r) && r.topic === name) delete r.topic; });
+      saveTopics(allTopics().filter(function (t) { return t !== name; }));
+      persist();
+      var ti = $("topic"), dirty = formDirty();
+      if (cleanTopic(ti.value) === name) { ti.value = ""; if (!dirty) formSnap = snapForm(); }
+      render();
+      if (topicIsOpen()) renderTopicPop();
+      showToast("분류를 삭제했어요");
+    });
+  }
+  function topicIsOpen() { return !$("topicPop").hidden; }
+  function closeTopicPop() {
+    topicEditing = null;
+    $("topicPop").hidden = true;
+    $("topicPop").parentNode.classList.remove("open");
+    $("topic").setAttribute("aria-expanded", "false");
+  }
+  function openTopicPop() {
+    topicEditing = null;
+    renderTopicPop();
+    $("topicPop").hidden = false;
+    $("topicPop").parentNode.classList.add("open");
+    $("topic").setAttribute("aria-expanded", "true");
+    try { $("topicPop").scrollIntoView({ block: "nearest", behavior: "smooth" }); } catch (e) {}
+  }
+  function pickTopic(t) {
+    var ti = $("topic");
+    ti.value = t; ti.readOnly = true;
+    closeTopicPop();
+  }
+  function editTopicInput() {
+    var ti = $("topic");
+    closeTopicPop();
+    ti.readOnly = false;
+    ti.focus();
+    var n = ti.value.length;
+    try { ti.setSelectionRange(n, n); } catch (e) {}
+  }
+  function renderTopicPop() {
+    var pop = $("topicPop"), cur = cleanTopic($("topic").value), list = allTopics();
+    pop.textContent = "";
+    var head = el("div", "gnhead");
+    head.appendChild(el("span", "gnh", "분류 선택"));
+    if (cur) {
+      var cl = el("button", "gnclr", "지우기"); cl.type = "button";
+      cl.onclick = function () { pickTopic(""); };
+      head.appendChild(cl);
+    }
+    pop.appendChild(head);
+    if (!list.length) pop.appendChild(el("div", "tpempty", "아직 분류가 없어요. 아래 「직접 입력」으로 만들어 보세요."));
+    var box = el("div", "tplist");
+    list.forEach(function (t) {
+      var row = el("div", "tprow");
+      if (topicEditing === t) {
+        var inp = el("input", "tpedit"); inp.type = "text"; inp.maxLength = 30; inp.value = t; inp.setAttribute("aria-label", "분류 이름 고치기");
+        var ok = el("button", "tpbtn", "저장"); ok.type = "button";
+        var no = el("button", "tpbtn", "취소"); no.type = "button";
+        var go = function () { if (renameTopic(t, inp.value)) { topicEditing = null; renderTopicPop(); } };
+        ok.onclick = go;
+        no.onclick = function () { topicEditing = null; renderTopicPop(); };
+        inp.onkeydown = function (e) { if (e.key === "Enter") { e.preventDefault(); go(); } };
+        row.appendChild(inp); row.appendChild(ok); row.appendChild(no);
+        box.appendChild(row);
+        setTimeout(function () { try { inp.focus(); inp.select(); } catch (e) {} }, 0);
+        return;
+      }
+      var on = t === cur;
+      var b = el("button", "tpsel" + (on ? " on" : "")); b.type = "button";
+      b.setAttribute("role", "option"); b.setAttribute("aria-selected", on ? "true" : "false");
+      b.appendChild(el("span", "", t));
+      if (on) b.insertAdjacentHTML("beforeend", CHECK);
+      b.onclick = function () { pickTopic(t); };
+      var eb = el("button", "tpbtn", "수정"); eb.type = "button";
+      eb.onclick = function () { topicEditing = t; renderTopicPop(); };
+      var db = el("button", "tpbtn del", "삭제"); db.type = "button";
+      db.onclick = function () { deleteTopic(t); };
+      row.appendChild(b); row.appendChild(eb); row.appendChild(db);
+      box.appendChild(row);
+    });
+    pop.appendChild(box);
+    var grid = el("div", "gngrid"); grid.style.marginTop = "8px";
+    var custom = cur && list.indexOf(cur) < 0;
+    var cb = el("button", "gnopt wide" + (custom ? " on" : "")); cb.type = "button";
+    cb.setAttribute("role", "option"); cb.setAttribute("aria-selected", custom ? "true" : "false");
+    cb.appendChild(el("span", "", custom ? "직접 입력 · " + cur : "직접 입력"));
+    cb.insertAdjacentHTML("beforeend", custom ? CHECK : PENCIL);
+    cb.onclick = editTopicInput;
+    grid.appendChild(cb);
+    pop.appendChild(grid);
+  }
+  $("topic").onclick = function () { if (this.readOnly) { topicIsOpen() ? closeTopicPop() : openTopicPop(); } };
+  $("topic").onblur = function () { this.readOnly = true; };
+  $("topicChev").onclick = function () { topicIsOpen() ? closeTopicPop() : openTopicPop(); };
+  document.addEventListener("pointerdown", function (e) {
+    if (!topicIsOpen()) return;
+    if ($("topicBox").contains(e.target)) return;
+    if (typeof dlgEl !== "undefined" && dlgEl && dlgEl.contains(e.target)) return;   /* 삭제 확인창을 눌러도 목록은 그대로 */
+    closeTopicPop();
+  }, true);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && topicIsOpen()) {
+      if (topicEditing) { topicEditing = null; renderTopicPop(); } else closeTopicPop();
+      e.stopImmediatePropagation(); e.preventDefault();
+    }
+  }, true);
   /* ---------- 입력창 ---------- */
   function fmtRate(v) { return v ? String(v) : ""; }
   function buildRate() {
@@ -4712,7 +5158,8 @@
     Array.prototype.forEach.call($("kinds").children, function (b) {
       b.classList.toggle("on", b.dataset.k === k);
     });
-    $("creatorLabel").textContent = KIND[k].who;
+    $("creatorLabel").textContent = KIND[k].who || "저자";
+    $("creatorBox").hidden = (k === "think");
     $("dateLabel").textContent = KIND[k].when;
     $("castBox").hidden = !KIND[k].cast;
     $("seatBox").hidden = !KIND[k].cast;
@@ -4720,8 +5167,8 @@
     $("timeBox").hidden = true;
     $("date").hidden = !!KIND[k].cast;
     /* 책은 완독일을 오늘 이후로 못 정함(공연은 미리 넣을 수 있어서 제한 없음) */
-    $("date").max = k === "book" ? today() : "";
-    if (k === "book" && $("date").value > today()) $("date").value = today();
+    $("date").max = (k === "book" || k === "think") ? today() : "";
+    if ((k === "book" || k === "think") && $("date").value > today()) $("date").value = today();
     $("dtBtn").hidden = !KIND[k].cast;
     if (KIND[k].cast) $("row2").prepend($("creatorBox"));          /* 연극·뮤지컬: 극장은 「더 적기」 안 */
     else if (k === "book") $("statusBox").before($("creatorBox"));   /* 책: 저자는 위에 그대로 보임 */
@@ -4731,7 +5178,83 @@
     $("statusBox").hidden = (k !== "book");
     if (k !== "book") form.status = "done";
     updateDateBox();
+    updateThinkUI();
     if ($("sheet").classList.contains("show")) setVTab(vTab);   /* 기록 창에서 종류를 바꾸면 탭도 맞춤(책은 탭 없음) */
+  }
+  /* 생각 종류(일기/이어쓰기)에 따라 입력창의 제목·날짜·본문 칸 이름을 맞춤 */
+  function tkDayLabel(ds) {
+    var d = new Date(ds + "T00:00:00");
+    return isNaN(d.getTime()) ? "" : ds.replace(/-/g, ".") + " (" + DOW[d.getDay()] + ")";
+  }
+  function updateThinkUI() {
+    var th = form.type === "think", diary = th && form.tk !== "thread";
+    $("tkKinds").hidden = !th;
+    Array.prototype.forEach.call($("tkKinds").children, function (b) { b.classList.toggle("on", b.dataset.tk === form.tk); });
+    $("title").hidden = diary;                       /* 일기: 제목 없이 날짜만 */
+    $("title").placeholder = "제목";
+    $("noteBox").hidden = th;                        /* 생각: 비고 없음(이어쓰기는 분류·태그만) */
+    $("textLabel").textContent = !th ? "후기" : diary ? "일기" : "첫 글";
+    $("text").placeholder = !th ? "이 작품은 어땠나요? 여기를 눌러 전체 화면으로 적어보세요."
+      : diary ? "오늘은 어땠나요? 여기를 눌러 전체 화면으로 적어보세요."
+      : "이 생각타래에 떠오른 생각을 적어요. 이어지는 글은 카드에서 「이어쓰기」로 계속 보탤 수 있어요.";
+    $("gOpen").hidden = th;
+    var thr = th && !diary;
+    $("topicBox").hidden = !thr;                     /* 생각타래: 제목 아래에서 분류를 고름 */
+    if (!thr) closeTopicPop();
+    $("sub").hidden = !(thr && !editingId);          /* 새 생각타래: 첫 글의 소제목 */
+    $("cardEntries").hidden = !(thr && editingId);   /* 수정: 쓴 글들을 목록으로 */
+    if (thr && editingId) renderFormEntries();
+    $("sheetTitle").textContent = th ? (editingId ? "생각 수정" : "새 생각") : (editingId ? "후기 수정" : "새 후기");
+  }
+  function renderFormEntries() {
+    var box = $("entList"); box.textContent = "";
+    var r = data.filter(function (x) { return x.id === editingId; })[0], arr = (r && r.later) || [];
+    if (!arr.length) { box.appendChild(el("div", "entempty", "아직 쓴 글이 없어요. 카드에서 「이어쓰기」로 글을 써 보세요.")); return; }
+    arr.forEach(function (x, idx) {
+      var row = el("div", "entrow");
+      var b = el("button", "entitem"); b.type = "button";
+      b.appendChild(el("div", "em", x.d.replace(/-/g, ".") + (x.tm ? " " + fmtTime(x.tm) : "") + (x.te ? " (수정됨)" : "")));
+      if (x.h) b.appendChild(el("div", "esub", x.h));
+      b.appendChild(el("div", "et", x.t));
+      b.onclick = function () { openEntryFromForm(idx); };
+      row.appendChild(b);
+      if (arr.length > 1) {
+        var mv = el("div", "entmv");
+        var up = el("button", "", "↑"); up.type = "button"; up.setAttribute("aria-label", "위로 옮기기"); up.disabled = idx === 0;
+        up.onclick = function () { if (moveEntry(r, idx, -1)) { render(); renderFormEntries(); } };
+        var dn = el("button", "", "↓"); dn.type = "button"; dn.setAttribute("aria-label", "아래로 옮기기"); dn.disabled = idx === arr.length - 1;
+        dn.onclick = function () { if (moveEntry(r, idx, 1)) { render(); renderFormEntries(); } };
+        mv.appendChild(up); mv.appendChild(dn); row.appendChild(mv);
+      }
+      box.appendChild(row);
+    });
+  }
+  /* 수정 창의 글 목록에서 글을 누르면 쓰기 창이 열리고, 닫으면 그 글만 바로 저장됨 */
+  var entCtx = null;
+  function openEntryFromForm(idx) {
+    var r = data.filter(function (x) { return x.id === editingId; })[0];
+    if (!r || !r.later[idx] || layers.indexOf("writer") > -1) return;
+    entCtx = idx;
+    $("text").value = r.later[idx].t; $("sub").value = r.later[idx].h || "";
+    writerDirect = false; writerHad = true;
+    openWriter("post");
+  }
+  function commitEntCtx() {
+    var idx = entCtx; entCtx = null;
+    var r = data.filter(function (x) { return x.id === editingId; })[0];
+    var v = $("text").value.trim(), h = $("sub").value.trim();
+    $("text").value = ""; $("sub").value = "";
+    if (r && v && r.later[idx]) {
+      var x = r.later[idx];
+      if (v !== x.t || h !== (x.h || "")) { x.t = v; if (h) x.h = h; else delete x.h; x.te = Date.now(); persist(); render(); }
+    }
+    renderFormEntries();
+  }
+  function setTk(v) {
+    form.tk = v === "thread" ? "thread" : "diary"; lastTk = form.tk;
+    updateDateBox();
+    updateThinkUI();
+    if ($("sheet").classList.contains("show")) setVTab(vTab);
   }
   function setStatus(st) {
     form.status = st;
@@ -4741,14 +5264,14 @@
     updateDateBox();
   }
   function updateDateBox() {
-    $("dateBox").hidden = (form.type === "book" && form.status !== "done");
+    $("dateBox").hidden = (form.type === "book" && form.status !== "done") || (form.type === "think" && form.tk === "thread");
     updateMoreSum();
   }
   /* 「더 적기」 접이식: 종류별로 접히는 칸이 달라서, 버튼 옆에 안에 든 칸 이름을 보여줌 */
   function updateMoreSum() {
     var sm = $("moreSum");
     if (!sm) return;
-    sm.textContent = form.type === "book" ? "장르 · 비고 · 태그" : form.type === "movie" ? "감독 · 비고 · 태그" : "극장 · 좌석 · 캐스팅 · 비고 · 태그";
+    sm.textContent = form.type === "think" ? "태그" : form.type === "book" ? "장르 · 비고 · 태그" : form.type === "movie" ? "감독 · 비고 · 태그" : "극장 · 좌석 · 캐스팅 · 비고 · 태그";
   }
   function setMore(on) {
     $("moreBox").hidden = !on;
@@ -4759,6 +5282,7 @@
   /* 수정하거나 이어 쓰는 기록에 접힌 칸의 내용이 있으면 펼친 채로 열어서 놓치지 않게 */
   function hasExtra() {
     var v = function (id) { return !!$(id).value.trim(); };
+    if (form.type === "think") return v("tags");
     if (form.type === "book") return v("genre") || v("note") || v("tags");
     if (form.type === "movie") return v("creator") || v("note") || v("tags");
     return v("creator") || v("seat") || v("cast") || v("note") || v("tags") ;
@@ -4796,12 +5320,16 @@
     $("sheetTitle").textContent = r ? "후기 수정" : "새 후기";
     form.rating = r ? r.rating : 0;
     form.status = r ? (r.status || "done") : "done";
+    form.eidx = null;
+    form.tk = r ? (r.tk === "thread" ? "thread" : "diary") : (filter === "think" && tkf !== "all" ? tkf : lastTk);
     setKind(r ? r.type : (filter !== "all" ? filter : "book"));
     setStatus(form.status);
     $("title").value = r ? r.title : "";
+    if (form.type === "think" && form.tk === "diary") $("title").value = tkDayLabelOf(r ? r.date : (view === "cal" ? selDate : today()));
     $("creator").value = r ? r.creator : "";
     $("genre").value = r ? (r.genre || "") : "";
     $("genre").readOnly = true; closeGenrePop();
+    $("topic").value = r ? (r.topic || "") : ""; $("topic").readOnly = true; closeTopicPop();
     $("cast").value = r ? (r.cast || "") : "";
     $("seat").value = r ? (r.seat || "") : "";
     $("note").value = r ? (r.note || "") : "";
@@ -4810,16 +5338,17 @@
     form.time = r ? (r.time || "") : "";
     updateTimeBtn();
     $("date").value = r ? r.date : (view === "cal" ? selDate : today());
-    if (form.type === "book" && !r && $("date").value > today()) $("date").value = today();   /* 달력에서 미래 날짜로 책을 추가해도 오늘로 */
+    if ((form.type === "book" || form.type === "think") && !r && $("date").value > today()) $("date").value = today();   /* 달력에서 미래 날짜로 책·일기를 추가해도 오늘로 */
     updateTimeBtn();
-    $("text").value = r ? r.text : "";
+    updateThinkUI();
+    $("text").value = r ? r.text : ""; $("sub").value = "";
     $("pre").value = r ? (r.pre || "") : "";
     buildRate();
     $("sheet").classList.add("show");
     document.body.style.overflow = "hidden";
     $("sheet").querySelector(".panel").scrollTop = 0;
     growText(); growCast();
-    setVTab(form.type !== "book" && $("date").value > today() ? "pre" : "post");   /* 아직 안 본(관람일이 오늘 이후) 기록은 「관람 전」부터 */
+    setVTab(hasPre(form.type) && $("date").value > today() ? "pre" : "post");   /* 아직 안 본(관람일이 오늘 이후) 기록은 「관람 전」부터 */
     formSnap = snapForm();
     if (opts.fields) { applyFields(opts.fields); syncAfterRestore(); }   /* 새로고침·앱 재시작 복원: 물어보지 않고 바로 채움 */
     else restoreDraft(id);
@@ -4882,11 +5411,12 @@
     setTabDot($("vtPost"), "post");
   }
   function setVTab(t) {
-    vTab = (t === "pre" && form.type !== "book") ? "pre" : "post";
+    vTab = (t === "pre" && hasPre(form.type)) ? "pre" : "post";
     var pre = vTab === "pre";
-    $("vtabs").hidden = form.type === "book";
+    $("vtabs").hidden = !hasPre(form.type);
     $("cardPre").hidden = !pre;
-    $("cardRate").hidden = pre; $("cardText").hidden = pre;
+    $("cardRate").hidden = pre || form.type === "think";
+    $("cardText").hidden = pre || (form.type === "think" && form.tk === "thread" && !!editingId);   /* 이어쓰기 글은 카드에서 하나씩 고침 */
     $("vtPre").classList.toggle("on", pre); $("vtPost").classList.toggle("on", !pre);
     $("vtPre").setAttribute("aria-selected", pre ? "true" : "false"); $("vtPost").setAttribute("aria-selected", pre ? "false" : "true");
     if (pre) growPre(); else growText();
@@ -4954,17 +5484,19 @@
   }
   function wApplyTab() {
     var pre = wTab === "pre", t = $("wtext");
-    t.placeholder = pre ? "기대한 점이나 보기 전부터 알고 있던 점을 적어보세요." : "이 작품은 어땠나요? 자유롭게 적어보세요.";
-    t.setAttribute("aria-label", pre ? "관람 전 쓰기" : "후기 쓰기");
+    t.placeholder = pre ? "기대한 점이나 보기 전부터 알고 있던 점을 적어보세요."
+      : form.type === "think" ? (form.tk === "thread" ? "이어서 자유롭게 적어보세요." : "오늘은 어땠나요? 자유롭게 적어보세요.")
+      : "이 작품은 어땠나요? 자유롭게 적어보세요.";
+    t.setAttribute("aria-label", pre ? "관람 전 쓰기" : form.type === "think" ? "생각 쓰기" : "후기 쓰기");
     $("wtPre").classList.toggle("on", pre); $("wtPost").classList.toggle("on", !pre);
     $("wtPre").setAttribute("aria-selected", pre ? "true" : "false"); $("wtPost").setAttribute("aria-selected", pre ? "false" : "true");
-    $("rateBox").style.display = pre ? "none" : "";
+    $("rateBox").style.display = (pre || form.type === "think") ? "none" : "";
     $("wPreBox").hidden = !pre;
     $("wcnt").textContent = t.value.length + "자";
     updateWTabDots();
   }
   function wSwitchTab(tab) {
-    if (form.type === "book" || tab === wTab) return;
+    if (!hasPre(form.type) || tab === wTab) return;
     wSnap();
     wStore[wTab] = { h: wHist, p: wPos };
     wTab = tab;
@@ -4989,12 +5521,14 @@
     scheduleDraft(); wSyncBtns();
   }
   function openWriter(tab) {
-    var t = $("wtext"), isBook = form.type === "book";
+    var t = $("wtext"), isBook = !hasPre(form.type);
     wTab = (!isBook && tab === "pre") ? "pre" : "post"; wStore = {};
     writerInitPost = $("text").value; writerInitPre = $("pre").value;
     t.value = wField().value;
     wReset();
     $("wtitle").textContent = $("title").value.trim() || "후기";
+    var thr = form.type === "think" && form.tk === "thread";
+    $("wsub").hidden = !thr; $("wsub").value = thr ? $("sub").value : ""; writerInitSub = $("sub").value;
     $("wtabs").hidden = isBook;
     $("wtabs").after($("rateBox"));
     wApplyTab();
@@ -5009,9 +5543,9 @@
   }
   function restoreExtra() { $("rateAnchor").before($("rateBox")); $("rateBox").style.display = ""; }
   /* 카드의 「후기 쓰기」를 누르면 후기 입력창만 바로 열림(완료하면 바로 저장) */
-  var writerDirect = false, writerHad = false, writerInitPost = "", writerInitPre = "";
+  var writerDirect = false, writerHad = false, writerInitPost = "", writerInitPre = "", writerInitSub = "";
   function enterDirectWriter(tab, had) {
-    var pre = tab === "pre" && form.type !== "book";
+    var pre = tab === "pre" && hasPre(form.type);
     writerDirect = true; writerHad = !!had;
     setVTab(pre ? "pre" : "post");
     openWriter(pre ? "pre" : "post");
@@ -5023,7 +5557,34 @@
     if (layers.indexOf("form") < 0 || layers.indexOf("writer") > -1) return;
     enterDirectWriter(tab, had);
   }
+  /* 이어쓰기 글(처음 글·이어 쓴 글 모두 같은 형식): 후기 창과 같은 전체 화면 창으로 쓰고 고침 */
+  function openThreadWriter(id, idx) {
+    var rv = data.filter(function (x) { return x.id === id; })[0];
+    if (!rv) return;
+    var had = idx >= 0 && !!rv.later[idx];
+    openForm(id, { mode: "review", had: had });
+    if (layers.indexOf("form") < 0 || layers.indexOf("writer") > -1) return;
+    form.eidx = had ? idx : -1;
+    $("text").value = had ? rv.later[idx].t : ""; $("sub").value = had ? (rv.later[idx].h || "") : "";
+    formSnap = snapForm();
+    enterDirectWriter("post", had);
+  }
+  function saveThreadEntry() {
+    wField().value = $("wtext").value;
+    writerDirect = false;
+    var r = data.filter(function (x) { return x.id === editingId; })[0];
+    var v = $("text").value.trim(), h = $("sub").value.trim(), ei = form.eidx;
+    if (!r || !v) { closeAllLayers(); return; }   /* 비어 있으면 저장 없이 닫음(고치던 글은 그대로) */
+    if (ei >= 0 && r.later[ei]) {
+      var x0 = r.later[ei];
+      if (v !== x0.t || h !== (x0.h || "")) { x0.t = v; if (h) x0.h = h; else delete x0.h; x0.te = Date.now(); }
+    } else { r.later = r.later || []; var o = { d: today(), tm: nowHM(), t: v }; if (h) o.h = h; r.later.push(o); }
+    openIds[r.id] = true; if (infoOpen[r.id] == null) infoOpen[r.id] = true;
+    buzz(15);
+    persist(); heldDraft = null; clearDraft(); closeAllLayers(); render();
+  }
   function finishDirectWriter() {
+    if (form.eidx !== null && form.eidx !== undefined) { saveThreadEntry(); return; }
     wField().value = $("wtext").value;
     writerDirect = false;
     /* 원래 아무 기록이 없고 둘 다 비어 있으면 저장 없이 닫음(원래 있던 내용을 지운 경우는 저장) */
@@ -5033,6 +5594,8 @@
   function hideWriter() {
     restoreExtra();
     wField().value = $("wtext").value;
+    if (!$("wsub").hidden) $("sub").value = $("wsub").value;
+    if (entCtx !== null) commitEntCtx();
     $("writer").hidden = true;
     $("writer").style.height = "";
     $("writer").style.top = "";
@@ -5040,7 +5603,8 @@
     growText(); growPre(); updateVTabDots();
   }
   function hideForm() {
-    closeGenrePop();
+    form.eidx = null;
+    closeGenrePop(); closeTopicPop();
     if (!$("writer").hidden) { $("writer").hidden = true; restoreExtra(); }
     $("sheet").classList.remove("show");
     document.body.style.overflow = "";
@@ -5051,8 +5615,8 @@
   var layers = [];          /* 지금 열려 있는 창들: "form" > "writer" / "clock" */
   var skipPop = 0, skipConfirm = false, exitArmedAt = 0, formSnap = "";
   function snapForm() {
-    return JSON.stringify([form.type, form.status, form.rating, form.time, $("title").value, $("creator").value, $("genre").value, $("date").value,
-      $("seat").value, $("cast").value, $("note").value, $("tags").value, $("take").value, $("text").value, $("pre").value]);
+    return JSON.stringify([form.type, form.tk, form.eidx, form.status, form.rating, form.time, $("title").value, $("creator").value, $("genre").value, $("date").value,
+      $("seat").value, $("cast").value, $("note").value, $("tags").value, $("take").value, $("text").value, $("pre").value, $("sub").value, $("topic").value]);
   }
   function formDirty() { return !!formSnap && snapForm() !== formSnap; }
   var quietPush = false;   /* 새로고침 복원 중엔 이미 있는 뒤로가기 기록을 그대로 씀 */
@@ -5311,7 +5875,7 @@
     if (layers.length && g < 1 + layers.length) {
       var top = layers[layers.length - 1];
       var finishTop = function (resetWriter) {
-        if (resetWriter) { $("text").value = writerInitPost; $("pre").value = writerInitPre; $("wtext").value = wField().value; $("wcnt").textContent = $("wtext").value.length + "자"; }   /* 기록 창에서 연 경우: 고친 내용은 버리고 원래대로 */
+        if (resetWriter) { $("sub").value = writerInitSub; $("wsub").value = writerInitSub; $("text").value = writerInitPost; $("pre").value = writerInitPre; $("wtext").value = wField().value; $("wcnt").textContent = $("wtext").value.length + "자"; }   /* 기록 창에서 연 경우: 고친 내용은 버리고 원래대로 */
         skipConfirm = false;
         layers.pop(); hideLayer(top);
       };
@@ -5325,11 +5889,11 @@
         var wDirty;
         wField().value = $("wtext").value;
         if (writerDirect) wDirty = formDirty();
-        else wDirty = $("text").value !== writerInitPost || $("pre").value !== writerInitPre;
+        else wDirty = $("text").value !== writerInitPost || $("pre").value !== writerInitPre || $("sub").value !== writerInitSub;
         if (wDirty) {
           if (writerDirect) askSaveClose(function () { restorePos(); finishDirectWriter(); }, function () { finishTop(false); }, restorePos);   /* 목록에서 바로 연 후기 창 */
           else askConfirm("닫기 전 수정한 사항을 저장할까요?", { ok: "네", alt: "아니오", cancel: "취소" },
-            function () { writerInitPost = $("text").value; writerInitPre = $("pre").value; finishTop(false); },   /* 네: 고친 내용을 반영하고 후기 창 닫기 */
+            function () { writerInitPost = $("text").value; writerInitPre = $("pre").value; writerInitSub = $("sub").value; finishTop(false); },   /* 네: 고친 내용을 반영하고 후기 창 닫기 */
             restorePos,                                                                                          /* 취소: 확인창만 닫고 후기 창은 그대로 */
             function () { finishTop(true); });                                                                   /* 아니오: 고친 내용은 버리고 후기 창 닫기 */
           return;
@@ -5373,24 +5937,30 @@
   ["pointerdown", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, armGuard, { capture: true, once: true, passive: true }); });
   function save() {
     var title = $("title").value.trim();
+    var thk = form.type === "think", diaryF = thk && form.tk !== "thread";
+    if (diaryF && !$("date").value) $("date").value = today();
+    if (diaryF) title = tkDayLabelOf($("date").value > today() ? today() : $("date").value);   /* 일기: 제목 없이 날짜가 곧 제목 */
     if (!title) { askNotice("제목을 입력해 주세요."); $("title").focus(); return; }
     buzz(15);   /* 저장할 때 진동 */
-    if (form.type === "book" && $("date").value > today()) $("date").value = today();   /* 직접 입력으로 미래가 들어와도 저장은 막지 않고 오늘로 맞춤 */
+    if ((form.type === "book" || thk) && $("date").value > today()) $("date").value = today();   /* 직접 입력으로 미래가 들어와도 저장은 막지 않고 오늘로 맞춤 */
+    var prev0 = editingId ? data.filter(function (x) { return x.id === editingId; })[0] : null;
     var rec = {
       type: form.type, title: title,
       creator: $("creator").value.trim(),
       genre: form.type === "book" ? $("genre").value.trim() : "",
       cast: KIND[form.type].cast ? castNorm($("cast").value) : "",
       seat: KIND[form.type].cast ? $("seat").value.trim() : "",
-      note: $("note").value.trim(),
+      note: thk ? "" : $("note").value.trim(),
       time: KIND[form.type].cast ? form.time : "",
       status: form.type === "book" ? form.status : "done",
-      date: (form.type === "book" && form.status !== "done") ? "" : $("date").value,
-      rating: form.rating,
+      date: (form.type === "book" && form.status !== "done") ? "" : thk && !diaryF ? ((prev0 && prev0.tk === "thread" && prev0.date) || today()) : $("date").value,
+      rating: thk ? 0 : form.rating,
       text: $("text").value.trim(),
-      take: $("take").value.trim(),
-      pre: form.type !== "book" ? $("pre").value.trim() : ""
+      take: thk ? "" : $("take").value.trim(),
+      pre: hasPre(form.type) ? $("pre").value.trim() : ""
     };
+    if (thk) { rec.tk = form.tk === "thread" ? "thread" : "diary"; rec.cr = (prev0 && prev0.cr) || (prev0 && createdMs(prev0)) || Date.now(); }
+    if (thk && !diaryF) { var tpc = cleanTopic($("topic").value); if (tpc) { rec.topic = tpc; addTopicToList(tpc); } }   /* 직접 입력한 새 분류는 목록에 생김 */
     var prev = editingId ? data.filter(function (x) { return x.id === editingId; })[0] : null;
     /* 후기를 처음 쓴 시각(ta)과 마지막 수정 시각(te) 기록 */
     var nowMs = Date.now();
@@ -5412,6 +5982,10 @@
     rec.later = prev ? (prev.later || []) : [];
     rec.rlog = prev ? (prev.rlog || []) : [];
     rec.tags = parseTags($("tags").value);
+    if (thk && !diaryF) {   /* 이어쓰기: 첫 글도 이어 쓴 글과 같은 「글」로 쌓임 */
+      if (!prev && rec.text) { rec.later = [{ d: today(), tm: nowHM(), t: rec.text }]; var h0 = $("sub").value.trim(); if (h0) rec.later[0].h = h0; }
+      rec.text = ""; delete rec.ta; delete rec.te;
+    }
     var evs = [];
     if (editingId) {
       rec.id = editingId;
@@ -5422,8 +5996,8 @@
           evs.push({ v: "완독", w: true });
         } else evs.push({ v: rec.status === "done" ? "완독" : rec.status === "paused" ? "독서 중단" : "다시 읽기", w: false });
       }
-      if (rec.type !== "book" && rec.pre && !(prev && String(prev.pre || "").trim())) evs.push({ v: "관람 전 기대 작성", w: false });
-      if (prev && !hasReview(prev) && hasReview(rec)) evs.push({ v: "후기 작성", w: false });
+      if (hasPre(rec.type) && rec.pre && !(prev && String(prev.pre || "").trim())) evs.push({ v: "관람 전 기대 작성", w: false });
+      if (prev && !hasReview(prev) && hasReview(rec) && !thk) evs.push({ v: "후기 작성", w: false });
       data = data.map(function (x) { return x.id === editingId ? Object.assign({ id: x.id }, rec) : x; });
       openIds[editingId] = true; if (infoOpen[editingId] == null) infoOpen[editingId] = true;
     } else {
@@ -5434,19 +6008,27 @@
       /* 타임라인에는 두 줄이 남음: ① 실제로 추가한 시각의 「기록 추가」 ② 관람일시(책은 완독일)의 「관람」·「완독」.
          ②는 기록의 날짜·시간을 따라가서 수정하면 같이 옮겨지고, 미래 일시면 그때가 되어야 보임.
          책을 오늘 완독한 걸로 추가하면 같은 날 같은 줄이 두 번 생기지 않게 「완독」 한 줄만 남김 */
-      if (rec.type !== "book") {
+      if (thk) {
+        /* 생각: 지난 날짜의 일기는 지금 시각에 「기록 추가」, 그 날짜에는 「일기 작성」. 오늘 일기·이어쓰기는 한 줄만 */
+        if (diaryF && rec.date < today()) { evs.push({ v: "기록 추가", w: false }); evs.push({ v: "일기 작성", w: true }); }
+        else evs.push({ v: actVerb(rec), w: false });
+      } else if (rec.type !== "book") {
         evs.push({ v: "기록 추가", w: false });
         evs.push({ v: "관람", w: true });
       } else if (rec.status === "done" && rec.date && rec.date < today()) {
         evs.push({ v: "기록 추가", w: false });
         evs.push({ v: "완독", w: true });
       } else evs.push({ v: actVerb(rec), w: false });
-      if (rec.type !== "book" && rec.pre) evs.push({ v: "관람 전 기대 작성", w: false });
-      if (hasReview(rec)) evs.push({ v: "후기 작성", w: false });
+      if (hasPre(rec.type) && rec.pre) evs.push({ v: "관람 전 기대 작성", w: false });
+      if (hasReview(rec) && !thk) evs.push({ v: "후기 작성", w: false });
     }
-    if (rec.type !== "book" && rec.pre) markPreSynced(editingId || rec.id);
+    if (hasPre(rec.type) && rec.pre) markPreSynced(editingId || rec.id);
     evs.forEach(function (ev) { logAct("\u300C" + rec.title + "\u300D " + ev.v, rec, ev.w); });
     if (rec.date) { calY = +rec.date.slice(0, 4); calM = +rec.date.slice(5, 7) - 1; selDate = rec.date; }
+    if (thk && !editingId && view === "list" && !(filter === "think" || (filter === "all" && showTh))) {
+      filter = "think"; tkf = "all"; tpf = "all"; rfilter = "all"; sfilter = "all";
+      Array.prototype.forEach.call($("tabs").children, function (b) { b.classList.toggle("on", b.dataset.f === "think"); });
+    }
     persist(); heldDraft = null; clearDraft(); closeAllLayers(); render();
     if (newCardId) { var nid = newCardId; newCardId = null; setTimeout(function () { revealNewCard(nid); }, 250); }
   }
@@ -5627,6 +6209,9 @@
   /* 책은 완독일을 미래로 못 고름: 날짜 선택창에서 오늘 이후는 비활성(max), 직접 입력해도 오늘로 되돌림 */
   $("date").addEventListener("change", function () {
     if (form.type === "book" && this.value > today()) { this.value = today(); showToast("완독일은 오늘까지만 정할 수 있어요"); }
+    if (form.type === "think") {
+      if (this.value > today()) { this.value = today(); showToast("일기 날짜는 오늘까지만 정할 수 있어요"); }
+    }
   });
   $("timeBtn").onclick = openClock;
   $("dtBtn").onclick = openClock;
@@ -5662,10 +6247,10 @@
     var wOpen = !$("writer").hidden;
     return { at: Date.now(), key: draftKey, mode: draftMode, had: draftHad, tab: wOpen ? wTab : vTab, editingId: editingId,
       w: wOpen ? { direct: !!writerDirect, tab: wTab, iPost: writerInitPost, iPre: writerInitPre } : null, f: {
-      type: form.type, status: form.status, rating: form.rating, time: form.time,
+      type: form.type, tk: form.tk, eidx: form.eidx, status: form.status, rating: form.rating, time: form.time,
       title: $("title").value, creator: $("creator").value, genre: $("genre").value, date: $("date").value,
       seat: $("seat").value, cast: $("cast").value, note: $("note").value, tags: $("tags").value,
-      take: $("take").value, text: $("text").value, pre: $("pre").value } };
+      take: $("take").value, text: $("text").value, pre: $("pre").value, sub: $("sub").value, topic: $("topic").value } };
   }
   var DRAFT_MAX = 5, DRAFT_DAYS = 10;
   function dkey(id) { return id ? String(id) : "new"; }
@@ -5785,26 +6370,31 @@
     if (hasExtra()) setMore(true);
     var w = $("writer");
     if (w.hidden) return;
-    var t = $("wtext"), isBook = form.type === "book";
+    var t = $("wtext"), isBook = !hasPre(form.type);
     if (isBook) wTab = "post";
     wStore = {};
     t.value = wField().value;
     wReset();
     $("wtitle").textContent = $("title").value.trim() || "후기";
+    var thr = form.type === "think" && form.tk === "thread";
+    $("wsub").hidden = !thr; $("wsub").value = thr ? $("sub").value : ""; writerInitSub = $("sub").value;
     $("wtabs").hidden = isBook;
     wApplyTab();
     writerInitPost = $("text").value; writerInitPre = $("pre").value;
     try { t.focus(); var n = t.value.length; t.setSelectionRange(n, n); t.scrollTop = t.scrollHeight; } catch (e) {}
   }
   function applyFields(f) {
+    form.tk = f.tk === "thread" ? "thread" : "diary";
     setKind(KIND[f.type] ? f.type : form.type);
     setStatus(f.status === "reading" || f.status === "paused" ? f.status : "done");
     $("title").value = f.title || ""; $("creator").value = f.creator || ""; $("genre").value = f.genre || "";
     $("seat").value = f.seat || ""; $("cast").value = f.cast || ""; $("note").value = f.note || "";
-    $("tags").value = f.tags || ""; $("take").value = f.take || ""; $("text").value = f.text || ""; $("pre").value = f.pre || "";
+    $("tags").value = f.tags || ""; $("take").value = f.take || ""; $("text").value = f.text || ""; $("pre").value = f.pre || ""; $("sub").value = f.sub || ""; $("topic").value = f.topic || "";
     form.rating = +f.rating || 0; buildRate();
     form.time = /^\d{2}:\d{2}$/.test(f.time) ? f.time : "";
     $("date").value = f.date || ""; updateTimeBtn();
+    form.eidx = (f.eidx === null || f.eidx === undefined) ? null : +f.eidx;
+    if (form.type === "think") { lastTk = form.tk; updateThinkUI(); }
   }
   /* 기록 창 안에서 후기 창을 열어 쓰던 중이었다면 후기 창을 다시 열어 줌(닫거나 저장하면 기록 창으로 돌아옴) */
   function inFormWriter(d) { return !!(d && d.w && !d.w.direct && d.mode !== "review"); }
@@ -6458,7 +7048,7 @@
   function exportData() {
     if (!data.length && !thoughts.length) { askNotice("저장할 기록이 없어요."); return; }
     var t0 = ""; try { t0 = localStorage.getItem(TKEY) || ""; } catch (e) {}
-    var out = [{ type: "meta", v: SCHEMA, title: t0, goals: getGoals(), at: today() }]
+    var out = [{ type: "meta", v: SCHEMA, title: t0, goals: getGoals(), topics: allTopics(), at: today() }]
       .concat(data, thoughts.map(function (t) { return { type: "thought", id: t.id, d: t.d, tm: t.tm, t: t.t, w: t.w, wtm: t.wtm }; }),
               acts.map(function (a) { return { type: "log", id: a.id, d: a.d, tm: a.tm, t: a.t, rid: a.rid, tid: a.tid, ty: a.ty, w: a.w }; }));
     var text = JSON.stringify(out, null, 2), name = "후기백업_" + today() + ".json", file = null;
@@ -6606,6 +7196,12 @@
               });
               if (gch) saveGoals(gl, true);
             }
+            /* 생각타래 분류 목록: 이 기기에 없는 분류만 보탬 */
+            if (Array.isArray(x.topics)) {
+              var tl = allTopics(), tch = false;
+              x.topics.forEach(function (t) { t = cleanTopic(t); if (t && tl.indexOf(t) < 0) { tl.push(t); tch = true; } });
+              if (tch) saveTopics(tl);
+            }
             return;
           }
           if (x && x.type === "log") {
@@ -6623,8 +7219,22 @@
           if (x && have[x.id]) {
             var fx = have[x.id], fc = false;
             if (!String(fx.text || "").trim() && String(x.text || "").trim()) { fx.text = String(x.text); fc = true; }
-            else if (x.oldText != null && fx.text === String(x.oldText) && String(x.text || "") !== fx.text) { fx.text = String(x.text || ""); fc = true; }
+            else if ((x.oldText != null && fx.text === String(x.oldText) || Array.isArray(x.oldTexts) && x.oldTexts.some(function (o) { return fx.text === String(o); })) && String(x.text || "") !== fx.text) {
+              fx.text = String(x.text || ""); fc = true;
+              /* 글이 바뀐 만큼 처음 쓴/마지막 고친 시각도 백업에 있는 값으로 맞춤(글이 안 바뀐 기록은 건드리지 않음) */
+              var okTa = isFinite(+x.ta) && +x.ta > 0, okTe = isFinite(+x.te) && +x.te > 0;
+              if (okTa) fx.ta = +x.ta;
+              if (okTe) fx.te = +x.te; else if (okTa) delete fx.te;
+            }
             if (fx.type !== "book" && !String(fx.pre || "").trim() && String(x.pre || "").trim()) { fx.pre = String(x.pre); if (/^\d{4}-\d{2}-\d{2}$/.test(String(x.preD || ""))) fx.preD = String(x.preD); if (isFinite(+x.pta) && +x.pta > 0) fx.pta = +x.pta; if (isFinite(+x.pte) && +x.pte > 0) fx.pte = +x.pte; fc = true; }
+            /* 관람 전 기록이 앞서 불러온 글(oldPre/oldPres)과 같을 때만 새 글로 바꿈 — 직접 고친 건 덮어쓰지 않음 */
+            if (fx.type !== "book" && String(fx.pre || "").trim() && String(x.pre || "").trim() && String(x.pre) !== fx.pre && (x.oldPre != null && fx.pre === String(x.oldPre) || Array.isArray(x.oldPres) && x.oldPres.some(function (o) { return fx.pre === String(o); }))) {
+              fx.pre = String(x.pre); if (/^\d{4}-\d{2}-\d{2}$/.test(String(x.preD || ""))) fx.preD = String(x.preD);
+              var okPa = isFinite(+x.pta) && +x.pta > 0, okPe = isFinite(+x.pte) && +x.pte > 0;
+              if (okPa) fx.pta = +x.pta;
+              if (okPe) fx.pte = +x.pte; else if (okPa) delete fx.pte;
+              fc = true;
+            }
             if (!(fx.later && fx.later.length) && cleanLater(x.later).length) { fx.later = cleanLater(x.later); fc = true; }
             if (!(fx.rlog && fx.rlog.length) && cleanLater(x.rlog).length) { fx.rlog = cleanLater(x.rlog); fc = true; }
             if (String(fx.text || "").trim() && fx.ta == null && isFinite(+x.ta) && +x.ta > 0) {
@@ -6633,6 +7243,7 @@
               fc = true;
             }
             else if (String(fx.text || "").trim() && fx.ta == null && fx.te == null && isFinite(+x.te) && +x.te > 0) { fx.te = +x.te; fc = true; }   /* 처음 쓴 시각은 모르지만 고친 시각만 있는 경우 */
+            if (isThread(fx) && !fx.topic && cleanTopic(x.topic)) { fx.topic = cleanTopic(x.topic); fc = true; }
             if (fc) filled++;
           }
           if (x && have[x.id] && x.oldNote != null) {
@@ -6665,6 +7276,7 @@
               if (isFinite(+x.pta) && +x.pta > 0) rec.pta = +x.pta;
               if (isFinite(+x.pte) && +x.pte > 0) rec.pte = +x.pte;
             }
+            if (rec.type === "think") { rec.tk = x.tk === "thread" ? "thread" : "diary"; rec.rating = 0; rec.pre = ""; rec.take = ""; if (isFinite(+x.cr) && +x.cr > 0) rec.cr = +x.cr; if (x.topic) rec.topic = x.topic; tkNormalize(rec); }
             data.push(rec); have[newId] = rec;
             added++;
           }
@@ -6699,6 +7311,9 @@
   $("moreBtn").onclick = function () { setMore($("moreBox").hidden); };
   $("date").addEventListener("change", updateMoreSum);
   $("kinds").onclick = function (e) { if (e.target.dataset.k) setKind(e.target.dataset.k); };
+  $("tkKinds").onclick = function (e) { if (e.target.dataset.tk) { setTk(e.target.dataset.tk); scheduleDraft(); } };
+  $("tksel").onchange = function () { tkf = this.value; if (tkf === "diary") tpf = "all"; render(); };
+  $("tpsel").onchange = function () { tpf = this.value; render(); };
   $("tabs").onclick = function (e) {
     if (!e.target.dataset.f) return;
     filter = e.target.dataset.f;
@@ -6710,6 +7325,7 @@
   $("rsel").onchange = function () { rfilter = this.value; render(); };
   $("ssel").onchange = function () { sfilter = this.value; render(); };
   $("tgBtn").onclick = function () { showTh = !showTh; render(); };
+  $("amBtn").onclick = function () { showAm = !showAm; render(); };
   $("pdfBtn").onclick = enterSel;
   $("tlFilt").onclick = function (e) {
     if (!e.target.dataset.tf) return;
@@ -6764,9 +7380,11 @@
     if (k === "z") { e.preventDefault(); wGo(e.shiftKey ? 1 : -1); }
     else if (k === "y") { e.preventDefault(); wGo(1); }
   });
+  $("wsub").addEventListener("input", function () { $("sub").value = this.value; scheduleDraft(); });
+  $("sub").addEventListener("input", scheduleDraft);
   $("wdone").onclick = function () {
     if (writerDirect) finishDirectWriter();
-    else { wField().value = $("wtext").value; writerInitPost = $("text").value; writerInitPre = $("pre").value; closeWriter(); }   /* 완료: 고친 내용(관람 전·후 둘 다)을 기록 창에 넘기고 닫음(확인창 없음) */
+    else { wField().value = $("wtext").value; writerInitPost = $("text").value; writerInitPre = $("pre").value; writerInitSub = $("sub").value; closeWriter(); }   /* 완료: 고친 내용(관람 전·후 둘 다)을 기록 창에 넘기고 닫음(확인창 없음) */
   };
   /* 작성 창 맨 위 탭: 키보드가 내려가지 않게 하고, 바꿔도 내용은 그대로 */
   [["wtPre", "pre"], ["wtPost", "post"]].forEach(function (x) {
@@ -6880,7 +7498,7 @@
   function saveViewState() {
     try {
       sessionStorage.setItem(VIEWKEY, JSON.stringify({
-        view: view, filter: filter, rfilter: rfilter, sfilter: sfilter, showTh: showTh, tlOnly: tlOnly, tlLimit: tlLimit,
+        view: view, filter: filter, rfilter: rfilter, sfilter: sfilter, showTh: showTh, showAm: showAm, tlOnly: tlOnly, tlLimit: tlLimit,
         searchOpen: searchOpen, q: $("q").value, openIds: openIds, infoOpen: infoOpen,
         calY: calY, calM: calM, selDate: selDate, stat: stat, gy: gy, y: window.pageYOffset || 0
       }));
@@ -6895,7 +7513,7 @@
     if (typeof v.filter === "string") filter = v.filter;
     if (typeof v.rfilter === "string") rfilter = v.rfilter;
     if (typeof v.sfilter === "string") sfilter = v.sfilter;
-    showTh = !!v.showTh; tlOnly = !!v.tlOnly;
+    showTh = !!v.showTh; showAm = !!v.showAm; tlOnly = !!v.tlOnly;
     if (+v.tlLimit > 0) tlLimit = +v.tlLimit;
     searchOpen = !!v.searchOpen;
     if (typeof v.q === "string") $("q").value = v.q;
