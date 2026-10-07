@@ -7334,6 +7334,8 @@
               if (sTe && fx.te !== +x.te) { fx.te = +x.te; ch = true; } else if (sTa && !sTe && fx.te != null) { delete fx.te; ch = true; }
               if (ch) fc = true;
             }
+            /* 유형(연극/뮤지컬)이 백업과 다르면 백업 값으로 바꿈(syncType 표시가 있는 기록만) */
+            if (x.syncType && (x.type === "play" || x.type === "musical") && (fx.type === "play" || fx.type === "musical") && fx.type !== x.type) { fx.type = x.type; fc = true; }
             /* 덧붙인 생각이 앞서 불러온 것(oldLater)과 같을 때만 새 목록으로 바꿈 — 직접 고친 건 덮어쓰지 않음 */
             if (fx.later && fx.later.length && Array.isArray(x.oldLater) && cleanLater(x.later).length && JSON.stringify(cleanLater(fx.later)) === JSON.stringify(cleanLater(x.oldLater)) && JSON.stringify(cleanLater(x.later)) !== JSON.stringify(cleanLater(fx.later))) { fx.later = cleanLater(x.later); fc = true; }
             if (!(fx.later && fx.later.length) && cleanLater(x.later).length) { fx.later = cleanLater(x.later); fc = true; }
