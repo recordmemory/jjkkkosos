@@ -1435,6 +1435,35 @@
   .fcard label { margin: 0 0 6px 2px; }
   .fcard label.tl, .thead label.tl { margin: 0 0 0 2px; }
   .fld { margin-top: 12px; }
+  /* 설정: 카카오 키 */
+  .setkey { padding: 12px 16px 14px; }
+  .setkeyhd { display: flex; align-items: center; gap: 8px; }
+  .setkeyhd b { font-size: 14.5px; font-weight: 600; letter-spacing: -.02em; }
+  .helpq { flex: none; width: 20px; height: 20px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid var(--sub); border-radius: 50%; background: transparent; color: var(--sub); font: inherit; font-size: 12px; font-weight: 700; line-height: 1; cursor: pointer; }
+  .setkey small { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.45; color: var(--sub); letter-spacing: -.02em; word-break: keep-all; }
+  .setkeyrow { display: flex; gap: 6px; margin-top: 10px; }
+  input[type=text].setkeyinp { flex: 1; min-width: 0; height: 36px; padding: 0 12px; border-radius: 10px; -webkit-text-security: disc; }
+  .setkeybtn { flex: none; height: 36px; padding: 0 14px; border: 1px solid var(--line2); background: var(--paper); color: var(--ink); border-radius: 10px; font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .setkeybtn.pri { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .setkeybtn:disabled { opacity: .6; cursor: default; }
+  /* 책 검색 자동입력 */
+  #bookSearchBox { margin-top: 8px; }
+  .bsrow { display: flex; align-items: center; gap: 8px; }
+  .bsbtn { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 30px; padding: 0 14px; border: 1.5px solid var(--c, var(--ink)); background: var(--paper); color: var(--ink); border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .bsbtn:disabled { opacity: .6; cursor: default; }
+  .bshint { min-width: 0; font-size: 12px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bsres { margin-top: 8px; max-height: 320px; overflow-y: auto; border: 1px solid var(--line2); border-radius: 12px; background: var(--paper); }
+  .bsitem { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border: 0; border-top: 1px solid var(--line); background: transparent; color: var(--ink); text-align: left; cursor: pointer; font: inherit; }
+  .bsitem:first-child { border-top: 0; }
+  .bsitem:active { background: var(--bg); }
+  .bsitem img, .bsitem .bsnoimg { flex: none; width: 34px; height: 48px; border-radius: 3px; background: var(--clockface); object-fit: cover; }
+  .bstx { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .bstx .bt { font-size: 14px; font-weight: 600; line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .bstx .bm { font-size: 12.5px; color: var(--sub); line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bsmsg { padding: 14px 12px; font-size: 13px; color: var(--sub); line-height: 1.5; }
+  .bsfoot { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--mute); }
+  .bsfoot span { flex: 1; min-width: 0; }
+  .bsclose { flex: none; border: 0; background: transparent; color: var(--sub); font: inherit; font-size: 12.5px; cursor: pointer; padding: 4px 2px; }
   .row2 { margin-top: 12px; gap: 8px; }
   .row2 > .fld { margin-top: 0; }
   #creatorBox { margin-top: 12px; }
@@ -2145,6 +2174,13 @@
           <button type="button" data-tk="thread">생각타래</button>
         </div>
         <input type="text" id="title" class="bigtitle" placeholder="제목" aria-label="제목">
+        <div id="bookSearchBox" hidden>
+          <div class="bsrow">
+            <button type="button" class="bsbtn" id="bsBtn">책 검색</button>
+            <span class="bshint">저자·출판사 자동입력</span>
+          </div>
+          <div class="bsres" id="bsRes" hidden></div>
+        </div>
 
         <div id="topicBox" class="fld" hidden>
           <label for="topic">분류</label>
@@ -2196,6 +2232,11 @@
             </button>
             <div class="gnpop" id="genrePop" role="listbox" hidden></div>
           </div>
+        </div>
+
+        <div id="publisherBox" class="fld">
+          <label for="publisher">출판사</label>
+          <input type="text" id="publisher" maxlength="50" autocomplete="off">
         </div>
 
         <div class="row2" id="row2" hidden>
@@ -2596,7 +2637,7 @@
       /* 예전 버전 데이터 변환은 한 번만(스키마 버전 2 미만일 때) */
       if (ver < 2 && r.type === "show") r.type = "play";
       if (!KIND[r.type]) { dropped++; return; }
-      ["title", "creator", "genre", "cast", "seat", "note", "time", "take", "quote", "text", "pre", "preD"].forEach(function (k) {
+      ["title", "creator", "genre", "publisher", "cast", "seat", "note", "time", "take", "quote", "text", "pre", "preD"].forEach(function (k) {
         if (typeof r[k] !== "string") r[k] = r[k] == null ? "" : String(r[k]);
       });
       if (r.type !== "book" || (r.status !== "reading" && r.status !== "paused")) r.status = "done";
@@ -2878,16 +2919,16 @@
   }
   function resetFilters() { rfilter = "all"; sfilter = "all"; pfilter = "all"; pfrom = ""; pto = ""; }
   var QSCOPE = [["all", "전체"], ["title", "제목"], ["review", "후기"], ["creator", "저자·장소"], ["cast", "캐스팅"], ["note", "비고·태그"]];
-  var QHINT = { all: "제목, 저자, 후기 내용 검색", title: "제목에서 검색", review: "후기 내용에서 검색", creator: "저자·감독·극장에서 검색", cast: "캐스팅·좌석에서 검색", note: "비고·태그에서 검색" };
+  var QHINT = { all: "제목, 저자, 후기 내용 검색", title: "제목에서 검색", review: "후기 내용에서 검색", creator: "저자·감독·극장·출판사에서 검색", cast: "캐스팅·좌석에서 검색", note: "비고·태그에서 검색" };
   function qText(r) {
     var later = (r.later || []).concat(r.rlog || []).map(function (x) { return x.t; }).join(" ");
     var tags = (r.tags || []).map(function (t) { return "#" + t; }).join(" ");
     if (qscope === "title") return r.title + " " + (r.topic || "");
     if (qscope === "review") return (r.text || "") + " " + (r.take || "") + " " + (r.pre || "") + " " + (r.quote || "") + " " + later;
-    if (qscope === "creator") return (r.creator || "") + " " + (r.genre || "");
+    if (qscope === "creator") return (r.creator || "") + " " + (r.genre || "") + " " + (r.publisher || "");
     if (qscope === "cast") return (r.cast || "") + " " + (r.seat || "");
     if (qscope === "note") return (r.note || "") + " " + tags;
-    return r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.topic || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.pre || "") + " " + (r.quote || "") + " " + later + " " + tags;
+    return r.title + " " + r.creator + " " + (r.genre || "") + " " + (r.publisher || "") + " " + (r.topic || "") + " " + (r.cast || "") + " " + (r.seat || "") + " " + (r.note || "") + " " + r.text + " " + (r.take || "") + " " + (r.pre || "") + " " + (r.quote || "") + " " + later + " " + tags;
   }
   function anyFilter() { return filter !== "all" || rfilter !== "all" || sfNow() !== "all" || periodOn(); }
   function getItems(useSearch) {
@@ -3089,6 +3130,7 @@
         gl.appendChild(gv);
       } else gl.appendChild(document.createTextNode(r.genre));
     }
+    if (r.publisher) line("출판사", r.publisher);
     if (r.take) info.appendChild(mkTake(r.take));
     if (r.seat) line("좌석", r.seat);
     if (r.cast) line("캐스팅", castNorm(r.cast));
@@ -3480,6 +3522,20 @@
     if (/^https?:\/\//i.test(CONTACT)) { window.open(CONTACT, "_blank", "noopener"); return; }
     location.href = "mailto:" + CONTACT + "?subject=" + encodeURIComponent("[나의 후기] 문의");
   }
+  /* 책 검색용 카카오 REST API 키: 이 기기 브라우저에만 저장하고 백업 파일에는 넣지 않음 */
+  var KKEY = "reviews-kakaokey-v1";
+  function kakaoKey() { try { return localStorage.getItem(KKEY) || ""; } catch (e) { return ""; } }
+  function setKakaoKey(v) { try { if (v) localStorage.setItem(KKEY, v); else localStorage.removeItem(KKEY); } catch (e) {} bsMem = {}; }
+  function showKeyHelp() {
+    askConfirm("책 검색에 쓰는 카카오 키\n\n" +
+      "제목을 적고 「책 검색」을 누르면 카카오 책 검색에서 찾아서 제목·저자·출판사를 자동으로 채워 줘요. 이 키는 그 검색을 쓰기 위한 열쇠예요.\n\n" +
+      "키를 넣지 않으면 책 검색 버튼은 나타나지 않고, 지금까지처럼 직접 적으면 돼요.\n\n" +
+      "발급 방법 (무료)\n" +
+      "1. developers.kakao.com에 카카오 계정으로 로그인해요.\n" +
+      "2. 「내 애플리케이션」 → 「애플리케이션 추가하기」로 앱을 만들어요. 이름은 아무거나 괜찮아요.\n" +
+      "3. 만든 앱의 「앱 키」에서 REST API 키를 복사해 이 칸에 붙여넣고 「저장」을 눌러요.\n\n" +
+      "키는 이 기기의 브라우저에만 저장되고, 백업 파일에는 들어가지 않아요. 다른 사람에게 알려 주지 마세요.", { single: true, ok: "확인" });
+  }
   function vibOn() { try { return localStorage.getItem("reviews-vibrate-v1") !== "off"; } catch (e) { return true; } }
   function setVib(v) { try { localStorage.setItem("reviews-vibrate-v1", v ? "on" : "off"); } catch (e) {} }
   /* 설정 탭을 누르면 마지막에 보던 안쪽 탭(설정/타임라인)으로. 본 적이 없으면 타임라인부터 */
@@ -3610,6 +3666,40 @@
     var thSp = el("span", "sethandle"); thSp.style.visibility = "hidden"; thSp.style.pointerEvents = "none"; thSp.setAttribute("aria-hidden", "true");   /* 다른 줄과 글자 시작 위치를 맞추는 빈 칸(순서는 늘 맨 끝) */
     thRow.insertBefore(thSp, thRow.firstChild);
     catCard.appendChild(thRow);
+    (function () {
+      var has = !!kakaoKey();
+      var kr = el("div", "setkey");
+      var hd = el("div", "setkeyhd"); hd.appendChild(el("b", "", "카카오 키 (책 검색용)"));
+      var q = el("button", "helpq", "?"); q.type = "button"; q.setAttribute("aria-label", "카카오 키가 뭐예요? 사용법 보기"); q.onclick = showKeyHelp;
+      hd.appendChild(q); kr.appendChild(hd);
+      kr.appendChild(el("small", "", has ? "켜짐 · 기록 창의 제목 아래에 「책 검색」이 보여요" : "꺼짐 · 키를 넣으면 책 검색 버튼이 생겨요"));
+      var row = el("div", "setkeyrow");
+      var inp = el("input", "setkeyinp"); inp.type = "text"; inp.value = kakaoKey(); inp.placeholder = "REST API 키 붙여넣기";
+      inp.autocomplete = "off"; inp.spellcheck = false; inp.setAttribute("autocapitalize", "off"); inp.setAttribute("aria-label", "카카오 REST API 키");
+      var sv = el("button", "setkeybtn pri", "저장"); sv.type = "button";
+      function save() {
+        var v = inp.value.trim().replace(/^KakaoAK\s+/i, "");
+        if (!v) { showToast("키를 붙여넣어 주세요"); return; }
+        if (!/^[A-Za-z0-9]{16,}$/.test(v)) { showToast("키 모양이 이상해요. REST API 키가 맞는지 확인해 주세요", 2600); return; }
+        sv.disabled = true; sv.textContent = "확인 중…";
+        kakaoTest(v).then(function (st) {
+          if (st === "auth") { sv.disabled = false; sv.textContent = "저장"; showToast("키가 올바르지 않아요. REST API 키인지 확인해 주세요", 2800); return; }
+          setKakaoKey(v); buzz(12);
+          showToast(st === "ok" ? "키를 저장했어요. 이제 책 검색을 쓸 수 있어요" : "키를 저장했어요. 연결은 확인하지 못했어요", 2800);
+          renderSettings();
+        });
+      }
+      sv.onclick = save;
+      inp.onkeydown = function (e) { if (e.key === "Enter" && !e.isComposing) { e.preventDefault(); save(); } };
+      row.appendChild(inp); row.appendChild(sv);
+      if (has) {
+        var cl = el("button", "setkeybtn", "지우기"); cl.type = "button";
+        cl.onclick = function () { setKakaoKey(""); showToast("키를 지웠어요. 책 검색 버튼이 사라져요", 2400); renderSettings(); };
+        row.appendChild(cl);
+      }
+      kr.appendChild(row);
+      sec("책 검색", [kr], !kindOn("book"));
+    })();
     sec("독서 목표", [
       toggle("목록·달력에 목표 바 표시", "끄면 목록·달력의 독서 목표가 완전히 사라져요", goalPinned(), setGoalPinned),
       seg("목록 목표 기준", "목록 맨 위 독서 목표의 기간", [["year", "연간"], ["month", "월간"]], getGoalMode() || "year", setGoalMode)
@@ -4638,7 +4728,7 @@
       var blk = el("section", "pr-blk");
       blk.appendChild(el("h2", "pr-title", "[" + KIND[r.type].name + "] " + (r.title || "(제목 없음)")));
       var when = r.status === "reading" ? "읽는 중" : r.status === "paused" ? "중단" : (dots(r.date) + (r.time ? (r.date ? " " : "") + r.time : ""));
-      var meta = [when, starText(r.rating), r.creator, r.genre].filter(function (x) { return x && String(x).trim(); });
+      var meta = [when, starText(r.rating), r.creator, r.genre, r.publisher].filter(function (x) { return x && String(x).trim(); });
       if (meta.length) blk.appendChild(el("div", "pr-meta", meta.join(" \u00B7 ")));
       if (r.tags && r.tags.length) blk.appendChild(el("div", "pr-tags", r.tags.map(function (t) { return "#" + t; }).join(" ")));
       [["한줄평", r.take], ["관람 전", r.pre], ["캐스팅", castNorm(r.cast)], ["좌석", r.seat], ["비고", r.note]].forEach(function (f) {
@@ -5402,7 +5492,7 @@
     ] },
     { t: "기록하기", items: [
       {"h": "종류부터 골라요", "lines": ["책, 영화, 연극, 뮤지컬 중 무엇인지 먼저 골라요.", "종류에 따라 입력칸이 조금씩 달라져요.", "책은 저자, 장르, 읽기 상태, 완독한 날을 적어요.", "영화는 감독과 본 날을 적어요.", "연극·뮤지컬은 극장, 관람 일시, 좌석, 캐스팅을 적어요."]},
-      {"h": "작품 정보와 날짜", "lines": ["제목과 저자(감독·극장)를 적어요. 나중에 \"그때 본 그 작품이 뭐였지?\" 싶을 때 찾는 기본 단서가 돼요.", "책의 장르는 목록에서 고르거나 직접 입력해요.", "적어둔 장르는 카드를 펼친 세부정보의 「장르」 글자(점선 밑줄)를 눌러 바로 고칠 수 있어요. 목록에서 고르거나 「직접 입력」을 하고 「확인」을 누르면 바뀌고, 「취소」면 그대로예요. 장르를 안 적은 책은 「수정」에서 넣어요.", "책은 읽기 상태를 「읽는 중」 「중단」 「완독」 중에서 골라요. 날짜는 완독일 때만 입력해요.", "연극·뮤지컬은 관람 일시를 5분 단위로 맞출 수 있어요."]},
+      {"h": "작품 정보와 날짜", "lines": ["제목과 저자(감독·극장)를 적어요. 나중에 \"그때 본 그 작품이 뭐였지?\" 싶을 때 찾는 기본 단서가 돼요.", "책 검색을 쓰려면 설정 > 책 검색에 카카오 REST API 키를 넣어요(칸 옆 「?」에 발급 방법이 있어요). 키를 넣으면 책 기록 제목 아래에 「책 검색」이 생기고, 눌러서(또는 키보드 엔터) 책을 고르면 제목·저자·출판사가 한 번에 채워져요. 키가 없으면 버튼은 안 보여요.", "책의 출판사는 「더 적기」 안에 적어요.", "책의 장르는 목록에서 고르거나 직접 입력해요.", "적어둔 장르는 카드를 펼친 세부정보의 「장르」 글자(점선 밑줄)를 눌러 바로 고칠 수 있어요. 목록에서 고르거나 「직접 입력」을 하고 「확인」을 누르면 바뀌고, 「취소」면 그대로예요. 장르를 안 적은 책은 「수정」에서 넣어요.", "책은 읽기 상태를 「읽는 중」 「중단」 「완독」 중에서 골라요. 날짜는 완독일 때만 입력해요.", "연극·뮤지컬은 관람 일시를 5분 단위로 맞출 수 있어요."]},
       {"h": "책 읽기 상태", "lines": ["읽는 중과 중단은 날짜 없이 제목만으로 바로 등록할 수 있어요. 병렬독서처럼 여러 권을 동시에 읽어도 부담 없어요.", "카드를 펼치면 아래쪽 버튼으로 상태를 바로 바꿀 수 있어요. 읽는 중은 「완독」 「중단」, 중단은 「다시 읽기」 「완독」이에요.", "완독으로 바꾸면 완독일이 오늘로 들어가요. 다른 날이면 「수정」에서 고쳐요.", "상태를 바꾸면 실수해도 잠깐 되돌릴 수 있고, 타임라인에는 「완독」 「독서 중단」 「다시 읽기」로 남아요."]},
       {"h": "연극·뮤지컬 전용 칸", "lines": ["좌석을 적어두면 다음 관람 때 시야와 거리를 비교하기 좋아요.", "캐스팅은 콤마, 띄어쓰기, 줄바꿈으로 구분해요.", "같은 작품도 회차마다 다른 배우가 나오니, 그날의 기억을 남겨두면 좋아요.", "연극과 뮤지컬은 입력칸이 같아서 종류만 바로 바꿀 수 있어요. 카드를 펼치고 맨 윗줄의 「연극」/「뮤지컬」 글자(점선 밑줄)를 꾹(약 0.5초) 눌렀다 떼면 서로 바뀌고, 잠깐 「실행취소」가 떠요. 짧게 톡 누르는 것만으로는 바뀌지 않고, 접힌 카드에서도 바뀌지 않아요."]},
       {"h": "별점·한줄평", "lines": ["별점은 0.5점 단위로 남겨요.", "한줄평은 120자까지 쓸 수 있어요.", "한줄평은 목록에 바로 보여서, 나중에 훑을 때 첫인상이 한눈에 떠올라요.", "길게 쓸 기운이 없는 날엔 이 두 가지만 남겨도 충분해요."]},
@@ -5441,6 +5531,8 @@
     ] },
     /* 업데이트 내역: 코드를 수정할 때마다 맨 위(최신순)에 한 줄씩 추가 */
     { t: "업데이트 내역", log: true, items: [
+      {"d": "2026-10-13 20:50", "h": "책 검색 자동입력", "p": "설정 > 책 검색에 카카오 REST API 키를 넣으면 책 기록 제목 아래에 「책 검색」이 생겨요. 눌러서 책을 고르면 제목·저자·출판사가 한 번에 채워져요. 키 옆 「?」에서 발급 방법을 볼 수 있고, 키가 없으면 버튼은 나타나지 않아요."},
+      {"d": "2026-10-13 20:20", "h": "책 출판사 칸", "p": "책 기록의 「더 적기」 안에 출판사 칸이 생겼어요. 카드 세부정보, 검색, 백업에도 함께 들어가요."},
       {"d": "2026-10-12 22:10", "h": "카테고리 순서 바꾸기", "p": "설정 > 카테고리에서 각 줄 왼쪽의 손잡이(점 여섯 개)를 눌러 위아래로 끌면 순서를 바꿀 수 있어요. 바꾼 순서는 위쪽 탭, 기록 작성창의 종류 버튼, 통계의 표와 막대에 그대로 적용돼요. 「생각」은 늘 맨 끝에 있고, 「전체」는 맨 앞이에요."},
       {"d": "2026-10-12 21:05", "h": "생각 탭 바로 올리기 창", "p": "생각 탭 맨 위에 타임라인과 똑같은 입력창이 생겼어요. 「지금 무슨 생각해?」에 적고 「올리기」를 누르면 아무말로 바로 쌓여요. 올리면 「아무말 포함」이 켜져서 방금 올린 글이 목록에 바로 보이고, 쓰다 만 글은 화면이 다시 그려져도 남아 있어요."},
       {"d": "2026-10-12 19:55", "h": "카테고리·되돌아보기 사용 설정", "p": "설정에 「카테고리」가 생겼어요. 책·영화·연극·뮤지컬을 각각 켜고 끌 수 있고, 꺼진 종류는 목록 탭과 작성창에서 숨겨져요. 남은 탭 개수에 맞게 알약 크기가 자동으로 맞춰지고, 이미 쓴 기록은 지워지지 않아요. 하나는 꼭 켜 둬야 해요. 또 「되돌아보기 펼쳐 보기」가 「되돌아보기 사용」으로 바뀌어, 끄면 목록 맨 위에 되돌아보기가 나오지 않아요."},
@@ -5967,6 +6059,116 @@
     }
     box.appendChild(el("span", "rval", fmtRate(form.rating)));
   }
+  /* ---------- 책 검색 자동입력: 설정에 넣은 내 카카오 REST API 키로 카카오 책 검색을 호출(키가 없으면 버튼이 안 보임) ---------- */
+  var bsMem = {}, bsSeq = 0;   /* 앱을 켜 둔 동안 같은 검색은 다시 호출하지 않음 */
+  function closeBs() {
+    bsSeq++;
+    $("bsRes").hidden = true; $("bsRes").textContent = "";
+    $("bsBtn").disabled = false; $("bsBtn").textContent = "책 검색";
+  }
+  function bsGet(url, key) {
+    var ac = window.AbortController ? new AbortController() : null;
+    var t = setTimeout(function () { if (ac) ac.abort(); }, 8000);
+    var opt = { headers: { Authorization: "KakaoAK " + key } };
+    if (ac) opt.signal = ac.signal;
+    return fetch(url, opt).then(function (r) {
+      clearTimeout(t);
+      if (!r.ok) { var e = new Error(String(r.status)); e.status = r.status; throw e; }
+      return r.json();
+    }, function (e) { clearTimeout(t); throw e; });
+  }
+  function bsKakao(q, key, byTitle) {
+    var u = "https://dapi.kakao.com/v3/search/book?size=10&query=" + encodeURIComponent(q) + (byTitle ? "&target=title" : "");
+    return bsGet(u, key).then(function (j) {
+      return (j.documents || []).map(function (d) {
+        return {
+          title: String(d.title || "").trim(), authors: (d.authors || []).join(", "), publisher: String(d.publisher || "").trim(),
+          year: String(d.datetime || "").slice(0, 4), cover: String(d.thumbnail || "").replace(/^http:/, "https:")
+        };
+      });
+    });
+  }
+  /* 설정에서 키를 저장할 때 한 번 시험 호출: ok / auth(키 문제) / net(연결을 확인하지 못함) */
+  function kakaoTest(key) {
+    return bsGet("https://dapi.kakao.com/v3/search/book?size=1&query=" + encodeURIComponent("책"), key).then(function () { return "ok"; }, function (e) {
+      return (e && (e.status === 401 || e.status === 403)) ? "auth" : "net";
+    });
+  }
+  function bsFind(q, key) {
+    var ck = q.toLowerCase();
+    if (bsMem[ck]) return Promise.resolve({ list: bsMem[ck], err: "" });
+    var err = "";
+    function tryIt(byTitle) {
+      return bsKakao(q, key, byTitle).catch(function (e) {
+        err = (e && (e.status === 401 || e.status === 403)) ? "auth" : (e && e.status === 429) ? "quota" : "net";
+        return [];
+      });
+    }
+    return tryIt(true)
+      .then(function (a) { return (a.length || err) ? a : tryIt(false); })   /* 제목으로 못 찾으면 제목·저자·출판사·ISBN 전체에서 */
+      .then(function (a) {
+        var seen = {}, out = [];
+        a.forEach(function (b) {
+          var k = b.title + "|" + b.publisher + "|" + b.authors;
+          if (!b.title || seen[k]) return;
+          seen[k] = 1; out.push(b);
+        });
+        if (out.length) bsMem[ck] = out;
+        return { list: out, err: out.length ? "" : err };
+      });
+  }
+  function bsPick(b) {
+    $("title").value = b.title;
+    $("creator").value = b.authors;
+    $("publisher").value = b.publisher;
+    closeBs();
+    var n = []; if (b.authors) n.push("저자"); if (b.publisher) n.push("출판사");
+    showToast(n.length ? ["제목"].concat(n).join("·") + "를 채웠어요" : "제목을 채웠어요");
+  }
+  function bsShow(res) {
+    var box = $("bsRes"); box.textContent = ""; box.hidden = false;
+    var msg = res.err === "auth" ? "카카오 키가 올바르지 않거나 사용 권한이 없어요. 설정 > 책 검색에서 REST API 키를 확인해 주세요."
+      : res.err === "quota" ? "오늘 검색 한도를 모두 썼어요. 내일 다시 해보세요."
+      : res.err ? "검색에 실패했어요. 인터넷 연결을 확인하고 잠시 뒤 다시 해보세요."
+      : !res.list.length ? "찾지 못했어요. 제목을 줄이거나 다르게 적어 보세요." : "";
+    if (msg) { box.appendChild(el("div", "bsmsg", msg)); return; }
+    res.list.forEach(function (b) {
+      var it = el("button", "bsitem"); it.type = "button";
+      if (b.cover) {
+        var im = el("img", ""); im.src = b.cover; im.alt = ""; im.loading = "lazy";
+        im.onerror = function () { im.style.visibility = "hidden"; };
+        it.appendChild(im);
+      } else it.appendChild(el("span", "bsnoimg"));
+      var tx = el("span", "bstx");
+      tx.appendChild(el("span", "bt", b.title));
+      tx.appendChild(el("span", "bm", [b.authors, b.publisher, b.year].filter(Boolean).join(" · ") || "정보 없음"));
+      it.appendChild(tx);
+      it.onclick = function () { bsPick(b); };
+      box.appendChild(it);
+    });
+    var ft = el("div", "bsfoot"); ft.appendChild(el("span", "", "카카오 책 검색 결과예요."));
+    var cl = el("button", "bsclose", "닫기"); cl.type = "button"; cl.onclick = closeBs;
+    ft.appendChild(cl); box.appendChild(ft);
+  }
+  function bsRun() {
+    var key = kakaoKey();
+    if (!key) return;
+    var q = $("title").value.trim();
+    if (!q) { askNotice("검색할 책 제목을 먼저 입력해 주세요."); $("title").focus(); return; }
+    var my = ++bsSeq, btn = $("bsBtn");
+    $("bsRes").hidden = true;
+    btn.disabled = true; btn.textContent = "검색 중…";
+    bsFind(q, key).then(function (res) {
+      if (my !== bsSeq) return;
+      btn.disabled = false; btn.textContent = "책 검색";
+      bsShow(res);
+    });
+  }
+  $("bsBtn").onclick = bsRun;
+  $("title").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.isComposing && form.type === "book" && kakaoKey()) { e.preventDefault(); bsRun(); }
+  });
+
   function setKind(k) {
     if (k === "book" && form.type !== "book" && !editingId && $("sheet").classList.contains("show")) form.status = "reading";   /* 새 기록에서 책으로 바꾸면 「읽는 중」부터 */
     form.type = k;
@@ -5990,6 +6192,9 @@
     else if (k === "book") $("statusBox").before($("creatorBox"));   /* 책: 저자는 위에 그대로 보임 */
     else $("moreBox").prepend($("creatorBox"));                      /* 영화: 감독은 「더 적기」 안 */
     $("genreBox").hidden = (k !== "book");
+    $("publisherBox").hidden = (k !== "book");
+    $("bookSearchBox").hidden = (k !== "book" || !kakaoKey());
+    closeBs();
     closeGenrePop();
     $("statusBox").hidden = (k !== "book");
     if (k !== "book") form.status = "done";
@@ -6142,7 +6347,7 @@
   function updateMoreSum() {
     var sm = $("moreSum");
     if (!sm) return;
-    sm.textContent = form.type === "think" ? "태그" : form.type === "book" ? "장르 · 비고 · 태그" : form.type === "movie" ? "감독 · 비고 · 태그" : "극장 · 좌석 · 캐스팅 · 비고 · 태그";
+    sm.textContent = form.type === "think" ? "태그" : form.type === "book" ? "장르 · 출판사 · 비고 · 태그" : form.type === "movie" ? "감독 · 비고 · 태그" : "극장 · 좌석 · 캐스팅 · 비고 · 태그";
   }
   function setMore(on) {
     $("moreBox").hidden = !on;
@@ -6154,7 +6359,7 @@
   function hasExtra() {
     var v = function (id) { return !!$(id).value.trim(); };
     if (form.type === "think") return v("tags");
-    if (form.type === "book") return v("genre") || v("note") || v("tags");
+    if (form.type === "book") return v("genre") || v("publisher") || v("note") || v("tags");
     if (form.type === "movie") return v("creator") || v("note") || v("tags");
     return v("creator") || v("seat") || v("cast") || v("note") || v("tags") ;
   }
@@ -6200,6 +6405,7 @@
     $("creator").value = r ? r.creator : "";
     $("genre").value = r ? (r.genre || "") : "";
     $("genre").readOnly = true; closeGenrePop();
+    $("publisher").value = r ? (r.publisher || "") : "";
     $("topic").value = r ? (r.topic || "") : ""; $("topic").readOnly = true; closeTopicPop();
     $("cast").value = r ? (r.cast || "") : "";
     $("seat").value = r ? (r.seat || "") : "";
@@ -6503,7 +6709,7 @@
   var layers = [];          /* 지금 열려 있는 창들: "form" > "writer" / "clock" */
   var skipPop = 0, skipConfirm = false, exitArmedAt = 0, formSnap = "";
   function snapForm() {
-    return JSON.stringify([form.type, form.tk, form.eidx, form.status, form.rating, form.time, $("title").value, $("creator").value, $("genre").value, $("date").value,
+    return JSON.stringify([form.type, form.tk, form.eidx, form.status, form.rating, form.time, $("title").value, $("creator").value, $("genre").value, $("publisher").value, $("date").value,
       $("seat").value, $("cast").value, $("note").value, $("tags").value, $("take").value, $("text").value, $("pre").value, $("sub").value, $("topic").value, $("rl0").value]);
   }
   function formDirty() { return !!formSnap && snapForm() !== formSnap; }
@@ -6893,6 +7099,7 @@
       type: form.type, title: title,
       creator: $("creator").value.trim(),
       genre: form.type === "book" ? $("genre").value.trim() : "",
+      publisher: form.type === "book" ? $("publisher").value.trim() : "",
       cast: KIND[form.type].cast ? castNorm($("cast").value) : "",
       seat: KIND[form.type].cast ? $("seat").value.trim() : "",
       note: thk ? "" : $("note").value.trim(),
@@ -7196,7 +7403,7 @@
     return { at: Date.now(), key: draftKey, mode: draftMode, had: draftHad, tab: wOpen ? wTab : vTab, editingId: editingId,
       w: wOpen ? { direct: !!writerDirect, tab: wTab, iPost: writerInitPost, iPre: writerInitPre } : null, f: {
       type: form.type, tk: form.tk, eidx: form.eidx, status: form.status, rating: form.rating, time: form.time,
-      title: $("title").value, creator: $("creator").value, genre: $("genre").value, date: $("date").value,
+      title: $("title").value, creator: $("creator").value, genre: $("genre").value, publisher: $("publisher").value, date: $("date").value,
       seat: $("seat").value, cast: $("cast").value, note: $("note").value, tags: $("tags").value,
       take: $("take").value, text: $("text").value, pre: $("pre").value, sub: $("sub").value, topic: $("topic").value, rl0: $("rl0").value } };
   }
@@ -7336,7 +7543,7 @@
     form.tk = f.tk === "thread" ? "thread" : "diary";
     setKind(KIND[f.type] ? f.type : form.type);
     setStatus(f.status === "reading" || f.status === "paused" ? f.status : "done");
-    $("title").value = f.title || ""; $("creator").value = f.creator || ""; $("genre").value = f.genre || "";
+    $("title").value = f.title || ""; $("creator").value = f.creator || ""; $("genre").value = f.genre || ""; $("publisher").value = f.publisher || "";
     $("seat").value = f.seat || ""; $("cast").value = f.cast || ""; $("note").value = f.note || "";
     $("tags").value = f.tags || ""; $("take").value = f.take || ""; $("text").value = f.text || ""; $("pre").value = f.pre || ""; $("sub").value = f.sub || ""; $("topic").value = f.topic || ""; $("rl0").value = f.rl0 || "";
     form.rating = +f.rating || 0; buildRate();
@@ -8280,7 +8487,7 @@
             while (have[newId] && !x.id) newId++;
             var rec = {
               id: newId, type: x.type, title: String(x.title),
-              creator: String(x.creator || ""), genre: x.type === "book" ? String(x.genre || "").slice(0, 30) : "", cast: String(x.cast || ""), seat: String(x.seat || ""), note: String(x.note || ""),
+              creator: String(x.creator || ""), genre: x.type === "book" ? String(x.genre || "").slice(0, 30) : "", publisher: x.type === "book" ? String(x.publisher || "").slice(0, 50) : "", cast: String(x.cast || ""), seat: String(x.seat || ""), note: String(x.note || ""),
               time: /^\d{2}:\d{2}$/.test(x.time) ? x.time : "",
               status: (x.type === "book" && (x.status === "reading" || x.status === "paused")) ? x.status : "done",
               date: (x.type === "book" && (x.status === "reading" || x.status === "paused")) ? "" : normDate(x.date),
