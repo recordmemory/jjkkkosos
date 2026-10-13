@@ -1030,7 +1030,6 @@
   .rows .tent.chain { padding-left: 20px; border-top: 0; padding-top: 8px; }
   .rows .tent.chain::before { content: ""; position: absolute; left: 9px; top: 0; bottom: 0; width: 3px; background: var(--think); }
   /* 일기 본문과 아무말 사이 점선: 다른 카드의 덧붙임 구분선과 같은 굵기·색·간격(위 12 / 아래 10) */
-  .rows .tent.chain.chainfirst::after { content: ""; position: absolute; left: 20px; right: 14px; top: -2px; border-top: 1px dashed var(--line2); }
   .rows .tent.chain.chainlast::before { bottom: 11px; border-radius: 0 0 2px 2px; }
   .tent .th { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--mute); min-height: 20px; }
   .tent .th .tm { flex: 1; min-width: 0; }
@@ -1744,6 +1743,7 @@
   .chead { margin-top: -12px; }
   .card h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.38; }
   .l2 { margin-top: 3px; font-size: 12.5px; }
+  .dico { width: 1.1em; height: 1.1em; margin-right: .42em; vertical-align: -0.16em; fill: none; stroke: var(--think); stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
   .stars { font-size: 11.5px; }
   .l2 .lcnt, .lcnt { padding: 1px 8px; border-radius: 999px; background: #f0f1f7; color: var(--sub); font-size: 11px; font-weight: 600; line-height: 16px; }
   .card .tk { margin-top: 6px; color: var(--sub); }
@@ -1806,147 +1806,148 @@
   html[data-theme="dark"] .dlg .dbtn button.ok.danger { color: #fff; }
   /* 가이드 「중요」 안내: 노란 글자는 어두운 바탕 위에서 보이게 */
   html[data-theme="dark"] .wbadge, html[data-theme="dark"] .hq.warn .hwrow .hwnum { background: #0b0c12; color: #ffd45a; }
+  /* 밝아진 종류 색 위에서 선택된 칩의 글자는 어두운 색으로 */
+  html[data-theme="dark"] :is([data-k="movie"], [data-f="movie"], [data-type="movie"], [data-t="movie"], [data-k="play"], [data-f="play"], [data-type="play"], [data-t="play"], [data-k="musical"], [data-f="musical"], [data-type="musical"], [data-t="musical"], [data-k="think"], [data-f="think"], [data-type="think"], [data-t="think"]) { --cf: #14151d; }
+  html[data-theme="dark"] { --mute: #8a8fa8; }
+  /* 처음 안내(웰컴) 제목: 어두운 보라 바탕에서 또렷하게 */
+  html[data-theme="dark"] #welcome .whd b { color: #cdbcff; }
 
   /* 아래는 기존 밝은 색 지정을 어두운 색으로 자동 변환한 것 */
-html[data-theme="dark"] .views { background: #2e313d; }
-html[data-theme="dark"] .tabs button.on { color: var(--cf, var(--paper)); }
-html[data-theme="dark"] .tabs button.on::before,
-html[data-theme="dark"] .kinds button.on::before { background: var(--cf, var(--paper)) !important; }
-html[data-theme="dark"] .rtabs .sbtn { background: #3c404d; border-color: #434756; color: #8c91a6; }
-html[data-theme="dark"] .card:active { background: #1b1e27; }
-html[data-theme="dark"] .badge { color: #ffc70f; }
-html[data-theme="dark"] .badge.dday { color: var(--ct, #ffc70f); }
-html[data-theme="dark"] .entfold { background: #20232f; }
-html[data-theme="dark"] .entfold:active { background: #2c2f3f; }
-html[data-theme="dark"] .badge.paused { color: #7c8198; }
-html[data-theme="dark"] .badge.stale { color: #cd746e; }
-html[data-theme="dark"] .badge.read { color: #ffc70f; }
-html[data-theme="dark"] .qs button.main { color: #f1ad00; }
-html[data-theme="dark"] #dock { background: rgba(33,35,44,0.96); }
-html[data-theme="dark"] #dock .dadd { color: var(--paper); }
-html[data-theme="dark"] .dlg .dic { background: #242836; }
-html[data-theme="dark"] .dlg .dsheet[data-t] .dic { background: color-mix(in srgb, var(--c) 15%, var(--paper)); }
-html[data-theme="dark"] .dlg .dcat { background: color-mix(in srgb, var(--c) 15%, var(--paper)); }
-html[data-theme="dark"] .dlg .dbtn button { background: #242836; }
-html[data-theme="dark"] .dlg .dbtn button.ok { color: var(--paper); }
-html[data-theme="dark"] .day.sel { color: var(--paper); }
-html[data-theme="dark"] .day.sel .dots i { box-shadow: 0 0 0 1.5px var(--paper); }
-html[data-theme="dark"] .sub button.on { color: var(--paper); }
-html[data-theme="dark"] .gdonut .gin.dk { fill: #eac100; }
-html[data-theme="dark"] .kinds button.on { color: var(--cf, var(--paper)); }
-html[data-theme="dark"] .cq.main { background: #282c36; }
-html[data-theme="dark"] .barbtn.save { color: var(--paper); }
-html[data-theme="dark"] .wbar .wundo:not(:disabled):active { background: rgba(255,255,255,0.1); }
-html[data-theme="dark"] .tk { color: #a9aec5; }
-html[data-theme="dark"] .quote { color: #a9aec5; }
-html[data-theme="dark"] .cb .primary { color: var(--paper); }
-html[data-theme="dark"] .compose { background: #1f212a; }
-html[data-theme="dark"] .compose:focus-within { background: var(--paper); }
-html[data-theme="dark"] .recall .rx { color: #a9aec5; }
-html[data-theme="dark"] .hact .ghost:active { background: #222633; }
-html[data-theme="dark"] .tools .views { background: #303441; }
-html[data-theme="dark"] .tools .tabs button.on { color: var(--cf, var(--paper)); }
-html[data-theme="dark"] #rtabs .sbtn.act { color: var(--paper); }
-html[data-theme="dark"] .calcard .calhead button:active { background: #222633; }
-html[data-theme="dark"] .calcard .day.sel > span:first-child { color: var(--paper); }
-html[data-theme="dark"] .calcard .day:not(.blank):not(.sel):active > span:first-child { background: #222633; }
-html[data-theme="dark"] .dayhead button { color: var(--paper); }
-html[data-theme="dark"] .gedit button.primary { color: var(--paper); }
-html[data-theme="dark"] .bkbar { background: #4b3e16; border: 1px solid #9c8745; color: #ffc500; }
-html[data-theme="dark"] #toast.act button { background: rgba(26,28,39,0.14); }
-html[data-theme="dark"] #toast.act button:active { background: rgba(26,28,39,0.24); }
-html[data-theme="dark"] .tagchip { background: #242836; color: #8c91a6; }
-html[data-theme="dark"] .tagchip:active { background: #3c404d; }
-html[data-theme="dark"] .hact #import:active,
-html[data-theme="dark"] .hact #export:active { background: #222633; }
-html[data-theme="dark"] #rtabs button.pdfb.on { color: var(--paper); }
-html[data-theme="dark"] .setrow.dragging { background: #222633; }
-html[data-theme="dark"] button.setrow:active { background: #1a1d28; }
-html[data-theme="dark"] .setsw::after { background: var(--paper); }
-html[data-theme="dark"] .setseg { background: #2e313d; }
-html[data-theme="dark"] .tlcompose .cb button { color: var(--paper); }
-html[data-theme="dark"] .tent.lt .tx { color: #a8adc3; }
-html[data-theme="dark"] .tent.lst .th .tag { color: #7b89de; }
-html[data-theme="dark"] .tent .edit .cb button.primary { color: var(--paper); }
-html[data-theme="dark"] .dayh2 .dwbtn { color: #7b89de; }
-html[data-theme="dark"] #kinds button.on { color: var(--cf, var(--paper)); }
-html[data-theme="dark"] .fcard input[type=text],
-html[data-theme="dark"] .fcard input[type=date],
-html[data-theme="dark"] .fcard textarea,
-html[data-theme="dark"] .fcard .timeBtn { background: #1d1f29; }
-html[data-theme="dark"] .fcard input:focus,
-html[data-theme="dark"] .fcard textarea:focus,
-html[data-theme="dark"] .fcard .timeBtn:focus-visible { background: var(--paper); }
-html[data-theme="dark"] #stKinds { background: #262a36; }
-html[data-theme="dark"] .fcard #text,
-html[data-theme="dark"] .fcard #pre,
-html[data-theme="dark"] .fcard #rl0 { background: #1d1f29; }
-html[data-theme="dark"] .fcard #text:focus,
-html[data-theme="dark"] .fcard #pre:focus,
-html[data-theme="dark"] .fcard #rl0:focus { background: var(--paper); }
-html[data-theme="dark"] .gtabs button.on { color: var(--cf, var(--paper)); }
-html[data-theme="dark"] .gtabs .bd { color: var(--cf, var(--paper)); }
-html[data-theme="dark"] .gtabs button.on .bd { background: var(--cf, var(--paper)); }
-html[data-theme="dark"] .gck { background: var(--paper); }
-html[data-theme="dark"] .gck::after { border-right: 2px solid var(--paper); border-bottom: 2px solid var(--paper); }
-html[data-theme="dark"] .grand:active { background: #222633; }
-html[data-theme="dark"] .gins { color: var(--paper); }
-html[data-theme="dark"] .gnwrap.open #genre { background: var(--paper); }
-html[data-theme="dark"] .gnpop { background: var(--paper); }
-html[data-theme="dark"] .gnopt { background: #1d1f29; }
-html[data-theme="dark"] .gnopt:active { background: #272a3b; }
-html[data-theme="dark"] .gnopt.on { color: #f1ad00; }
-html[data-theme="dark"] .gnopt.wide { background: var(--paper); }
-html[data-theme="dark"] .gnopt.wide.on { color: #f1ad00; }
-html[data-theme="dark"] .gnwrap.open #topic { background: var(--paper); }
-html[data-theme="dark"] .tpsel { background: #1d1f29; }
-html[data-theme="dark"] .tpsel:active { background: #272a3b; }
-html[data-theme="dark"] .tpsel.on { color: #f1ad00; }
-html[data-theme="dark"] .tpbtn.del { color: #db6a5e; }
-html[data-theme="dark"] .tpedit { background: var(--paper); }
-html[data-theme="dark"] .entmv button { background: var(--paper); }
-html[data-theme="dark"] #qbox input[type=search] { background: #2c2f3a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0a4b6' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px center / 14px; }
-html[data-theme="dark"] #qbox input[type=search]:focus,
-html[data-theme="dark"] #qbox input[type=search]:focus-visible { background-color: var(--paper); }
-html[data-theme="dark"] #miniBar button { color: var(--paper); }
-html[data-theme="dark"] #welcome .wbox { background: #2c1b48; }
-html[data-theme="dark"] #welcome .whd b { color: #6d52cb; }
-html[data-theme="dark"] #welcome .wbd b { background: linear-gradient(transparent 58%, #4f367c 58%); }
-html[data-theme="dark"] #welcome .wguide { color: var(--paper); }
-html[data-theme="dark"] .hq.warn { background: #433713; }
-html[data-theme="dark"] .hwrow .hwnum { background: #2c2240; color: #866ec6; }
-html[data-theme="dark"] .hq.hwpurple { background: #231836; }
-html[data-theme="dark"] .hq.hwpurple .gqt { color: #7b63c5; }
-html[data-theme="dark"] .fbico { color: var(--paper); }
-html[data-theme="dark"] #exbar .ghost.exgo { color: var(--paper); }
-html[data-theme="dark"] .card.sel .ck { background: var(--paper); }
-html[data-theme="dark"] .card.sel.picked { background: #1c1e30; }
-html[data-theme="dark"] .card.sel.picked .ck::after { border: solid var(--paper); }
+:where(html[data-theme="dark"]) .views { background: #2e313d; }
+:where(html[data-theme="dark"]) .tabs button.on { color: var(--cf, var(--paper)); }
+:where(html[data-theme="dark"]) .tabs button.on::before,
+:where(html[data-theme="dark"]) .kinds button.on::before { background: var(--cf, var(--paper)) !important; }
+:where(html[data-theme="dark"]) .rtabs .sbtn { background: #3c404d; border-color: #434756; color: #8c91a6; }
+:where(html[data-theme="dark"]) .card:active { background: #1b1e27; }
+:where(html[data-theme="dark"]) .badge { color: #ffc70f; }
+:where(html[data-theme="dark"]) .badge.dday { color: var(--ct, #ffc70f); }
+:where(html[data-theme="dark"]) .entfold { background: #20232f; }
+:where(html[data-theme="dark"]) .entfold:active { background: #2c2f3f; }
+:where(html[data-theme="dark"]) .badge.paused { color: #7c8198; }
+:where(html[data-theme="dark"]) .badge.stale { color: #cd746e; }
+:where(html[data-theme="dark"]) .badge.read { color: #ffc70f; }
+:where(html[data-theme="dark"]) #dock { background: rgba(33,35,44,0.96); }
+:where(html[data-theme="dark"]) #dock .dadd { color: var(--paper); }
+:where(html[data-theme="dark"]) .dlg .dic { background: #242836; }
+:where(html[data-theme="dark"]) .dlg .dsheet[data-t] .dic { background: color-mix(in srgb, var(--c) 15%, var(--paper)); }
+:where(html[data-theme="dark"]) .dlg .dcat { background: color-mix(in srgb, var(--c) 15%, var(--paper)); }
+:where(html[data-theme="dark"]) .dlg .dbtn button { background: #242836; }
+:where(html[data-theme="dark"]) .dlg .dbtn button.ok { color: var(--paper); }
+:where(html[data-theme="dark"]) .day.sel { color: var(--paper); }
+:where(html[data-theme="dark"]) .day.sel .dots i { box-shadow: 0 0 0 1.5px var(--paper); }
+:where(html[data-theme="dark"]) .sub button.on { color: var(--paper); }
+:where(html[data-theme="dark"]) .gdonut .gin.dk { fill: #eac100; }
+:where(html[data-theme="dark"]) .kinds button.on { color: var(--cf, var(--paper)); }
+:where(html[data-theme="dark"]) .cq.main { background: #282c36; }
+:where(html[data-theme="dark"]) .barbtn.save { color: var(--paper); }
+:where(html[data-theme="dark"]) .wbar .wundo:not(:disabled):active { background: rgba(255,255,255,0.1); }
+:where(html[data-theme="dark"]) .tk { color: #a9aec5; }
+:where(html[data-theme="dark"]) .quote { color: #a9aec5; }
+:where(html[data-theme="dark"]) .cb .primary { color: var(--paper); }
+:where(html[data-theme="dark"]) .compose { background: #1f212a; }
+:where(html[data-theme="dark"]) .compose:focus-within { background: var(--paper); }
+:where(html[data-theme="dark"]) .recall .rx { color: #a9aec5; }
+:where(html[data-theme="dark"]) .hact .ghost:active { background: #222633; }
+:where(html[data-theme="dark"]) .tools .views { background: #303441; }
+:where(html[data-theme="dark"]) .tools .tabs button.on { color: var(--cf, var(--paper)); }
+:where(html[data-theme="dark"]) #rtabs .sbtn.act { color: var(--paper); }
+:where(html[data-theme="dark"]) .calcard .calhead button:active { background: #222633; }
+:where(html[data-theme="dark"]) .calcard .day.sel > span:first-child { color: var(--paper); }
+:where(html[data-theme="dark"]) .calcard .day:not(.blank):not(.sel):active > span:first-child { background: #222633; }
+:where(html[data-theme="dark"]) .dayhead button { color: var(--paper); }
+:where(html[data-theme="dark"]) .gedit button.primary { color: var(--paper); }
+:where(html[data-theme="dark"]) .bkbar { background: #4b3e16; border: 1px solid #9c8745; color: #ffc500; }
+:where(html[data-theme="dark"]) #toast.act button { background: rgba(26,28,39,0.14); }
+:where(html[data-theme="dark"]) #toast.act button:active { background: rgba(26,28,39,0.24); }
+:where(html[data-theme="dark"]) .tagchip { background: #242836; color: #8c91a6; }
+:where(html[data-theme="dark"]) .tagchip:active { background: #3c404d; }
+:where(html[data-theme="dark"]) .hact #import:active,
+:where(html[data-theme="dark"]) .hact #export:active { background: #222633; }
+:where(html[data-theme="dark"]) #rtabs button.pdfb.on { color: var(--paper); }
+:where(html[data-theme="dark"]) .setrow.dragging { background: #222633; }
+:where(html[data-theme="dark"]) button.setrow:active { background: #1a1d28; }
+:where(html[data-theme="dark"]) .setsw::after { background: var(--paper); }
+:where(html[data-theme="dark"]) .setseg { background: #2e313d; }
+:where(html[data-theme="dark"]) .tlcompose .cb button { color: var(--paper); }
+:where(html[data-theme="dark"]) .tent.lt .tx { color: #a8adc3; }
+:where(html[data-theme="dark"]) .tent.lst .th .tag { color: #7b89de; }
+:where(html[data-theme="dark"]) .tent .edit .cb button.primary { color: var(--paper); }
+:where(html[data-theme="dark"]) .dayh2 .dwbtn { color: #7b89de; }
+:where(html[data-theme="dark"]) #kinds button.on { color: var(--cf, var(--paper)); }
+:where(html[data-theme="dark"]) .fcard input[type=text],
+:where(html[data-theme="dark"]) .fcard input[type=date],
+:where(html[data-theme="dark"]) .fcard textarea,
+:where(html[data-theme="dark"]) .fcard .timeBtn { background: #1d1f29; }
+:where(html[data-theme="dark"]) .fcard input:focus,
+:where(html[data-theme="dark"]) .fcard textarea:focus,
+:where(html[data-theme="dark"]) .fcard .timeBtn:focus-visible { background: var(--paper); }
+:where(html[data-theme="dark"]) #stKinds { background: #262a36; }
+:where(html[data-theme="dark"]) .fcard #text,
+:where(html[data-theme="dark"]) .fcard #pre,
+:where(html[data-theme="dark"]) .fcard #rl0 { background: #1d1f29; }
+:where(html[data-theme="dark"]) .fcard #text:focus,
+:where(html[data-theme="dark"]) .fcard #pre:focus,
+:where(html[data-theme="dark"]) .fcard #rl0:focus { background: var(--paper); }
+:where(html[data-theme="dark"]) .gtabs button.on { color: var(--cf, var(--paper)); }
+:where(html[data-theme="dark"]) .gtabs .bd { color: var(--cf, var(--paper)); }
+:where(html[data-theme="dark"]) .gtabs button.on .bd { background: var(--cf, var(--paper)); }
+:where(html[data-theme="dark"]) .gck { background: var(--paper); }
+:where(html[data-theme="dark"]) .gck::after { border-right: 2px solid var(--paper); border-bottom: 2px solid var(--paper); }
+:where(html[data-theme="dark"]) .grand:active { background: #222633; }
+:where(html[data-theme="dark"]) .gins { color: var(--paper); }
+:where(html[data-theme="dark"]) .gnwrap.open #genre { background: var(--paper); }
+:where(html[data-theme="dark"]) .gnpop { background: var(--paper); }
+:where(html[data-theme="dark"]) .gnopt { background: #1d1f29; }
+:where(html[data-theme="dark"]) .gnopt:active { background: #272a3b; }
+:where(html[data-theme="dark"]) .gnopt.wide { background: var(--paper); }
+:where(html[data-theme="dark"]) .gnwrap.open #topic { background: var(--paper); }
+:where(html[data-theme="dark"]) .tpsel { background: #1d1f29; }
+:where(html[data-theme="dark"]) .tpsel:active { background: #272a3b; }
+:where(html[data-theme="dark"]) .tpbtn.del { color: #db6a5e; }
+:where(html[data-theme="dark"]) .tpedit { background: var(--paper); }
+:where(html[data-theme="dark"]) .entmv button { background: var(--paper); }
+:where(html[data-theme="dark"]) #qbox input[type=search] { background: #2c2f3a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0a4b6' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px center / 14px; }
+:where(html[data-theme="dark"]) #qbox input[type=search]:focus,
+:where(html[data-theme="dark"]) #qbox input[type=search]:focus-visible { background-color: var(--paper); }
+:where(html[data-theme="dark"]) #miniBar button { color: var(--paper); }
+:where(html[data-theme="dark"]) #welcome .wbox { background: #2c1b48; }
+:where(html[data-theme="dark"]) #welcome .whd b { color: #6d52cb; }
+:where(html[data-theme="dark"]) #welcome .wbd b { background: linear-gradient(transparent 58%, #4f367c 58%); }
+:where(html[data-theme="dark"]) #welcome .wguide { color: var(--paper); }
+:where(html[data-theme="dark"]) .hq.warn { background: #433713; }
+:where(html[data-theme="dark"]) .hwrow .hwnum { background: #2c2240; color: #866ec6; }
+:where(html[data-theme="dark"]) .hq.hwpurple { background: #231836; }
+:where(html[data-theme="dark"]) .hq.hwpurple .gqt { color: #7b63c5; }
+:where(html[data-theme="dark"]) .fbico { color: var(--paper); }
+:where(html[data-theme="dark"]) #exbar .ghost.exgo { color: var(--paper); }
+:where(html[data-theme="dark"]) .card.sel .ck { background: var(--paper); }
+:where(html[data-theme="dark"]) .card.sel.picked { background: #1c1e30; }
+:where(html[data-theme="dark"]) .card.sel.picked .ck::after { border: solid var(--paper); }
 @media print {
-html[data-theme="dark"] body { background: var(--paper) !important; }
-html[data-theme="dark"] #printArea .pr-meta { color: #d9d9d9; }
-html[data-theme="dark"] #printArea .pr-tags { color: #d9d9d9; }
-html[data-theme="dark"] #printArea .pr-f { color: #d9d9d9; }
-html[data-theme="dark"] #printArea .pr-lh { color: #d9d9d9; }
-html[data-theme="dark"] #printArea .pr-ld { color: #d9d9d9; }
+:where(html[data-theme="dark"]) body { background: var(--paper) !important; }
+:where(html[data-theme="dark"]) #printArea .pr-meta { color: #d9d9d9; }
+:where(html[data-theme="dark"]) #printArea .pr-tags { color: #d9d9d9; }
+:where(html[data-theme="dark"]) #printArea .pr-f { color: #d9d9d9; }
+:where(html[data-theme="dark"]) #printArea .pr-lh { color: #d9d9d9; }
+:where(html[data-theme="dark"]) #printArea .pr-ld { color: #d9d9d9; }
 }
-html[data-theme="dark"] .gtabs.ggenres button.on { color: var(--paper); }
-html[data-theme="dark"] #rtabs .fbtn.act { color: var(--paper); }
-html[data-theme="dark"] #fbox .fdr input[type=date] { background: var(--bg); }
-html[data-theme="dark"] .badge.tpb { color: var(--think, #7b89de); }
-html[data-theme="dark"] .l2 .lcnt,
-html[data-theme="dark"] .lcnt { background: #222430; }
-html[data-theme="dark"] .abar button { background: #20232f; }
-html[data-theme="dark"] .abar button:active { background: #2c2f3f; }
-html[data-theme="dark"] .abar .tog:disabled { background: #1a1d28; }
-html[data-theme="dark"] .text { color: #c1c5dd; }
-html[data-theme="dark"] .lx { color: #c1c5dd; }
-html[data-theme="dark"] .card.open .abar { border-top-color: rgba(255,255,255,0.088); border-bottom-color: rgba(255,255,255,0.088); }
-html[data-theme="dark"] .card.open .chead { border-bottom-color: rgba(255,255,255,0.088); }
-html[data-theme="dark"] .card.open .abar button { background: var(--paper); box-shadow: 0 0 0 1px rgba(255,255,255,0.1); }
-html[data-theme="dark"] .card.open .abar .del { background: var(--paper); }
-html[data-theme="dark"] .card.open .later,
-html[data-theme="dark"] .card.open .detail > .later:not(.rlog) { border-top-color: rgba(255,255,255,0.1); }
+:where(html[data-theme="dark"]) .gtabs.ggenres button.on { color: var(--paper); }
+:where(html[data-theme="dark"]) #rtabs .fbtn.act { color: var(--paper); }
+:where(html[data-theme="dark"]) #fbox .fdr input[type=date] { background: var(--bg); }
+:where(html[data-theme="dark"]) .badge.tpb { color: var(--think, #7b89de); }
+:where(html[data-theme="dark"]) .l2 .lcnt,
+:where(html[data-theme="dark"]) .lcnt { background: #222430; }
+:where(html[data-theme="dark"]) .abar button { background: #20232f; }
+:where(html[data-theme="dark"]) .abar button:active { background: #2c2f3f; }
+:where(html[data-theme="dark"]) .abar .tog:disabled { background: #1a1d28; }
+:where(html[data-theme="dark"]) .text { color: #c1c5dd; }
+:where(html[data-theme="dark"]) .lx { color: #c1c5dd; }
+:where(html[data-theme="dark"]) .card.open .abar { border-top-color: rgba(255,255,255,0.088); border-bottom-color: rgba(255,255,255,0.088); }
+:where(html[data-theme="dark"]) .card.open .chead { border-bottom-color: rgba(255,255,255,0.088); }
+:where(html[data-theme="dark"]) .card.open .abar button { background: var(--paper); box-shadow: 0 0 0 1px rgba(255,255,255,0.1); }
+:where(html[data-theme="dark"]) .card.open .abar .del { background: var(--paper); }
+:where(html[data-theme="dark"]) .card.open .later,
+:where(html[data-theme="dark"]) .card.open .detail > .later:not(.rlog) { border-top-color: rgba(255,255,255,0.1); }
   }
 </style>
 </head>
@@ -2466,10 +2467,18 @@ html[data-theme="dark"] .card.open .detail > .later:not(.rlog) { border-top-colo
   }
   function tkDayLabelOf(ds) {
     var d = new Date(ds + "T00:00:00");
-    return "[일기] " + (isNaN(d.getTime()) ? ds : ds.replace(/-/g, ".") + " (" + ["일", "월", "화", "수", "목", "금", "토"][d.getDay()] + ")");   /* 일기 제목: 「[일기] 2026.10.06 (화)」 */
+    return (isNaN(d.getTime()) ? ds : ds.replace(/-/g, ".") + " (" + ["일", "월", "화", "수", "목", "금", "토"][d.getDay()] + ")");   /* 일기 제목: 「2026.10.06 (화)」 — 앞의 일기 아이콘은 카드에서 그림(SVG)으로 붙임 */
   }
   /* 카드에 보이는 제목: 분류가 있는 생각타래는 「[분류] 제목」 */
-  function showTitle(r) { return r.title; }   /* 분류는 제목 앞이 아니라 종류 글자 옆 알약으로 보여줌 */
+  function showTitle(r) { return r.title; }
+  /* 일기 카드 제목 앞의 단색 아이콘(공책). 글자색을 따라가는 선 그림이라 라이트·다크 모두 깔끔 */
+  var DIARY_ICO = '<svg class="dico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h10.5a1.5 1.5 0 0 1 1.5 1.5v14a1.5 1.5 0 0 1-1.5 1.5H7z"/><path d="M7 3.5v17"/><path d="M10.8 8.5h4.6M10.8 12h4.6"/><path d="M4.5 7.5H7M4.5 12H7M4.5 16.5H7"/></svg>';
+  function titleEl(tag, cls, r) {
+    var e = el(tag, cls);
+    if (isThink(r) && !isThread(r)) e.insertAdjacentHTML("afterbegin", DIARY_ICO);
+    e.appendChild(document.createTextNode(showTitle(r)));
+    return e;
+  }   /* 분류는 제목 앞이 아니라 종류 글자 옆 알약으로 보여줌 */
   function topicBadge(r) { return isThread(r) && r.topic ? el("span", "badge tpb", r.topic) : null; }
 
   var TLKEY = "reviews-thoughts-v1", tseq = 0;
@@ -3031,7 +3040,7 @@ html[data-theme="dark"] .card.open .detail > .later:not(.rlog) { border-top-colo
     hl.appendChild(kindSw(r, el("span", "kind" + (isUpcoming(r) ? " soft" : ""), isThink(r) ? "생각 ▸ " + tkName(r) : KIND[r.type].name)));   /* 생각 ▸ 일기 / 생각 ▸ 생각타래 */
     if (hasDday(r)) hl.appendChild(ddayBadge(r));
     if (mark) hl.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
-    hl.appendChild(el("span", "ht", showTitle(r)));
+    hl.appendChild(titleEl("span", "ht", r));
     var w = r.status === "reading" ? "읽는 중" : r.status === "paused" ? "중단" : when;
     if (w) hl.appendChild(el("span", "hd", w));
     head.appendChild(hl);
@@ -3279,14 +3288,13 @@ html[data-theme="dark"] .card.open .detail > .later:not(.rlog) { border-top-colo
 
     if (!isOpen) {
       var l1 = el("div", "l1");
-      l1.appendChild(el("h2", "", showTitle(r)));
+      l1.appendChild(titleEl("h2", "", r));
       if (r.rating) l1.appendChild(makeStars(r));
       if (r.status === "done" && !isThink(r) && !(isUpcoming(r) && !hasReview(r))) l1.appendChild(makeRvIcon(r));   /* 후기 있으면 채운 말풍선, 없으면 흐린 빈 말풍선 */
       card.appendChild(l1);
 
       var l2 = el("div", "l2");
       l2.appendChild(el("span", "kind" + (isUpcoming(r) ? " soft" : ""), isThink(r) ? "생각 ▸ " + tkName(r) : KIND[r.type].name));   /* 예정 기록은 종류 글자도 띠처럼 연하게. 생각은 「생각 ▸ 일기」「생각 ▸ 생각타래」 */
-      var tpb2 = topicBadge(r); if (tpb2) l2.appendChild(tpb2);
       if (hasDday(r)) l2.appendChild(ddayBadge(r));
       if (mark) l2.appendChild(el("span", "badge" + (mark.k === "read" ? " read" : ""), mark.k === "read" ? "독서함" : "완독"));
       if (r.status === "reading") l2.appendChild(el("span", "badge", "읽는 중"));
@@ -5416,7 +5424,7 @@ html[data-theme="dark"] .card.open .detail > .later:not(.rlog) { border-top-colo
       {"h": "새로고침해도 그대로", "lines": ["새로고침해도 보던 탭, 필터, 검색어, 펼쳐둔 카드, 스크롤 위치가 유지돼요.", "탭을 완전히 닫았다가 다시 열면 처음 화면으로 시작해요."]}
     ] },
     { t: "생각 남기기", items: [
-      {"h": "생각 탭 · 일기 · 생각타래", "lines": ["위쪽 「생각」 탭에는 작품과 상관없이 쓴 생각이 모여요. 하단 「+ 생각 추가」로 쓰고, 종류는 「일기」와 「생각타래」 중에서 골라요.", "일기는 날짜별로 적는 글이에요. 제목은 「[일기] 2026.10.06 (화)」처럼 날짜로 자동으로 붙어요. 같은 날 일기를 또 쓰면 일기가 따로 하나 더 생겨요. 쓰는 창에 「이 날 쓴 일기」 목록이 보이고, 새 일기에는 소제목(선택)을 달 수 있어요. 덧붙이기는 일기마다 따로 해요.", "생각타래는 한 가지 생각을 여러 날에 걸쳐 이어 쓰는 글이에요. 카드의 「이어쓰기」로 글을 계속 쌓고, 원하면 「분류」를 붙일 수 있어요. 분류가 있으면 접힌 카드에서는 「생각 ▸ 생각타래」 옆에 연한 알약으로, 펼치면 세부정보의 「분류」 줄로 보여요.", "생각 탭 위쪽에서 「생각 전체 · 일기 · 생각타래 · 아무말」과 분류로 좁혀 볼 수 있어요. 「아무말 포함」을 켜면 타임라인에 그냥 쓴 글도 함께 보여요.", "생각 탭 맨 위에는 타임라인과 같은 입력칸이 있어서, 한마디(아무말)를 바로 적고 「올리기」로 올릴 수 있어요. 올리면 「아무말 포함」이 켜져서 바로 보여요."]},
+      {"h": "생각 탭 · 일기 · 생각타래", "lines": ["위쪽 「생각」 탭에는 작품과 상관없이 쓴 생각이 모여요. 하단 「+ 생각 추가」로 쓰고, 종류는 「일기」와 「생각타래」 중에서 골라요.", "일기는 날짜별로 적는 글이에요. 제목은 「2026.10.06 (화)」처럼 날짜로 자동으로 붙고, 카드에서는 앞에 작은 공책 아이콘이 함께 보여요. 같은 날 일기를 또 쓰면 일기가 따로 하나 더 생겨요. 쓰는 창에 「이 날 쓴 일기」 목록이 보이고, 새 일기에는 소제목(선택)을 달 수 있어요. 덧붙이기는 일기마다 따로 해요.", "생각타래는 한 가지 생각을 여러 날에 걸쳐 이어 쓰는 글이에요. 카드의 「이어쓰기」로 글을 계속 쌓고, 원하면 「분류」를 붙일 수 있어요. 분류가 있으면 접힌 카드에서는 「생각 ▸ 생각타래」 옆에 연한 알약으로, 펼치면 세부정보의 「분류」 줄로 보여요.", "생각 탭 위쪽에서 「생각 전체 · 일기 · 생각타래 · 아무말」과 분류로 좁혀 볼 수 있어요. 「아무말 포함」을 켜면 타임라인에 그냥 쓴 글도 함께 보여요.", "생각 탭 맨 위에는 타임라인과 같은 입력칸이 있어서, 한마디(아무말)를 바로 적고 「올리기」로 올릴 수 있어요. 올리면 「아무말 포함」이 켜져서 바로 보여요."]},
       {"h": "읽는 중 감상", "lines": ["읽는 중이거나 중단한 책 카드를 펼치고 「읽는 중 감상 추가」를 눌러요. 읽는 중에도 카드의 「후기 쓰기」로 메인 후기를 쓸 수 있어요.", "「읽는 중 감상」은 제목 줄을 누르면 접고 펼 수 있고, 「수정」으로 고칠 수 있어요. 고치면 날짜 뒤에 (수정됨)이 붙고, 누르면 최종 수정 시각이 보여요.", "읽다가 든 생각이 날짜와 함께 쌓여요. 여러 날에 걸쳐 읽는 책을 위한 기록이에요.", "닫힌 카드에는 마지막 기록이 한 줄로 보여서, 어디까지 어떤 생각이었는지 바로 떠올릴 수 있어요.", "완독해도 읽는 중 감상은 그대로 남아요. 완독한 뒤에 다시 든 생각은 아래 「생각 덧붙이기」로 따로 남겨요.", "같은 기록이 보이는 곳마다 이름이 달라요.\n· 카드 → 「읽는 중 감상」\n· 타임라인 → 「독서」 태그\n· 달력 → 「독서함」 (덧글이 아니라 후기 개념이라 「그날의 생각」에는 안 나와요)\n각각 따로 지울 수 있어요."]},
       {"h": "생각 덧붙이기", "lines": ["완독한 기록 카드의 「생각 덧붙이기」를 눌러요.", "원래 후기는 그대로 두고 새 생각만 날짜와 함께 쌓여요.", "처음엔 별로였는데 며칠 뒤 어느 장면이 자꾸 떠오를 때, 마음이 어떻게 자랐는지 볼 수 있어요.", "덧붙인 생각은 각각 따로 지울 수 있어요."]},
       {"h": "독립 생각", "lines": ["일기·생각타래로 쓰기엔 가벼운 한마디(아무말)는 타임라인 위쪽 입력칸에 적고 「올리기」를 눌러요. 제목 없이 시간순으로 쌓여요.", "아직 정리되지 않은 생각을 가볍게 붙잡아두는 곳이에요. 생각 탭에서 「아무말 포함」을 켜면 함께 볼 수 있어요.", "나중에 수정하거나 삭제할 수 있어요."]},
