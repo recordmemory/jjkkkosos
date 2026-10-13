@@ -9,6 +9,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<script>
+  /* 화면 모드(라이트/다크/기기 설정): 깜빡임 없이 처음부터 적용 */
+  (function () { try { var t = localStorage.getItem("reviews-theme-v1"); var d = t === "dark" || (t === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches); document.documentElement.setAttribute("data-theme", d ? "dark" : "light"); } catch (e) {} })();
+</script>
 <style>
   :root {
     --bg: #f3f4f8;
@@ -26,6 +30,7 @@
     --star: #e3a11c;
     --sun: #cf5048;
     --sat: #4468b0;
+    --clockface: #eceef4;
     --sans: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
     --serif: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif;
   }
@@ -1702,7 +1707,7 @@
   }
   #fbox .freset[hidden] { display: none; }
 
-  /* 연극·뮤지컬 종류 글자: 누르면 서로 바뀜. 크기·간격은 그대로, 옅은 점선 밑줄만 */
+  /* 연극·뮤지컬 종류 글자: 꾹 누르면 서로 바뀜. 크기·간격은 그대로, 옅은 점선 밑줄만 */
   .kind.sw { position: relative; cursor: pointer; text-decoration: underline dotted; text-decoration-thickness: 1px; text-underline-offset: 3px;
     text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); -webkit-tap-highlight-color: transparent; }
   .kind.sw::after { content: ""; position: absolute; inset: -5px -5px; }
@@ -1767,6 +1772,182 @@
   .card.open .later.rlog + .rvwrap, .card.open .later.rlog + .text, .prewrap + .rvwrap, .prewrap + .noreview { border-top: 1px solid var(--card-line); }
   .card.open .rvwrap.tkent + .rvwrap.tkent { border-top: 1px solid var(--card-line); margin-top: 16px; padding-top: 14px; }
   .detail > .later:not(.rlog) { border-top: 1px solid var(--card-line); }
+
+  /* ===== 펼친 카드가 위아래 카드와 구분되게: 종류 색 테두리 + 연한 종류 색 바탕 ===== */
+  .card.open { --ocbg: #f8f9fd; background: var(--ocbg); border-top: 2px solid var(--c); border-bottom: 2px solid var(--c); }
+  @supports (background: color-mix(in srgb, red 5%, white)) {
+    .card.open { --ocbg: color-mix(in srgb, var(--c, #8a90a8) 6%, #ffffff); }
+  }
+  .card + .card.open { border-top: 2px solid var(--c); }
+  .card.open + .card { border-top: 0; }
+  .card.open:active { background: var(--ocbg); }
+  .card.open .chead, .card.open .abar, .card.open .rvstick .rmwr, .card.open .rvstick .tkact, .card.open .cfloat { background: var(--ocbg); }
+  .card.open .abar { border-top-color: rgba(25,28,43,.07); border-bottom-color: rgba(25,28,43,.07); }
+  .card.open .chead { border-bottom-color: rgba(25,28,43,.07); }
+  .card.open .abar button { background: #fff; box-shadow: 0 0 0 1px rgba(25,28,43,.08); }
+  .card.open .abar .del { background: #fff; color: var(--movie); }
+  .card.open .abar .tog:disabled { background: transparent; box-shadow: none; }
+  .card.open .later, .card.open .detail > .later:not(.rlog) { border-top-color: rgba(25,28,43,.08); }
+
+
+  /* ===== 다크 모드 (설정 → 보기 → 화면 모드) ===== */
+  html[data-theme="dark"] { color-scheme: dark; }
+  @media screen {
+  html[data-theme="dark"] {
+    --bg: #0f1017; --paper: #1a1c27; --ink: #eceef6; --sub: #a3a8bd; --mute: #747993;
+    --line: #292c3a; --line2: #363a4c;
+    --book: #efbd1c; --movie: #ee6b62; --show: #9b7ee0; --musical: #f173ae; --think: #8392f0;
+    --star: #f0b23a; --sun: #ef6f67; --sat: #7d9be0; --clockface: #2a2d3b;
+  }
+  html[data-theme="dark"] [data-k="book"], html[data-theme="dark"] [data-f="book"], html[data-theme="dark"] [data-type="book"], html[data-theme="dark"] [data-t="book"] { --ct: #efbd1c; }
+  html[data-theme="dark"] .card.open { --ocbg: #20222f; }
+  html[data-theme="dark"] { --card-line: #262938; }
+  html[data-theme="dark"] .hq.warn .hp b { background: linear-gradient(transparent 58%, rgba(240,189,28,.38) 58%); }
+  html[data-theme="dark"] .dlg .dbtn button.ok.danger { color: #fff; }
+  /* 가이드 「중요」 안내: 노란 글자는 어두운 바탕 위에서 보이게 */
+  html[data-theme="dark"] .wbadge, html[data-theme="dark"] .hq.warn .hwrow .hwnum { background: #0b0c12; color: #ffd45a; }
+
+  /* 아래는 기존 밝은 색 지정을 어두운 색으로 자동 변환한 것 */
+html[data-theme="dark"] .views { background: #2e313d; }
+html[data-theme="dark"] .tabs button.on { color: var(--cf, var(--paper)); }
+html[data-theme="dark"] .tabs button.on::before,
+html[data-theme="dark"] .kinds button.on::before { background: var(--cf, var(--paper)) !important; }
+html[data-theme="dark"] .rtabs .sbtn { background: #3c404d; border-color: #434756; color: #8c91a6; }
+html[data-theme="dark"] .card:active { background: #1b1e27; }
+html[data-theme="dark"] .badge { color: #ffc70f; }
+html[data-theme="dark"] .badge.dday { color: var(--ct, #ffc70f); }
+html[data-theme="dark"] .entfold { background: #20232f; }
+html[data-theme="dark"] .entfold:active { background: #2c2f3f; }
+html[data-theme="dark"] .badge.paused { color: #7c8198; }
+html[data-theme="dark"] .badge.stale { color: #cd746e; }
+html[data-theme="dark"] .badge.read { color: #ffc70f; }
+html[data-theme="dark"] .qs button.main { color: #f1ad00; }
+html[data-theme="dark"] #dock { background: rgba(33,35,44,0.96); }
+html[data-theme="dark"] #dock .dadd { color: var(--paper); }
+html[data-theme="dark"] .dlg .dic { background: #242836; }
+html[data-theme="dark"] .dlg .dsheet[data-t] .dic { background: color-mix(in srgb, var(--c) 15%, var(--paper)); }
+html[data-theme="dark"] .dlg .dcat { background: color-mix(in srgb, var(--c) 15%, var(--paper)); }
+html[data-theme="dark"] .dlg .dbtn button { background: #242836; }
+html[data-theme="dark"] .dlg .dbtn button.ok { color: var(--paper); }
+html[data-theme="dark"] .day.sel { color: var(--paper); }
+html[data-theme="dark"] .day.sel .dots i { box-shadow: 0 0 0 1.5px var(--paper); }
+html[data-theme="dark"] .sub button.on { color: var(--paper); }
+html[data-theme="dark"] .gdonut .gin.dk { fill: #eac100; }
+html[data-theme="dark"] .kinds button.on { color: var(--cf, var(--paper)); }
+html[data-theme="dark"] .cq.main { background: #282c36; }
+html[data-theme="dark"] .barbtn.save { color: var(--paper); }
+html[data-theme="dark"] .wbar .wundo:not(:disabled):active { background: rgba(255,255,255,0.1); }
+html[data-theme="dark"] .tk { color: #a9aec5; }
+html[data-theme="dark"] .quote { color: #a9aec5; }
+html[data-theme="dark"] .cb .primary { color: var(--paper); }
+html[data-theme="dark"] .compose { background: #1f212a; }
+html[data-theme="dark"] .compose:focus-within { background: var(--paper); }
+html[data-theme="dark"] .recall .rx { color: #a9aec5; }
+html[data-theme="dark"] .hact .ghost:active { background: #222633; }
+html[data-theme="dark"] .tools .views { background: #303441; }
+html[data-theme="dark"] .tools .tabs button.on { color: var(--cf, var(--paper)); }
+html[data-theme="dark"] #rtabs .sbtn.act { color: var(--paper); }
+html[data-theme="dark"] .calcard .calhead button:active { background: #222633; }
+html[data-theme="dark"] .calcard .day.sel > span:first-child { color: var(--paper); }
+html[data-theme="dark"] .calcard .day:not(.blank):not(.sel):active > span:first-child { background: #222633; }
+html[data-theme="dark"] .dayhead button { color: var(--paper); }
+html[data-theme="dark"] .gedit button.primary { color: var(--paper); }
+html[data-theme="dark"] .bkbar { background: #4b3e16; border: 1px solid #9c8745; color: #ffc500; }
+html[data-theme="dark"] #toast.act button { background: rgba(26,28,39,0.14); }
+html[data-theme="dark"] #toast.act button:active { background: rgba(26,28,39,0.24); }
+html[data-theme="dark"] .tagchip { background: #242836; color: #8c91a6; }
+html[data-theme="dark"] .tagchip:active { background: #3c404d; }
+html[data-theme="dark"] .hact #import:active,
+html[data-theme="dark"] .hact #export:active { background: #222633; }
+html[data-theme="dark"] #rtabs button.pdfb.on { color: var(--paper); }
+html[data-theme="dark"] .setrow.dragging { background: #222633; }
+html[data-theme="dark"] button.setrow:active { background: #1a1d28; }
+html[data-theme="dark"] .setsw::after { background: var(--paper); }
+html[data-theme="dark"] .setseg { background: #2e313d; }
+html[data-theme="dark"] .tlcompose .cb button { color: var(--paper); }
+html[data-theme="dark"] .tent.lt .tx { color: #a8adc3; }
+html[data-theme="dark"] .tent.lst .th .tag { color: #7b89de; }
+html[data-theme="dark"] .tent .edit .cb button.primary { color: var(--paper); }
+html[data-theme="dark"] .dayh2 .dwbtn { color: #7b89de; }
+html[data-theme="dark"] #kinds button.on { color: var(--cf, var(--paper)); }
+html[data-theme="dark"] .fcard input[type=text],
+html[data-theme="dark"] .fcard input[type=date],
+html[data-theme="dark"] .fcard textarea,
+html[data-theme="dark"] .fcard .timeBtn { background: #1d1f29; }
+html[data-theme="dark"] .fcard input:focus,
+html[data-theme="dark"] .fcard textarea:focus,
+html[data-theme="dark"] .fcard .timeBtn:focus-visible { background: var(--paper); }
+html[data-theme="dark"] #stKinds { background: #262a36; }
+html[data-theme="dark"] .fcard #text,
+html[data-theme="dark"] .fcard #pre,
+html[data-theme="dark"] .fcard #rl0 { background: #1d1f29; }
+html[data-theme="dark"] .fcard #text:focus,
+html[data-theme="dark"] .fcard #pre:focus,
+html[data-theme="dark"] .fcard #rl0:focus { background: var(--paper); }
+html[data-theme="dark"] .gtabs button.on { color: var(--cf, var(--paper)); }
+html[data-theme="dark"] .gtabs .bd { color: var(--cf, var(--paper)); }
+html[data-theme="dark"] .gtabs button.on .bd { background: var(--cf, var(--paper)); }
+html[data-theme="dark"] .gck { background: var(--paper); }
+html[data-theme="dark"] .gck::after { border-right: 2px solid var(--paper); border-bottom: 2px solid var(--paper); }
+html[data-theme="dark"] .grand:active { background: #222633; }
+html[data-theme="dark"] .gins { color: var(--paper); }
+html[data-theme="dark"] .gnwrap.open #genre { background: var(--paper); }
+html[data-theme="dark"] .gnpop { background: var(--paper); }
+html[data-theme="dark"] .gnopt { background: #1d1f29; }
+html[data-theme="dark"] .gnopt:active { background: #272a3b; }
+html[data-theme="dark"] .gnopt.on { color: #f1ad00; }
+html[data-theme="dark"] .gnopt.wide { background: var(--paper); }
+html[data-theme="dark"] .gnopt.wide.on { color: #f1ad00; }
+html[data-theme="dark"] .gnwrap.open #topic { background: var(--paper); }
+html[data-theme="dark"] .tpsel { background: #1d1f29; }
+html[data-theme="dark"] .tpsel:active { background: #272a3b; }
+html[data-theme="dark"] .tpsel.on { color: #f1ad00; }
+html[data-theme="dark"] .tpbtn.del { color: #db6a5e; }
+html[data-theme="dark"] .tpedit { background: var(--paper); }
+html[data-theme="dark"] .entmv button { background: var(--paper); }
+html[data-theme="dark"] #qbox input[type=search] { background: #2c2f3a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0a4b6' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px center / 14px; }
+html[data-theme="dark"] #qbox input[type=search]:focus,
+html[data-theme="dark"] #qbox input[type=search]:focus-visible { background-color: var(--paper); }
+html[data-theme="dark"] #miniBar button { color: var(--paper); }
+html[data-theme="dark"] #welcome .wbox { background: #2c1b48; }
+html[data-theme="dark"] #welcome .whd b { color: #6d52cb; }
+html[data-theme="dark"] #welcome .wbd b { background: linear-gradient(transparent 58%, #4f367c 58%); }
+html[data-theme="dark"] #welcome .wguide { color: var(--paper); }
+html[data-theme="dark"] .hq.warn { background: #433713; }
+html[data-theme="dark"] .hwrow .hwnum { background: #2c2240; color: #866ec6; }
+html[data-theme="dark"] .hq.hwpurple { background: #231836; }
+html[data-theme="dark"] .hq.hwpurple .gqt { color: #7b63c5; }
+html[data-theme="dark"] .fbico { color: var(--paper); }
+html[data-theme="dark"] #exbar .ghost.exgo { color: var(--paper); }
+html[data-theme="dark"] .card.sel .ck { background: var(--paper); }
+html[data-theme="dark"] .card.sel.picked { background: #1c1e30; }
+html[data-theme="dark"] .card.sel.picked .ck::after { border: solid var(--paper); }
+@media print {
+html[data-theme="dark"] body { background: var(--paper) !important; }
+html[data-theme="dark"] #printArea .pr-meta { color: #d9d9d9; }
+html[data-theme="dark"] #printArea .pr-tags { color: #d9d9d9; }
+html[data-theme="dark"] #printArea .pr-f { color: #d9d9d9; }
+html[data-theme="dark"] #printArea .pr-lh { color: #d9d9d9; }
+html[data-theme="dark"] #printArea .pr-ld { color: #d9d9d9; }
+}
+html[data-theme="dark"] .gtabs.ggenres button.on { color: var(--paper); }
+html[data-theme="dark"] #rtabs .fbtn.act { color: var(--paper); }
+html[data-theme="dark"] #fbox .fdr input[type=date] { background: var(--bg); }
+html[data-theme="dark"] .badge.tpb { color: var(--think, #7b89de); }
+html[data-theme="dark"] .l2 .lcnt,
+html[data-theme="dark"] .lcnt { background: #222430; }
+html[data-theme="dark"] .abar button { background: #20232f; }
+html[data-theme="dark"] .abar button:active { background: #2c2f3f; }
+html[data-theme="dark"] .abar .tog:disabled { background: #1a1d28; }
+html[data-theme="dark"] .text { color: #c1c5dd; }
+html[data-theme="dark"] .lx { color: #c1c5dd; }
+html[data-theme="dark"] .card.open .abar { border-top-color: rgba(255,255,255,0.088); border-bottom-color: rgba(255,255,255,0.088); }
+html[data-theme="dark"] .card.open .chead { border-bottom-color: rgba(255,255,255,0.088); }
+html[data-theme="dark"] .card.open .abar button { background: var(--paper); box-shadow: 0 0 0 1px rgba(255,255,255,0.1); }
+html[data-theme="dark"] .card.open .abar .del { background: var(--paper); }
+html[data-theme="dark"] .card.open .later,
+html[data-theme="dark"] .card.open .detail > .later:not(.rlog) { border-top-color: rgba(255,255,255,0.1); }
+  }
 </style>
 </head>
 <body>
@@ -2810,7 +2991,7 @@
   }
   function reviewMeta(r) { return stampMeta(r.ta, r.te, "", "후기"); }
   function preMeta(r) { return stampMeta(r.pta, r.pte, r.preD ? r.preD.replace(/-/g, ".") : "", "관람 전 기록"); }
-  /* 연극 ↔ 뮤지컬: 입력칸이 똑같아서 종류 글자를 누르면 바로 바꿈(실행취소 가능) */
+  /* 연극 ↔ 뮤지컬: 입력칸이 똑같아서 종류 글자를 꾹 누르면 바꿈(실행취소 가능) */
   function swapShowKind(r) {
     var from = r.type, to = from === "play" ? "musical" : "play", rid = r.id;
     function apply(t) {
@@ -2827,11 +3008,21 @@
   function kindSw(r, sp) {
     if (r.type !== "play" && r.type !== "musical") return sp;
     sp.classList.add("sw");
-    sp.title = r.type === "play" ? "누르면 뮤지컬로" : "누르면 연극으로";
-    sp.onclick = function (e) {
+    sp.title = r.type === "play" ? "꾹 누르면 뮤지컬로" : "꾹 누르면 연극으로";
+    /* 실수로 바뀌지 않게: 종류 글자를 0.55초 이상 꾹 눌렀다 뗄 때만 바뀜(짧게 누르면 그냥 카드 머리글 탭) */
+    var timer = null, ready = false, swallow = false, sx = 0, sy = 0;
+    function cancel() { if (timer) { clearTimeout(timer); timer = null; } ready = false; }
+    sp.style.userSelect = "none"; sp.style.webkitUserSelect = "none"; sp.style.webkitTouchCallout = "none";
+    sp.onpointerdown = function (e) {
       if (selMode) return;   /* PDF 선택 중엔 카드 선택이 우선 */
-      e.stopPropagation(); swapShowKind(r);
+      cancel(); swallow = false; sx = e.clientX; sy = e.clientY;
+      timer = setTimeout(function () { timer = null; ready = true; buzz(8); }, 550);
     };
+    sp.onpointermove = function (e) { if ((timer || ready) && (Math.abs(e.clientX - sx) > 10 || Math.abs(e.clientY - sy) > 10)) cancel(); };
+    sp.onpointerup = function () { var go = ready; cancel(); if (go) { swallow = true; swapShowKind(r); } };
+    sp.onpointercancel = cancel; sp.onpointerleave = cancel;
+    sp.oncontextmenu = function (e) { e.preventDefault(); };
+    sp.onclick = function (e) { if (swallow) { e.stopPropagation(); swallow = false; } };   /* 꾹 누른 뒤 따라오는 클릭은 무시 */
     return sp;
   }
   function buildHead(r, when, mark) {
@@ -3258,6 +3449,22 @@
   function svKey() { return "reviews-startview-v1"; }
   function startView() { try { var v = localStorage.getItem(svKey()); return (v === "cal" || v === "stat") ? v : "list"; } catch (e) { return "list"; } }
   function setStartView(v) { try { localStorage.setItem(svKey(), v); } catch (e) {} }
+  /* 화면 모드: light(라이트) · dark(다크) · auto(기기 설정을 따라감). 기본은 라이트 */
+  function themePref() { try { var v = localStorage.getItem("reviews-theme-v1"); return (v === "dark" || v === "auto") ? v : "light"; } catch (e) { return "light"; } }
+  function themeIsDark() { var p = themePref(); return p === "dark" || (p === "auto" && !!window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches); }
+  function applyTheme() {
+    var d = themeIsDark();
+    document.documentElement.setAttribute("data-theme", d ? "dark" : "light");
+    var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute("content", d ? "#0f1017" : "#f3f4f8");
+  }
+  function setTheme(v) { try { localStorage.setItem("reviews-theme-v1", v); } catch (e) {} applyTheme(); }
+  (function () {
+    if (!window.matchMedia) return;
+    var mq = matchMedia("(prefers-color-scheme: dark)");
+    var on = function () { if (themePref() === "auto") applyTheme(); };
+    if (mq.addEventListener) mq.addEventListener("change", on); else if (mq.addListener) mq.addListener(on);
+  })();
+  applyTheme();
   /* 문의하기: 업데이트 내역 위쪽 CONTACT 카드와 같은 곳(배포자 트위터)으로 연결. 이메일 주소나 다른 https:// 링크로 바꿔도 돼요 */
   var CONTACT = "https://twitter.com/jjkkkosos";
   function openContact() {
@@ -3325,6 +3532,7 @@
       go("백업 불러오기", "저장해 둔 백업 파일로 기록을 가져와요", function () { $("file").click(); })
     ]);
     sec("보기", [
+      seg("화면 모드", "어두운 화면으로 바꿔요", [["light", "라이트"], ["dark", "다크"], ["auto", "기기 설정"]], themePref(), setTheme),
       seg("시작 화면", "앱을 새로 열 때 처음 보이는 화면", [["list", "목록"], ["cal", "달력"], ["stat", "통계"]], startView(), setStartView),
       toggle("되돌아보기 사용", "끄면 목록 맨 위에 되돌아보기가 나오지 않아요", recallOn(), function (v) { setRecallOn(v); }),
       toggle("진동", "버튼을 누를 때 짧게 진동해요", vibOn(), setVib)
@@ -5188,7 +5396,7 @@
       {"h": "종류부터 골라요", "lines": ["책, 영화, 연극, 뮤지컬 중 무엇인지 먼저 골라요.", "종류에 따라 입력칸이 조금씩 달라져요.", "책은 저자, 장르, 읽기 상태, 완독한 날을 적어요.", "영화는 감독과 본 날을 적어요.", "연극·뮤지컬은 극장, 관람 일시, 좌석, 캐스팅을 적어요."]},
       {"h": "작품 정보와 날짜", "lines": ["제목과 저자(감독·극장)를 적어요. 나중에 \"그때 본 그 작품이 뭐였지?\" 싶을 때 찾는 기본 단서가 돼요.", "책의 장르는 목록에서 고르거나 직접 입력해요.", "적어둔 장르는 카드를 펼친 세부정보의 「장르」 글자(점선 밑줄)를 눌러 바로 고칠 수 있어요. 목록에서 고르거나 「직접 입력」을 하고 「확인」을 누르면 바뀌고, 「취소」면 그대로예요. 장르를 안 적은 책은 「수정」에서 넣어요.", "책은 읽기 상태를 「읽는 중」 「중단」 「완독」 중에서 골라요. 날짜는 완독일 때만 입력해요.", "연극·뮤지컬은 관람 일시를 5분 단위로 맞출 수 있어요."]},
       {"h": "책 읽기 상태", "lines": ["읽는 중과 중단은 날짜 없이 제목만으로 바로 등록할 수 있어요. 병렬독서처럼 여러 권을 동시에 읽어도 부담 없어요.", "카드를 펼치면 아래쪽 버튼으로 상태를 바로 바꿀 수 있어요. 읽는 중은 「완독」 「중단」, 중단은 「다시 읽기」 「완독」이에요.", "완독으로 바꾸면 완독일이 오늘로 들어가요. 다른 날이면 「수정」에서 고쳐요.", "상태를 바꾸면 실수해도 잠깐 되돌릴 수 있고, 타임라인에는 「완독」 「독서 중단」 「다시 읽기」로 남아요."]},
-      {"h": "연극·뮤지컬 전용 칸", "lines": ["좌석을 적어두면 다음 관람 때 시야와 거리를 비교하기 좋아요.", "캐스팅은 콤마, 띄어쓰기, 줄바꿈으로 구분해요.", "같은 작품도 회차마다 다른 배우가 나오니, 그날의 기억을 남겨두면 좋아요.", "연극과 뮤지컬은 입력칸이 같아서 종류만 바로 바꿀 수 있어요. 카드를 펼치고 맨 윗줄의 「연극」/「뮤지컬」 글자(점선 밑줄)를 누르면 서로 바뀌고, 잠깐 「실행취소」가 떠요. 접힌 카드에서는 눌러도 바뀌지 않아요."]},
+      {"h": "연극·뮤지컬 전용 칸", "lines": ["좌석을 적어두면 다음 관람 때 시야와 거리를 비교하기 좋아요.", "캐스팅은 콤마, 띄어쓰기, 줄바꿈으로 구분해요.", "같은 작품도 회차마다 다른 배우가 나오니, 그날의 기억을 남겨두면 좋아요.", "연극과 뮤지컬은 입력칸이 같아서 종류만 바로 바꿀 수 있어요. 카드를 펼치고 맨 윗줄의 「연극」/「뮤지컬」 글자(점선 밑줄)를 꾹(약 0.5초) 눌렀다 떼면 서로 바뀌고, 잠깐 「실행취소」가 떠요. 짧게 톡 누르는 것만으로는 바뀌지 않고, 접힌 카드에서도 바뀌지 않아요."]},
       {"h": "별점·한줄평", "lines": ["별점은 0.5점 단위로 남겨요.", "한줄평은 120자까지 쓸 수 있어요.", "한줄평은 목록에 바로 보여서, 나중에 훑을 때 첫인상이 한눈에 떠올라요.", "길게 쓸 기운이 없는 날엔 이 두 가지만 남겨도 충분해요."]},
       {"h": "후기 쓰기", "lines": ["카드를 펼친 뒤 눌러요.\n· 후기 있음 → 「수정」\n· 후기 없음 → 「후기 쓰기」\n후기만 적는 창이 열리고, 「완료」를 누르면 바로 저장돼요. 후기 칸을 누르면 전체 화면에서 쓸 수 있고, 글자 수는 오른쪽 아래에 보여요.", "목록 제목 줄 오른쪽 말풍선으로 후기 여부를 알 수 있어요.\n· {빈말풍선} 후기 없음 · 누르면 후기 쓰기 창이 열려요\n· {찬말풍선} 후기 있음\n읽는 중·중단 책에는 보이지 않아요.", "후기를 고치다 닫으면 「저장하지 않고 닫을까요?」라고 물어봐요.\n기록 추가·수정 화면에서 연 창은 「완료」를 누르면 쓴 내용이 그 화면에 들어가고(최종 저장은 「저장」), 「닫기」로 닫으면 이번에 고친 내용은 버려져요.", "실수로 지웠다면 위쪽 ↶ ↷ 버튼으로 되돌릴 수 있어요."]},
       {"h": "관람 전 기대 쓰기", "lines": ["영화·연극·뮤지컬은 기록 창에 「관람 전」 「관람 후」 탭이 있어요.\n· 「관람 전」 → 기대한 점, 보기 전부터 알고 있던 점\n· 「관람 후」 → 별점, 한줄평, 후기\n다른 탭에 쓴 내용이 있으면 탭 옆에 작은 점이 보여요.\n책은 새로 추가할 때만 「첫 독서기록」 「후기」 탭이 있어요. 「첫 독서기록」은 전체 화면 없이 그 칸에서 바로 적고, 저장하면 카드의 「읽는 중 감상」으로 남아요. 읽기 상태는 처음에 「읽는 중」으로 골라져 있어요.", "관람 전 글은 관람한 뒤에 떠올려 적어도 돼요.", "카드에서는 후기 위쪽 「관람 전」 칸을 눌러 접고 펼 수 있어요. 아직 안 본 기록에는 「관람 전 기대 쓰기」가 보이고, 쓴 뒤에는 「관람 전」 제목 줄의 「수정」으로 고쳐요.", "「관람 전」 칸을 눌러도 후기처럼 전체 화면으로 열려요. 맨 위 「관람 전」·「관람 후」 탭으로 오가도 쓰던 내용은 그대로 남고, 저장은 「완료」를 누를 때 한꺼번에 돼요. 쓰다가 예기치 않게 닫혀도 둘 다 임시저장돼요.", "「관람 전」 탭에도 「가이드 질문」이 있어요. 「알고 간 정보는?」, 「기대한 것은?」 질문을 골라 넣을 수 있어요.", "관람일이 오늘 이후인 기록은 「관람 전」 탭이 먼저 열려요. 말풍선과 「후기 있음/없음」 필터는 「관람 후」 후기만 기준이에요."]},
@@ -6822,27 +7030,27 @@
     var d = $("dial");
     d.textContent = "";
     var face = svgEl("circle", { cx: 120, cy: 120, r: 116 });
-    face.style.fill = "#eceef4";
+    face.style.fill = "var(--clockface)";
     d.appendChild(face);
 
     var selIdx = tp.mode === "h" ? (tp.h % 12) : (tp.m / 5);
     var sp = pos(selIdx, 92), hp = pos(selIdx, 70);
 
     var hand = svgEl("line", { x1: 120, y1: 120, x2: hp.x, y2: hp.y, "stroke-width": 2.5, "stroke-linecap": "round" });
-    hand.style.stroke = "#6b7086";
+    hand.style.stroke = "var(--sub)";
     d.appendChild(hand);
     var dot = svgEl("circle", { cx: 120, cy: 120, r: 5 });
-    dot.style.fill = "#6b7086";
+    dot.style.fill = "var(--sub)";
     d.appendChild(dot);
     var sel = svgEl("circle", { cx: sp.x, cy: sp.y, r: 21 });
-    sel.style.fill = "#6b7086";
+    sel.style.fill = "var(--sub)";
     d.appendChild(sel);
 
     for (var i = 0; i < 12; i++) {
       var p = pos(i, 92);
       var label = tp.mode === "h" ? (i === 0 ? 12 : i) : pad(i * 5);
       var t = svgEl("text", { x: p.x, y: p.y + 6, "text-anchor": "middle", "font-size": 18, "font-weight": 600 }, label);
-      t.style.fill = (i === selIdx) ? "#ffffff" : "#191c2b";
+      t.style.fill = (i === selIdx) ? "var(--paper)" : "var(--ink)";
       t.style.pointerEvents = "none";
       d.appendChild(t);
     }
